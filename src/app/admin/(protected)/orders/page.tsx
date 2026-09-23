@@ -1,0 +1,5 @@
+import { getOrders } from "@/lib/data/store";
+import { formatDateTime, formatMoney } from "@/lib/format";
+
+export const metadata = { title: "订单运营" };
+export default async function AdminOrdersPage() { const orders = await getOrders(); return <section className="admin-table-card"><div className="admin-card-heading"><div><span className="eyebrow">LATEST 100</span><h2>订单</h2></div><span>{orders.length} 笔</span></div>{orders.length ? <div className="admin-table-wrap"><table><thead><tr><th>订单</th><th>客户</th><th>商品</th><th>金额</th><th>状态</th><th>时间</th></tr></thead><tbody>{orders.map((order) => <tr key={order.id}><td><code>{order.id.slice(0, 8)}</code></td><td>{order.customerEmail || "待付款"}</td><td>{order.items.reduce((sum, item) => sum + item.quantity, 0)}</td><td>{formatMoney(order.totalAmount ?? order.subtotalAmount, order.currency)}</td><td><span className={`status-chip ${order.status}`}>{order.status}</span></td><td>{formatDateTime(order.createdAt)}</td></tr>)}</tbody></table></div> : <div className="empty-inline">尚无订单。Stripe Checkout 创建后会先出现 pending，webhook 确认付款后变为 paid。</div>}</section>; }

@@ -1,0 +1,11 @@
+import { AdminNav } from "@/components/admin/admin-nav";
+import { ReadinessBanner } from "@/components/admin/readiness-banner";
+import { requireAdminPage } from "@/lib/admin-auth";
+import { getDeploymentReadiness } from "@/lib/env";
+
+export const dynamic = "force-dynamic";
+
+export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
+  await requireAdminPage();
+  return <div className="admin-shell shell"><div className="admin-heading"><div><span className="eyebrow">SUNTV MALL</span><h1>运营工作台</h1></div><ReadinessBanner readiness={getDeploymentReadiness()} /></div><AdminNav />{children}</div>;
+}

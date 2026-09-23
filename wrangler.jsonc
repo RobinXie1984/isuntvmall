@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "isuntvmall",
+  "compatibility_date": "2026-09-23",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "vinext/server/fetch-handler",
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  "account_id": "c805fea6fe0eb47cd90cd5e19f0ff00e",
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://www.isuntvmall.com"
+  }
+}

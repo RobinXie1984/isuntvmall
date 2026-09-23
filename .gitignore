@@ -1,0 +1,40 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local environment and secrets
+.env*
+!.env.example
+
+# tests and tooling
+/coverage
+.playwright-cli/
+/output/playwright/
+*.tsbuildinfo
+
+# system files
+.DS_Store
+*.pem
+
+# local Supabase state
+/supabase/.branches
+/supabase/.temp
+/dist/
+.vinext/
+.wrangler/
+
+# Cloudflare build and local runtime
+dist/
+.wrangler/
+.dev.vars*
+package-lock.baseline.json
+BASELINE-MANIFEST.json
+*.tsbuildinfo
