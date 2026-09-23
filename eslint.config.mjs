@@ -12,5 +12,5 @@ export default defineConfig([
       "@next/next/no-img-element": "off",
     },
   },
-  globalIgnores([".next/**", "dist/**", ".wrangler/**", "coverage/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", "dist/**", ".wrangler/**", "qa/deploy-dry-run/**", "coverage/**", "next-env.d.ts"]),
 ]);

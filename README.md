@@ -8,7 +8,8 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 
 - Multiple creator rooms, each with its own featured products.
 - YouTube player example; explicit provider-aware Facebook/Instagram viewing boundaries.
-- Persistent bag across rooms with per-line attribution.
+- Persistent bag across rooms with per-line attribution and in-room review that keeps the player mounted.
+- Reservation-backed checkout implementation with frozen order snapshots, stable retry IDs, expiration and manual-review payment exceptions; real checkout remains disabled pending acceptance.
 - Product catalog, bounded CSV ingestion, and centrally managed host/session administration.
 - Bilingual English/Chinese interface and responsive customer pages.
 
@@ -25,6 +26,7 @@ npm ci
 npm run lint
 npm run typecheck
 npm run test:run
+npm run test:reservations
 npm run build
 npm run build:vinext
 npm run start:vinext
@@ -42,7 +44,7 @@ Do not point this at a production database or enable payment processing without 
 
 1. Approve the merchant catalog, actual inventory, host identities and authorized stream URLs.
 2. Provision a dedicated database, apply and verify migrations, and provision individual operator access appropriate to the launch scope.
-3. Implement and verify atomic stock reservations shared by simultaneous rooms, with expiration/release and idempotent fulfillment.
+3. Verify the implemented stock reservation, expiration/release and idempotent fulfillment paths on the actual managed PostgreSQL deployment, including overlapping transactions from independent connections. The included local PGlite checks execute actual migrations but do not prove production concurrency. Add checkout abuse controls before exposing inventory holds publicly.
 4. Verify hosted checkout, exact amount/currency binding, signed webhook replay, cancellation, refunds and retry behavior using the provider's test environment.
 5. Provide actual shipping, refund, privacy and contact policies; verify regional payment and fulfillment settings.
 6. Run desktop/mobile and deployed-origin player checks. Facebook/Instagram capability depends on supported provider behavior and authorized accounts; embedding, comment ordering and simulcasting are separate integrations.

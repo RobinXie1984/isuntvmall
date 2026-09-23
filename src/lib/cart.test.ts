@@ -14,9 +14,10 @@ describe("multi-room cart and release boundaries",()=>{
  });
  it("preserves attribution through JSON persistence",()=>expect(parseStoredCart(JSON.parse(JSON.stringify([line])))).toEqual([line]));
  it("bounds duplicate stored quantities",()=>expect(parseStoredCart([line,{...line,quantity:10}])[0].quantity).toBe(10));
+ it("accepts selectors only with a valid attempt UUID",()=>{expect(checkoutInputSchema.safeParse({checkoutAttemptId:"11111111-1111-4111-8111-111111111111",items:[line]}).success).toBe(true);expect(checkoutInputSchema.safeParse({items:[line]}).success).toBe(false);});
  it("refuses browser-supplied price or partial attribution",()=>{
-  expect(checkoutInputSchema.safeParse({items:[{...line,price:1}]}).success).toBe(false);
-  expect(checkoutInputSchema.safeParse({items:[{...line,source:{liveSessionId:s.id}}]}).success).toBe(false);
+  expect(checkoutInputSchema.safeParse({checkoutAttemptId:"11111111-1111-4111-8111-111111111111",items:[{...line,price:1}]}).success).toBe(false);
+  expect(checkoutInputSchema.safeParse({checkoutAttemptId:"11111111-1111-4111-8111-111111111111",items:[{...line,source:{liveSessionId:s.id}}]}).success).toBe(false);
  });
  it("reconstructs source from an active authoritative room",()=>expect(validateAttribution([line],[{...s,status:"live"}])).toEqual([line]));
  it("rejects forged KOL, unrelated SKU, inactive KOL and preview source",()=>{

@@ -3,7 +3,7 @@ import type { CartLine, LiveSession } from "@/types/commerce";
 
 const sourceSchema = z.object({ liveSessionId: z.uuid(), kolId: z.uuid() }).strict();
 export const cartLineSchema = z.object({ productId: z.uuid(), quantity: z.number().int().min(1).max(10), source: sourceSchema.optional() }).strict();
-export const checkoutInputSchema = z.object({ items: z.array(cartLineSchema).min(1).max(20) }).strict();
+export const checkoutInputSchema = z.object({ checkoutAttemptId: z.uuid(), items: z.array(cartLineSchema).min(1).max(20) }).strict();
 export function cartLineKey(line: Pick<CartLine, "productId" | "source">) {
  return [line.productId, line.source?.liveSessionId ?? "direct", line.source?.kolId ?? "direct"].join(":");
 }

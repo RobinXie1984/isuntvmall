@@ -1,10 +1,12 @@
 import "server-only";
+import { checkoutReleaseReady } from "@/lib/cart";
 
 import { hasStripeConfig, hasSupabaseConfig } from "@/lib/env";
 import { getStripe } from "@/lib/stripe/client";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export async function getCheckoutResult(sessionId: string | undefined) {
+  if (!checkoutReleaseReady()) return null;
   if (!sessionId || !/^cs_(?:test_|live_)?[a-zA-Z0-9_]+$/.test(sessionId)) return null;
   if (!hasStripeConfig() || !hasSupabaseConfig()) return null;
 

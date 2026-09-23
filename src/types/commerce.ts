@@ -1,7 +1,7 @@
 export type ProductStatus = "draft" | "published" | "archived";
 export type LivePlatform = "youtube" | "facebook" | "tiktok" | "instagram" | "external";
 export type LiveStatus = "scheduled" | "live" | "ended" | "preview";
-export type OrderStatus = "pending" | "paid" | "failed" | "cancelled" | "refunded";
+export type OrderStatus = "pending" | "paid" | "failed" | "cancelled" | "refunded" | "review";
 
 export interface ProductImage {
   id: string;
