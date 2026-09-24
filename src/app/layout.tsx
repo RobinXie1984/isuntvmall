@@ -1,26 +1,15 @@
 import type { Metadata } from "next";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { LocaleProvider } from "@/components/i18n/locale-provider";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { getLocale } from "@/lib/locale-server";
 import "./globals.css";
-import { hasSupabaseConfig } from "@/lib/env";
-
-export const metadata: Metadata = {
-  title: { default: "iSunTVMall · Watch, discover, shop", template: "%s · SunTV Mall" },
-  description: "看见产品，也看见产品背后的人。SunTV 精选直播与跨境好物。",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body>
-        <CartProvider>
-          <SiteHeader />
-          <div className="preview-banner" role="status">{!hasSupabaseConfig() ? "Showroom preview · Fictional hosts & sample products. No orders or payments. 演示预览：虚构主播与样品，不接收订单或付款。" : "Commerce preview · Ordering is not yet open. 商城预览：尚未开放下单。"}</div>
-          <main>{children}</main>
-          <SiteFooter />
-        </CartProvider>
-      </body>
-    </html>
-  );
+export async function generateMetadata():Promise<Metadata> {
+ const {t}=await getLocale();
+ return {title:{default:t("iSunTVMall — Considered everyday","iSunTVMall — 用心選好物"),template:"%s · iSunTVMall"},description:t("Thoughtful everyday finds, independent hosts, and a simpler way to shop.","用心挑選日常好物，與主播一起探索生活。")};
+}
+export default async function RootLayout({children}:Readonly<{children:React.ReactNode}>) {
+ const {locale,t}=await getLocale();
+ return <html lang={locale} data-scroll-behavior="smooth"><body><LocaleProvider initialLocale={locale}><CartProvider><a className="skip-link" href="#main-content">{t("Skip to content","跳至內容")}</a><SiteHeader/><div className="preview-banner" role="status">{t("Showroom preview · Sample products and hosts. Orders and payments are not open.","展示預覽・商品及主播均為演示，暫未開放訂單與付款。")}</div><main id="main-content">{children}</main><SiteFooter/></CartProvider></LocaleProvider></body></html>;
 }

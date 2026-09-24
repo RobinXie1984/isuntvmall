@@ -1,9 +1,10 @@
+import {getLocale} from "@/lib/locale-server";
 import { CartPageClient } from "@/components/cart/cart-page-client";
 import { getProducts, getLiveSessions } from "@/lib/data/store";
 import { checkoutReleaseReady } from "@/lib/cart";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "购物车" };
+export async function generateMetadata(){const {t}=await getLocale();return {title:t("Shopping bag","購物袋"),robots:{index:false,follow:false}};}
 
 export default async function CartPage({searchParams}: {searchParams: Promise<{checkout?:string;attempt?:string}>}) {
   const query = await searchParams;

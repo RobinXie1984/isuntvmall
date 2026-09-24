@@ -1,15 +1,5 @@
+"use client";
 import Link from "next/link";
-import { BrandMark } from "@/components/site/brand-mark";
-
-export function SiteFooter() {
-  return (
-    <footer className="site-footer">
-      <div className="shell footer-grid">
-        <div><BrandMark /><p>Good finds. Great company. 好物与陪伴，同在一处。</p></div>
-        <div><strong>选购</strong><Link href="/live">直播现场</Link><Link href="/shop">全部商品</Link></div>
-        <div><strong>运营</strong><Link href="/studio">Operations preview · 运营体验</Link><Link href="/admin/login">Operator sign-in · 后台登录</Link><span>Hong Kong · Global</span></div>
-      </div>
-      <div className="shell footer-bottom"><span>© 2026 iSunTVMall</span><span>Watch · Discover · Shop</span></div>
-    </footer>
-  );
-}
+import {BrandMark} from "@/components/site/brand-mark";
+import {useLocale} from "@/components/i18n/locale-provider";
+export function SiteFooter(){const {t}=useLocale();return <footer className="site-footer"><div className="shell footer-grid"><div><BrandMark/><p>{t("Thoughtful things. Everyday company.","用心選好物，陪伴每一天。")}</p></div><div><strong>{t("Explore","探索")}</strong><Link href="/shop">{t("All products","全部商品")}</Link><Link href="/live">{t("Watch & shop","觀看與選購")}</Link></div><div><strong>{t("For our team","營運團隊")}</strong><Link href="/studio">{t("Operations preview","營運體驗")}</Link><Link href="/admin/login">{t("Operator sign-in","後台登入")}</Link><span>{t("Hong Kong · Global","香港・全球")}</span></div></div><div className="shell footer-bottom"><span>© 2026 iSunTVMall</span><span>{t("Preview product imagery: AI illustrations.","預覽商品圖片為人工智能示意圖。")}</span></div></footer>;}

@@ -1,7 +1,11 @@
-import type { LiveStatus } from "@/types/commerce";
+"use client";
 
-const labels: Record<LiveStatus, string> = { live: "LIVE · 直播", scheduled: "Upcoming · 预告", ended: "Replay · 回放", preview: "Demo room · 演示间" };
+import type { LiveStatus } from "@/types/commerce";
+import { useLocale } from "@/components/i18n/locale-provider";
+
+const labels: Record<LiveStatus, readonly [string, string]> = { live: ["LIVE", "直播中"], scheduled: ["Upcoming", "即將開始"], ended: ["Replay", "重溫"], preview: ["Demo room", "示範直播間"] };
 
 export function LiveBadge({ status }: { status: LiveStatus }) {
-  return <span className={`live-badge ${status}`}>{status === "live" && <span />} {labels[status]}</span>;
+  const { t } = useLocale();
+  return <span className={`live-badge ${status}`}>{status === "live" && <span />} {t(...labels[status])}</span>;
 }

@@ -1,21 +1,11 @@
-import { ProductCard } from "@/components/product/product-card";
-import { getProducts } from "@/lib/data/store";
-
-export const dynamic = "force-dynamic";
-export const metadata = { title: "全部商品" };
-
-export default async function ShopPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const products = await getProducts();
-  const { category } = await searchParams;
-  const categories = [...new Set(products.map((product) => product.category))];
-  const visible = category ? products.filter((product) => product.category === category) : products;
-
-  return (
-    <div className="shell page-space">
-      <div className="page-intro"><span className="eyebrow">SUNTV SELECTION</span><h1>阳光严选</h1><p>不追求无穷货架。先把值得讲、值得看、值得买的产品放到镜头前。</p></div>
-      <nav className="filter-pills" aria-label="商品分类"><a className={!category ? "active" : ""} href="/shop">全部</a>{categories.map((item) => <a className={category === item ? "active" : ""} href={`/shop?category=${encodeURIComponent(item)}`} key={item}>{item}</a>)}</nav>
-      <div className="results-line"><span>{visible.length} 件商品</span><span>价格以结账页为准</span></div>
-      <div className="product-grid product-grid-wide">{visible.map((product) => <ProductCard key={product.id} product={product} />)}</div>
-    </div>
-  );
+import {ProductCard} from "@/components/product/product-card";
+import {getProducts} from "@/lib/data/store";
+import {getLocale} from "@/lib/locale-server";
+export const dynamic="force-dynamic";
+export async function generateMetadata(){const {t}=await getLocale();return {title:t("All products","全部商品")};}
+export default async function ShopPage({searchParams}:{searchParams:Promise<{category?:string;q?:string;sort?:string}>}){
+ const [{t,localize},products,{category,q="",sort="featured"}]=await Promise.all([getLocale(),getProducts(),searchParams]);
+ const categories=[...new Set(products.map(p=>p.category))];
+ const visible=products.filter(p=>(!category||p.category===category)&&(!q||[p.title,p.description,p.sku,localize(p.title),localize(p.description)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b)=>sort==="price-asc"?a.priceAmount-b.priceAmount:sort==="price-desc"?b.priceAmount-a.priceAmount:Number(b.featured)-Number(a.featured));
+ return <div className="shell page-space"><div className="catalogue-heading"><span className="eyebrow">{t("CONSIDERED EVERYDAY","用心選好物")}</span><h1>{q?t(`Results for “${q}”`,`「${q}」搜尋結果`):category?localize(category):t("All products","全部商品")}</h1><form className="mobile-catalogue-search" action="/shop" role="search"><input type="search" name="q" defaultValue={q} aria-label={t("Search the catalogue","搜尋商品目錄")} placeholder={t("Search products","搜尋商品")}/><button type="submit">{t("Search","搜尋")}</button></form></div><div className="catalogue-layout"><aside className="catalogue-sidebar"><h2>{t("Categories","商品分類")}</h2><nav aria-label={t("Product categories","商品分類")}><a className={!category?"active":""} href="/shop">{t("All products","全部商品")}</a>{categories.map(c=><a className={category===c?"active":""} key={c} href={`/shop?category=${encodeURIComponent(c)}`}>{localize(c)}</a>)}</nav></aside><div><form className="catalogue-toolbar" action="/shop"><span>{t(`${visible.length} items`,`${visible.length} 件商品`)}</span>{category&&<input type="hidden" name="category" value={category}/>} {q&&<input type="hidden" name="q" value={q}/>}<div><label htmlFor="sort">{t("Sort by","排序")}</label><select id="sort" name="sort" defaultValue={sort}><option value="featured">{t("Featured","精選優先")}</option><option value="price-asc">{t("Price: low to high","價格由低至高")}</option><option value="price-desc">{t("Price: high to low","價格由高至低")}</option></select><button className="sort-apply" type="submit">{t("Apply","套用")}</button></div></form><div className="product-grid product-grid-wide">{visible.map(p=><ProductCard key={p.id} product={p}/>)}</div>{!visible.length&&<div className="empty-state"><h2>{t("No products found","未找到商品")}</h2><p>{t("Try another search or browse the collection.","請嘗試其他關鍵字，或瀏覽全部商品。")}</p><a className="button" href="/shop">{t("View all products","查看全部商品")}</a></div>}</div></div></div>;
 }

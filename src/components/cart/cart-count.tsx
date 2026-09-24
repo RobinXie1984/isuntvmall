@@ -1,8 +1,10 @@
 "use client";
 
+import { useLocale } from "@/components/i18n/locale-provider";
 import { useCart } from "@/components/cart/cart-provider";
 
 export function CartCount() {
   const { itemCount } = useCart();
-  return <span className="cart-count" aria-label={`购物车有 ${itemCount} 件商品`}>{itemCount}</span>;
+  const { t } = useLocale();
+  return <span className="cart-count" aria-label={t(`${itemCount} items in your bag`, `購物袋內有 ${itemCount} 件商品`)}>{itemCount}</span>;
 }

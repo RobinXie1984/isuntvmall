@@ -1,11 +1,13 @@
 "use client";
 
+import { useLocale } from "@/components/i18n/locale-provider";
 import type { CartSource } from "@/types/commerce";
 import { useState } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 
 export function AddToCartButton({ productId, disabled = false, compact = false, source }: { productId: string; source?: CartSource; disabled?: boolean; compact?: boolean }) {
   const { addItem } = useCart();
+  const { t } = useLocale();
   const [added, setAdded] = useState(false);
 
   return (
@@ -19,7 +21,7 @@ export function AddToCartButton({ productId, disabled = false, compact = false, 
         window.setTimeout(() => setAdded(false), 1200);
       }}
     >
-      {disabled ? "Sold out · 售罄" : added ? "Added ✓ 已加入" : "Add · 加入"}
+      {disabled ? t("Sold out", "售罄") : added ? t("Added ✓", "已加入 ✓") : t("Add", "加入")}
     </button>
   );
 }

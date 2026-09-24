@@ -1,16 +1,11 @@
 import Link from "next/link";
-import { LiveBadge } from "@/components/live/live-badge";
-import { ProductCard } from "@/components/product/product-card";
-import { getLiveSessions, getProducts } from "@/lib/data/store";
-export const dynamic = "force-dynamic";
-export default async function HomePage() {
- const [products,sessions]=await Promise.all([getProducts(),getLiveSessions()]);
- return <>
-  <section className="home-hero"><div className="hero-orbit orbit-one"/><div className="hero-orbit orbit-two"/>
-   <div className="shell hero-grid"><div className="hero-copy"><span className="eyebrow light">ISUNTVMALL / WATCH. DISCOVER. SHOP.</span><h1>Good finds.<br/><em>Great company.</em></h1><p>好物，与懂它的人相遇。<br/>Discover independent hosts and their curated selections, all in one place.</p><div className="hero-actions"><Link className="button" href="/live">Explore rooms · 逛直播间 →</Link><Link className="button button-ghost" href="/shop">Shop · 商品</Link></div><div className="trust-line"><span>Your host</span><i/><span>Your selection</span><i/><span>One shopping bag</span></div></div>
-   <div className="hero-room-stack">{sessions.slice(0,3).map((s,i)=><Link href={`/live/${s.slug}`} key={s.id} className="room-preview"><img src={s.posterUrl || "/demo/live-hero.svg"} alt=""/><div><span className="eyebrow light">ROOM 0{i+1} · {s.platform}</span><h2>{s.title}</h2><p>{s.hostName}</p><LiveBadge status={s.status}/></div><span aria-hidden="true">↗</span></Link>)}</div>
-   </div></section>
-  <section className="section shell"><div className="section-heading"><div><span className="eyebrow">THE EDIT</span><h2>Worth a closer look · 好物精选</h2></div><Link className="text-link" href="/shop">All products · 全部 →</Link></div><div className="product-grid">{products.slice(0,4).map(p=><ProductCard key={p.id} product={p}/>)}</div></section>
-  <section className="story-strip"><div className="shell story-grid"><span className="story-number">↗</span><div><span className="eyebrow light">A DIFFERENT WAY TO DISCOVER</span><h2>Many hosts.<br/>Your kind of discovery.</h2></div><p>Choose a room. Explore its products. Keep your selections as you move between hosts. 多位主播，各有精选；自由切换，购物袋随你同行。</p></div></section>
- </>;
+import {LiveBadge} from "@/components/live/live-badge";
+import {ProductCard} from "@/components/product/product-card";
+import {getLiveSessions,getProducts} from "@/lib/data/store";
+import {getLocale} from "@/lib/locale-server";
+export const dynamic="force-dynamic";
+export default async function HomePage(){
+ const [{t,localize},products,sessions]=await Promise.all([getLocale(),getProducts(),getLiveSessions()]);
+ const categories=[{name:t("Clothing","服飾"),value:"Apparel",image:"/editorial/tee.jpg"},{name:t("Everyday living","日常生活"),value:"Lifestyle",image:"/editorial/fan.jpg"},{name:t("Travel","旅行用品"),value:"Travel",image:"/editorial/bag.jpg"},{name:t("Gifts","心意禮品"),value:"Gifts",image:"/editorial/tea.jpg"}];
+ return <><section className="shell editorial-hero"><div className="editorial-visual"><img src="/editorial/everyday.jpg" alt={t("A quiet collection of everyday essentials","日常好物的生活陳列")}/></div><div className="editorial-copy"><span className="eyebrow">{t("THE EVERYDAY EDIT","日常精選")}</span><h1>{t("Simple things.\nWell chosen.","簡單日常，\n用心挑選。")}</h1><p>{t("Useful pieces for the way you live. Discover them at your own pace, or with someone who knows them well.","為生活挑選實用好物。自在慢逛，或與了解它們的主播一起探索。")}</p><Link className="button" href="/shop">{t("Explore the collection","探索精選商品")} <span aria-hidden="true">→</span></Link><span className="editorial-note">{t("A preview of things to come","下一段生活的預覽")}</span></div></section><section className="shell category-tiles" aria-label={t("Shop by category","按分類選購")}>{categories.map(c=><Link href={`/shop?category=${c.value}`} key={c.value}><img src={c.image} alt=""/><span>{c.name}</span><span aria-hidden="true">↗</span></Link>)}</section><section className="section shell"><div className="section-heading"><div><span className="eyebrow">{t("OUR SELECTION","用心精選")}</span><h2>{t("For the everyday","好物融入日常")}</h2></div><Link className="text-link" href="/shop">{t("View all products","查看全部商品")} →</Link></div><div className="product-grid">{products.slice(0,4).map(p=><ProductCard key={p.id} product={p}/>)}</div></section><section className="rooms-section"><div className="shell section"><div className="section-heading"><div><span className="eyebrow">{t("MEET THE SELECTION","一起探索")}</span><h2>{t("A room for your interests","找到喜歡的直播間")}</h2><p className="section-description">{t("Independent selections. One shopping bag, wherever you wander.","每個直播間各有精選，購物袋隨你自由探索。")}</p></div><Link className="text-link" href="/live">{t("Explore rooms","探索直播間")} →</Link></div><div className="home-rooms">{sessions.slice(0,3).map((s,i)=><Link href={`/live/${s.slug}`} key={s.id}><div className={`room-art room-art-${i}`}><span aria-hidden="true">{String(i+1).padStart(2,"0")}</span><img src={categories[i]?.image} alt=""/><LiveBadge status={s.status}/></div><h3>{localize(s.title)}</h3><p>{localize(s.hostName)}</p><span className="text-link">{t("Enter room","進入直播間")} →</span></Link>)}</div></div></section></>;
 }

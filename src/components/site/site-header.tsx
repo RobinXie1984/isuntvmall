@@ -1,18 +1,9 @@
+"use client";
 import Link from "next/link";
 import { CartCount } from "@/components/cart/cart-count";
 import { BrandMark } from "@/components/site/brand-mark";
-
-export function SiteHeader() {
-  return (
-    <header className="site-header">
-      <div className="shell header-inner">
-        <BrandMark />
-        <nav aria-label="主导航">
-          <Link href="/live">Rooms · 直播</Link>
-          <Link href="/shop">Shop · 商品</Link>
-          <Link className="cart-link" href="/cart" aria-label="购物车">Bag · 购物袋<CartCount /></Link>
-        </nav>
-      </div>
-    </header>
-  );
+import {useLocale} from "@/components/i18n/locale-provider";
+export function SiteHeader(){
+ const {locale,t,setLocale}=useLocale();
+ return <header className="site-header"><div className="shell header-inner"><BrandMark/><form className="header-search" action="/shop" role="search"><input name="q" aria-label={t("Search products","搜尋商品")} placeholder={t("Search products","搜尋商品")}/><button type="submit" aria-label={t("Search","搜尋")}><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></form><div className="header-tools"><button className="language-switch" type="button" onClick={()=>setLocale(locale==="en"?"zh-Hant":"en")} aria-label={t("Switch to Traditional Chinese","切換至英文")} lang={locale==="en"?"zh-Hant":"en"}>{locale==="en"?"繁體中文":"English"}</button><Link className="cart-link" href="/cart" aria-label={t("Shopping bag","購物袋")}><svg width="21" height="23" viewBox="0 0 24 26" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M4 8h16l1 16H3L4 8Z"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/></svg><CartCount/></Link></div></div><nav className="shell category-nav" aria-label={t("Main navigation","主要導覽")}><Link href="/shop">{t("All products","全部商品")}</Link><Link href="/shop?category=Apparel">{t("Clothing","服飾")}</Link><Link href="/shop?category=Lifestyle">{t("Everyday living","日常生活")}</Link><Link href="/shop?category=Travel">{t("Travel","旅行用品")}</Link><Link href="/shop?category=Gifts">{t("Gifts","心意禮品")}</Link><Link className="nav-room-link" href="/live">{t("Watch & shop","觀看與選購")} <span aria-hidden="true">↗</span></Link></nav></header>;
 }

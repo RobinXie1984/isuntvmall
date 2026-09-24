@@ -1,3 +1,4 @@
+import {getLocale} from "@/lib/locale-server";
 import {OperationsPreview} from "@/components/admin/operations-preview";
-export const metadata={title:"Operations preview · 运营体验",robots:{index:false,follow:false}};
+export async function generateMetadata(){const {t}=await getLocale();return {title:t("Operations preview","營運體驗"),robots:{index:false,follow:false}};}
 export default function StudioPreview(){return <OperationsPreview/>;}
