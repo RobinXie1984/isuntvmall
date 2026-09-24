@@ -1,5 +1,7 @@
 import type { Kol, LiveSession, Product } from "@/types/commerce";
 
+import { expandedProducts } from "./expanded-catalogue";
+
 const createdAt = "2026-08-18T08:00:00.000Z";
 
 export const demoProducts: Product[] = [
@@ -99,6 +101,7 @@ export const demoProducts: Product[] = [
     createdAt,
     images: [{ id: "img-earbuds", sourceUrl: "/demo/earbuds.svg", storagePath: null, altText: "黑色无线耳机", position: 0 }],
   },
+  ...expandedProducts,
 ];
 
 // Fictional showroom identities, never represented as contracted KOLs.
@@ -110,8 +113,8 @@ export const demoKols: Kol[] = [
 
 export function getDemoLiveSessions(): LiveSession[] {
  return [
-  { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", slug: "style-studio", title: "Everyday, considered · 日常好物", description: "Explore a sample style room. The YouTube clip is a player demonstration, not a live shopping broadcast. 穿搭体验间，视频仅为播放器示例。", hostName: demoKols[0].displayName, kol: demoKols[0], platform: "youtube", externalUrl: "https://www.youtube.com/watch?v=M7lc1UVf-VE", embedId: "M7lc1UVf-VE", status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-hero.svg", products: demoProducts.slice(0,3) },
-  { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", slug: "home-studio", title: "A little more home · 生活小确幸", description: "A second independent room with its own featured selection. Facebook playback requires a verified broadcast. 独立选品，正式直播待接入。", hostName: demoKols[1].displayName, kol: demoKols[1], platform: "facebook", externalUrl: "https://www.facebook.com/", embedId: null, status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-founders.svg", products: [demoProducts[3],demoProducts[2]] },
-  { id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc", slug: "travel-studio", title: "Go somewhere good · 轻装出发", description: "Instagram viewing opens on the official platform; this room keeps your product selection together. Instagram 原平台观看，商品在这里选购。", hostName: demoKols[2].displayName, kol: demoKols[2], platform: "instagram", externalUrl: "https://www.instagram.com/", embedId: null, status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-style.svg", products: demoProducts.slice(4) },
+  { id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", slug: "style-studio", title: "Everyday, considered · 日常好物", description: "Explore a sample style room. The YouTube clip is a player demonstration, not a live shopping broadcast. 穿搭体验间，视频仅为播放器示例。", hostName: demoKols[0].displayName, kol: demoKols[0], platform: "youtube", externalUrl: "https://www.youtube.com/watch?v=M7lc1UVf-VE", embedId: "M7lc1UVf-VE", status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-hero.svg", products: [...demoProducts.slice(0,3), ...expandedProducts.filter(p => p.category === "Apparel").slice(0,3)] },
+  { id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", slug: "home-studio", title: "A little more home · 生活小确幸", description: "A second independent room with its own featured selection. Facebook playback requires a verified broadcast. 独立选品，正式直播待接入。", hostName: demoKols[1].displayName, kol: demoKols[1], platform: "facebook", externalUrl: "https://www.facebook.com/", embedId: null, status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-founders.svg", products: [demoProducts[3],demoProducts[2], ...expandedProducts.filter(p => p.category === "Lifestyle").slice(0,4)] },
+  { id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc", slug: "travel-studio", title: "Go somewhere good · 轻装出发", description: "Instagram viewing opens on the official platform; this room keeps your product selection together. Instagram 原平台观看，商品在这里选购。", hostName: demoKols[2].displayName, kol: demoKols[2], platform: "instagram", externalUrl: "https://www.instagram.com/", embedId: null, status: "preview", startsAt: createdAt, endsAt: null, posterUrl: "/demo/live-style.svg", products: [...demoProducts.slice(4,6), ...expandedProducts.filter(p => p.category === "Travel").slice(0,4)] },
  ];
 }

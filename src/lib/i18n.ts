@@ -1,3 +1,5 @@
+import { expandedTranslations } from "./data/expanded-catalogue";
+
 export type Locale = "en" | "zh-Hant";
 export const LOCALE_COOKIE = "isuntvmall-locale";
 export function parseLocale(value: string | undefined | null): Locale {
@@ -7,6 +9,7 @@ export function parseLocale(value: string | undefined | null): Locale {
 // Exact editorial translations for the sample catalogue. Never split or
 // heuristically rewrite merchant-authored content.
 const translations: Record<string, readonly [string, string]> = {
+  ...expandedTranslations,
   "Cotton tee · 纯棉 T恤": ["Cotton tee", "純棉上衣"],
   "轻盈亲肤的 200 支纯棉男士 T 恤，镜头前后都利落。": ["A light, soft cotton tee for everyday comfort, on camera and off.", "輕盈親膚的純棉上衣，鏡頭前後都俐落舒適。"],
   "阳光白色纯棉 T 恤": ["White cotton tee", "白色純棉上衣"],

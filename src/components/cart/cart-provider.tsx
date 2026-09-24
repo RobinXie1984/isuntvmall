@@ -7,12 +7,24 @@ import type { CartLine, CartSource } from "@/types/commerce";
 
 const STORAGE_KEY = "suntv-mall-cart-v2";
 
+export type AddItemResult = "added" | "bag-limit" | "quantity-limit" | "invalid";
+
+export function addCartLine(current: CartLine[], productId: string, quantity = 1, source?: CartSource): { items: CartLine[]; result: AddItemResult } {
+  if (!Number.isInteger(quantity) || quantity < 1) return { items: current, result: "invalid" };
+  const key = cartLineKey({ productId, source });
+  const existing = current.find(item => cartLineKey(item) === key);
+  if ((existing?.quantity ?? 0) + quantity > 10) return { items: current, result: "quantity-limit" };
+  if (existing) return { items: current.map(item => cartLineKey(item) === key ? { ...item, quantity: item.quantity + quantity } : item), result: "added" };
+  if (current.length >= 20) return { items: current, result: "bag-limit" };
+  return { items: [...current, { productId, quantity, ...(source ? { source } : {}) }], result: "added" };
+}
+
 interface CartContextValue {
   items: CartLine[];
   getCheckoutAttempt: () => CheckoutAttempt;
   clearCheckoutAttempt: () => void;
   itemCount: number;
-  addItem: (productId: string, quantity?: number, source?: CartSource) => void;
+  addItem: (productId: string, quantity?: number, source?: CartSource) => AddItemResult;
   setQuantity: (productId: string, quantity: number) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
@@ -24,57 +36,51 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const attemptRef = useRef<CheckoutAttempt | null>(null);
   const [items, setItems] = useState<CartLine[]>([]);
   const [ready, setReady] = useState(false);
+  // All cart writes update this snapshot before rendering, so rapid clicks receive
+  // a result from the latest state without side effects in a React updater.
+  const itemsRef = useRef<CartLine[]>([]);
+  const commitItems = useCallback((next: CartLine[]) => {
+    itemsRef.current = next;
+    setItems(next);
+  }, []);
 
   useEffect(() => {
     queueMicrotask(() => {
       try {
-        setItems(parseStoredCart(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")));
+        commitItems(parseStoredCart(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")));
       } catch {
-        setItems([]);
+        commitItems([]);
       }
       setReady(true);
     });
-  }, []);
+  }, [commitItems]);
 
   useEffect(() => {
     if (ready) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* Storage unavailable: cart remains usable for this visit. */ } }
   }, [items, ready]);
 
-  const addItem = useCallback((productId: string, quantity = 1, source?: CartSource) => {
-    if (!Number.isInteger(quantity) || quantity < 1) return;
-    const key = cartLineKey({productId, source});
-    setItems((current) => {
-      const existing = current.find((item) => cartLineKey(item) === key);
-      if (existing) {
-        return current.map((item) =>
-          cartLineKey(item) === key ? { ...item, quantity: Math.min(10, item.quantity + quantity) } : item,
-        );
-      }
-      if(current.length >= 20) return current;
-      return [...current, { productId, quantity: Math.min(10, Math.max(1, quantity)), ...(source ? {source} : {}) }];
-    });
-  }, []);
+  const addItem = useCallback((productId: string, quantity = 1, source?: CartSource): AddItemResult => {
+    const next = addCartLine(itemsRef.current, productId, quantity, source);
+    if (next.result === "added") commitItems(next.items);
+    return next.result;
+  }, [commitItems]);
 
   const setQuantity = useCallback((key: string, quantity: number) => {
-    if(!Number.isInteger(quantity)) return;
-    if (quantity <= 0) {
-      setItems((current) => current.filter((item) => cartLineKey(item) !== key));
-      return;
-    }
-    setItems((current) =>
-      current.map((item) => (cartLineKey(item) === key ? { ...item, quantity: Math.min(10, quantity) } : item)),
-    );
-  }, []);
+    if (!Number.isInteger(quantity)) return;
+    commitItems(quantity <= 0
+      ? itemsRef.current.filter(item => cartLineKey(item) !== key)
+      : itemsRef.current.map(item => cartLineKey(item) === key ? { ...item, quantity: Math.min(10, quantity) } : item));
+  }, [commitItems]);
 
   const removeItem = useCallback((key: string) => {
-    setItems((current) => current.filter((item) => cartLineKey(item) !== key));
-  }, []);
+    commitItems(itemsRef.current.filter(item => cartLineKey(item) !== key));
+  }, [commitItems]);
 
   const clearCart = useCallback(() => {
-    setItems([]);
+    commitItems([]);
     attemptRef.current = null;
     try { sessionStorage.removeItem(CHECKOUT_ATTEMPT_STORAGE); } catch { /* Root state is cleared even without storage. */ }
-  }, []);
+  }, [commitItems]);
 
   // Root-lifetime retry identity survives changing room/cart views even when
   // browser storage is denied. Full reload cannot preserve denied storage.
