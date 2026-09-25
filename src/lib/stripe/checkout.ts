@@ -32,19 +32,23 @@ async function release(orderId:string,reason:string) {
  return data as string | null;
 }
 function rpcError(message:string): CheckoutError {
+ for(const code of ["CHECKOUT_CLIENT_RATE_LIMIT","CHECKOUT_CLIENT_ACTIVE_LIMIT","CHECKOUT_STORE_ACTIVE_LIMIT"]){if(message.includes(code))return new CheckoutError(code,"Checkout capacity is temporarily limited.",429);}
+ if(message.includes("CHECKOUT_ADMISSION_DISABLED"))return new CheckoutError("CHECKOUT_HOLD","Checkout admission is paused.",503);
+ if(message.includes("CHECKOUT_CLIENT_CHANGED"))return new CheckoutError("CHECKOUT_CLIENT_CHANGED","Resume from the same connection or check the existing payment attempt.",409);
  if(message.includes("CHECKOUT_PAYMENT_PENDING"))return new CheckoutError("CHECKOUT_PAYMENT_PENDING","Payment or order review is being confirmed. Do not pay again.");
  for(const code of ["CHECKOUT_ATTEMPT_CHANGED","CHECKOUT_ATTEMPT_CLOSED","OUT_OF_STOCK","PRODUCT_UNAVAILABLE","INVALID_ATTRIBUTION","QUANTITY_LIMIT","UNSUPPORTED_CURRENCY"]){
   if(message.includes(code))return new CheckoutError(code,code.startsWith("CHECKOUT_ATTEMPT") ? "This checkout attempt has ended or changed. Start a new attempt." : "A selected product cannot be reserved. Please review your shopping bag.");
  }
  return retryError();
 }
-export async function createCheckoutSession(input: unknown, requestOrigin: string) {
+export async function createCheckoutSession(input: unknown, requestOrigin: string, clientHash?: string) {
  checkoutGate();
+ if(!clientHash||!/^[a-f0-9]{64}$/.test(clientHash))throw new CheckoutError("CHECKOUT_VERIFICATION_REQUIRED","Verification is required.",422);
  const parsed=checkoutInputSchema.parse(input);
  const normalized=parsed.items.map(i=>({product_id:i.productId,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
  const fingerprint=createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
  const supabase=getSupabaseAdmin();
- const {data:orderId,error:reserveError}=await supabase.rpc("reserve_checkout",{p_attempt:parsed.checkoutAttemptId,p_fingerprint:fingerprint,p_lines:normalized,p_policy:policy(requestOrigin)});
+ const {data:orderId,error:reserveError}=await supabase.rpc("reserve_checkout",{p_attempt:parsed.checkoutAttemptId,p_fingerprint:fingerprint,p_lines:normalized,p_policy:policy(requestOrigin),p_client_hash:clientHash});
  if(reserveError || !orderId)throw rpcError(reserveError?.message ?? "Reservation failed");
  const {data,error}=await supabase.from("orders").select("id,status,currency,subtotal_amount,reservation_expires_at,stripe_checkout_session_id,checkout_policy,order_items(id,product_id,sku,title,unit_amount,quantity)").eq("id",orderId).single();
  if(error || !data)throw retryError();
@@ -65,7 +69,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
   // A prior uncertain create might have succeeded: only release when the same
   // idempotency key can be reconciled, or at natural reservation expiry. Keep
   // the hold here; no unsafe early release based solely on missing local link.
-  throw new CheckoutError("CHECKOUT_ATTEMPT_EXPIRED","This attempt is too old to resume. Inventory releases automatically at expiry.");
+  throw new CheckoutError("CHECKOUT_RETRY","This attempt is still unresolved. Keep the same attempt until payment or expiry is confirmed.",503);
  }
  const p=order.checkout_policy;
  const params:Stripe.Checkout.SessionCreateParams={

@@ -31,6 +31,7 @@ for (const file of readdirSync(path.join(root, 'supabase/migrations')).filter(fi
  receipt.migrations.push({ file, sha256: createHash('sha256').update(source).digest('hex') });
 }
 check('all actual migrations execute on native PostgreSQL', receipt.migrations.length > 0, { count: receipt.migrations.length });
+const admissionOwner=randomUUID();sql(`insert into auth.users(id) values(${literal(admissionOwner)}); insert into staff_members(user_id,role) values(${literal(admissionOwner)},'super_admin'); select checkout_admission_policy_set(${literal(admissionOwner)},true,5,2,100)`);
 async function contend(name, lockSql, statements) {
  let blockerOut = '', blockerError = ''; const clients = [];
  const blocker = spawn(psql, args, { env: { ...environment, PGAPPNAME: `${name}_barrier` }, stdio: ['pipe', 'pipe', 'pipe'] });
@@ -51,7 +52,7 @@ async function contend(name, lockSql, statements) {
  } finally { if (blocker.exitCode === null && !blocker.stdin.writableEnded) { blocker.stdin.end('rollback;\n\\q\n'); } for (const child of clients) if (child.exitCode === null) child.kill('SIGTERM'); }
 }
 const product = randomUUID(); sql(`insert into products(id,sku,slug,title,price_amount,currency,stock_qty,status,is_demo) values(${literal(product)},'CONTENT-ONE','contention-one','Last-unit test',100,'hkd',1,'published',false)`);
-const stock = await contend('stock', 'select pg_advisory_xact_lock(73219023)', Array.from({ length: 8 }, () => `select reserve_checkout(${literal(randomUUID())},${literal('a'.repeat(64))},${json([{ product_id: product, quantity: 1 }])},'{}'::jsonb)`));
+const stock = await contend('stock', 'select pg_advisory_xact_lock(73219023)', Array.from({ length: 8 }, () => `select reserve_checkout(${literal(randomUUID())},${literal('a'.repeat(64))},${json([{ product_id: product, quantity: 1 }])},'{}'::jsonb,${literal(createHash('sha256').update(randomUUID()).digest('hex'))})`));
 check('last-unit contention has exactly one committed reservation and seven shortages', stock.result.filter(x => x.code === 0).length === 1 && stock.result.filter(x => x.code !== 0 && x.error.includes('OUT_OF_STOCK')).length === 7, { clients: 8, observedConcurrentLockWaiters: stock.observedConcurrentLockWaiters, distinctBackendPids: stock.distinctBackendPids });
 check('stock contention creates no orphan orders or oversell', number('select count(*) from orders') === 1 && number("select coalesce(sum(quantity),0) from inventory_reservations where status='active'") === 1 && number(`select stock_qty from products where id=${literal(product)}`) === 1);
 const users = Array.from({ length: 8 }, () => randomUUID()); for (const user of users) sql(`insert into auth.users(id) values(${literal(user)}); insert into staff_members(user_id,role) values(${literal(user)},'catalog_editor')`);
@@ -71,4 +72,26 @@ check('same-revision order contention commits one and rejects seven stale writes
 check('order moves once with one audit record', sql(`select fulfillment_status||'|'||operation_revision from orders where id=${literal(order)}`) === 'packed|2' && number(`select count(*) from order_operation_audit where order_id=${literal(order)}`) === 1);
 const sameRequest = randomUUID(); const duplicate = await contend('replay', `select pg_advisory_xact_lock(hashtextextended(${literal(admin + sameRequest)},1))`, Array.from({ length: 8 }, () => `select order_operate(${literal(admin)},${literal(order)},2,${literal(sameRequest)},'ship',${json({ carrier: 'Test carrier', trackingNumber: 'TEST-ONLY' })})`));
 check('simultaneous retries share one revision and one additional audit event', duplicate.result.every(x => x.code === 0) && duplicate.result.filter(x => JSON.parse(x.out).replayed === true).length === 7 && sql(`select fulfillment_status||'|'||operation_revision from orders where id=${literal(order)}`) === 'shipped|3' && number(`select count(*) from order_operation_audit where order_id=${literal(order)}`) === 2, { clients: 8, observedConcurrentLockWaiters: duplicate.observedConcurrentLockWaiters, distinctBackendPids: duplicate.distinctBackendPids });
+
+// Admission decisions share the same reservation lock; expensive stock is ample
+// so these races measure client/global limits rather than inventory exhaustion.
+sql(`update products set stock_qty=100 where id=${literal(product)}; select checkout_admission_policy_set(${literal(admissionOwner)},true,5,20,100)`);
+const admissionSql = (hash, attempt=randomUUID()) => `select reserve_checkout(${literal(attempt)},${literal('a'.repeat(64))},${json([{product_id:product,quantity:1}])},'{}'::jsonb,${literal(hash)})`;
+const rateHash='b'.repeat(64);
+const clientRate=await contend('client_rate','select pg_advisory_xact_lock(73219023)',Array.from({length:8},()=>admissionSql(rateHash)));
+check('eight same-client attempts commit five and reject three at the recent quota',clientRate.result.filter(x=>x.code===0).length===5&&clientRate.result.filter(x=>x.code!==0&&x.error.includes('CHECKOUT_CLIENT_RATE_LIMIT')).length===3&&number(`select count(*) from private.checkout_admissions where client_hash=${literal(rateHash)}`)===5,{clients:8,observedConcurrentLockWaiters:clientRate.observedConcurrentLockWaiters,distinctBackendPids:clientRate.distinctBackendPids});
+sql(`select checkout_admission_policy_set(${literal(admissionOwner)},true,100,2,100)`);
+const activeHash='c'.repeat(64);
+const clientActive=await contend('client_active','select pg_advisory_xact_lock(73219023)',Array.from({length:8},()=>admissionSql(activeHash)));
+check('eight same-client attempts commit only two active holds',clientActive.result.filter(x=>x.code===0).length===2&&clientActive.result.filter(x=>x.code!==0&&x.error.includes('CHECKOUT_CLIENT_ACTIVE_LIMIT')).length===6&&number(`select count(*) from private.checkout_admissions where client_hash=${literal(activeHash)}`)===2,{clients:8,observedConcurrentLockWaiters:clientActive.observedConcurrentLockWaiters,distinctBackendPids:clientActive.distinctBackendPids});
+const activeBefore=number("select count(distinct h.order_id) from inventory_reservations h join orders o on o.id=h.order_id where h.status='active' and h.expires_at>clock_timestamp() and o.status in ('pending','review')");
+sql(`select checkout_admission_policy_set(${literal(admissionOwner)},true,100,2,${activeBefore+2})`);
+const storeActive=await contend('store_active','select pg_advisory_xact_lock(73219023)',Array.from({length:8},()=>admissionSql(createHash('sha256').update(randomUUID()).digest('hex'))));
+check('eight distinct clients cannot overrun the remaining two global slots',storeActive.result.filter(x=>x.code===0).length===2&&storeActive.result.filter(x=>x.code!==0&&x.error.includes('CHECKOUT_STORE_ACTIVE_LIMIT')).length===6&&number("select count(distinct h.order_id) from inventory_reservations h join orders o on o.id=h.order_id where h.status='active' and h.expires_at>clock_timestamp() and o.status in ('pending','review')")===activeBefore+2,{clients:8,observedConcurrentLockWaiters:storeActive.observedConcurrentLockWaiters,distinctBackendPids:storeActive.distinctBackendPids});
+// Retries remain idempotent while the policy is disabled and capacity is full.
+const retryOrder=clientActive.result.find(x=>x.code===0).out;const retryAttempt=sql(`select checkout_attempt_id from orders where id=${literal(retryOrder)}`);const beforeRetry=number('select count(*) from private.checkout_admissions');
+sql(`select checkout_admission_policy_set(${literal(admissionOwner)},false,100,2,${activeBefore+2})`);
+const checkoutRetry=await contend('checkout_retry','select pg_advisory_xact_lock(73219023)',Array.from({length:8},()=>admissionSql(activeHash,retryAttempt)));
+check('eight simultaneous checkout retries return one frozen order without charging admission again',checkoutRetry.result.every(x=>x.code===0&&x.out===retryOrder)&&number('select count(*) from private.checkout_admissions')===beforeRetry,{clients:8,observedConcurrentLockWaiters:checkoutRetry.observedConcurrentLockWaiters,distinctBackendPids:checkoutRetry.distinctBackendPids});
+
 receipt.completedAt = new Date().toISOString(); receipt.passed = receipt.checks.length; writeFileSync(path.join(root, 'native-concurrency-receipt.json'), JSON.stringify(receipt, null, 2) + '\n'); console.log(JSON.stringify({ passed: receipt.passed, concurrentConnectionsTested: true, liveDatabaseTouched: false }));

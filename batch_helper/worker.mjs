@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { normalizeImage, sha256, MAX_BYTES } from './processor.mjs';
 import { boundedFetch } from './network.mjs';
+import { expireInventoryReservations } from './maintenance.mjs';
 
 const args = process.argv.slice(2);
 const limitIndex = args.indexOf('--limit');
@@ -8,7 +9,9 @@ const limit = limitIndex < 0 ? 20 : Number(args[limitIndex + 1]);
 if (!args.includes('--once') || !Number.isInteger(limit) || limit < 1 || limit > 1000) throw new Error('Usage: node worker.mjs --once [--limit 20], limit 1 to 1000');
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !key || process.env.BATCH_HELPER_ENABLED !== 'true') throw new Error('Worker requires explicit BATCH_HELPER_ENABLED=true and server-only Supabase credentials');
+const batchEnabled = process.env.BATCH_HELPER_ENABLED === 'true';
+const maintenanceEnabled = process.env.COMMERCE_MAINTENANCE_ENABLED === 'true';
+if (!url || !key || (!batchEnabled && !maintenanceEnabled)) throw new Error('Worker requires an explicitly enabled batch or commerce-maintenance task and server-only Supabase credentials');
 if (!/^https:\/\//.test(url) && !/^http:\/\/(localhost|127\.0\.0\.1)(:|\/)/.test(url)) throw new Error('HTTPS required');
 const secondsIndex = args.indexOf('--max-seconds');
 const maxSeconds = secondsIndex < 0 ? 900 : Number(args[secondsIndex + 1]);
@@ -17,6 +20,7 @@ const runController = new AbortController();
 const runTimer = setTimeout(() => runController.abort(new Error('RUN_DEADLINE')), maxSeconds * 1000);
 const hardStopTimer = setTimeout(() => { console.error(JSON.stringify({ outcome: 'RUN_DEADLINE', recovery: 'Lease expiry permits another bounded run' })); process.exit(1); }, (maxSeconds + 5) * 1000);
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false }, global: { fetch: boundedFetch({ runSignal: runController.signal }) } });
+const maintenanceDb = maintenanceEnabled ? createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false }, global: { fetch: boundedFetch({ runSignal: runController.signal, timeoutMs: 10_000 }) } }) : null;
 async function rpc(name, data) { const result = await db.rpc(name, data); if (result.error) throw new Error(result.error.message); return result.data; }
 async function download(bucket, path, cap) {
   const { data, error } = await db.storage.from(bucket).download(path);
@@ -36,9 +40,12 @@ async function immutableUpload(bucket, path, bytes, guard) {
   const verified = await download(bucket, path, 8 * 1024 * 1024);
   if (sha256(verified) !== sha256(bytes)) throw new Error('UPLOAD_HASH_MISMATCH');
 }
-let completed = 0; let failed = 0;
+let completed = 0; let failed = 0; let workerError = null;
+let commerceMaintenance = { enabled: maintenanceEnabled, status: 'UNKNOWN', reason: 'NOT_ATTEMPTED', releasedReservations: null, checkedAt: null, durationMs: null };
 try {
-for (let index = 0; index < limit && !runController.signal.aborted; index++) {
+commerceMaintenance = await expireInventoryReservations({ enabled: maintenanceEnabled, client: maintenanceDb });
+if (maintenanceEnabled) console.log(JSON.stringify({ task: 'inventory-expiry', ...commerceMaintenance }));
+for (let index = 0; batchEnabled && index < limit && !runController.signal.aborted; index++) {
   const [item] = await rpc('batch_claim', { p_limit: 1 });
   if (!item) break;
   const guard = { p_item_id: item.id, p_revision: item.revision, p_lease_token: item.lease_token };
@@ -75,8 +82,11 @@ for (let index = 0; index < limit && !runController.signal.aborted; index++) {
     console.error(JSON.stringify({ item: item.id, revision: item.revision, outcome: 'failed', reason: message }));
   }
 }
+} catch (error) {
+  workerError = String(error.message).replace(/https?:\/\/\S+/g, '[url]').slice(0, 500);
+  console.error(JSON.stringify({ outcome: 'WORKER_OPERATION_FAILED', reason: workerError }));
 }
 finally { clearTimeout(runTimer); clearTimeout(hardStopTimer); }
 const deadlineReached = runController.signal.aborted;
-console.log(JSON.stringify({ completed, failed, bounded: true, maxSeconds, deadlineReached }));
-if (failed || deadlineReached) process.exitCode = 1;
+console.log(JSON.stringify({ completed, failed, bounded: true, maxSeconds, deadlineReached, batchEnabled, commerceMaintenance, workerError }));
+if (failed || deadlineReached || workerError || (maintenanceEnabled && commerceMaintenance.status !== 'PASS')) process.exitCode = 1;

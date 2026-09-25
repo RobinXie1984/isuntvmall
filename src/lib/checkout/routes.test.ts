@@ -1,0 +1,20 @@
+import {beforeEach,describe,expect,it,vi} from "vitest";
+vi.mock("server-only",()=>({}));
+const mocks=vi.hoisted(()=>({origin:vi.fn(),gate:vi.fn(),verify:vi.fn(),create:vi.fn()}));
+vi.mock("@/lib/admin-auth",()=>({isSameOriginRequest:mocks.origin}));
+vi.mock("@/lib/cart",async original=>({...await original<object>(),checkoutReleaseReady:mocks.gate}));
+vi.mock("@/lib/checkout/verification",async original=>({...await original<object>(),verifyCheckoutRequest:mocks.verify}));
+vi.mock("@/lib/stripe/checkout",()=>({createCheckoutSession:mocks.create,CheckoutError:class extends Error{constructor(public code:string,message:string,public httpStatus=409){super(message);}}}));
+import {POST} from "@/app/api/checkout/route";
+import {CheckoutVerificationError} from "./verification";
+const input={checkoutAttemptId:"11111111-1111-4111-8111-111111111111",items:[{productId:"22222222-2222-4222-8222-222222222222",quantity:1}],turnstileToken:"fixture-token"};
+const request=(body:unknown=input)=>new Request("https://www.isuntvmall.com/api/checkout",{method:"POST",headers:{"content-type":"application/json","origin":"https://www.isuntvmall.com"},body:JSON.stringify(body)});
+beforeEach(()=>{vi.resetAllMocks();mocks.origin.mockReturnValue(true);mocks.gate.mockReturnValue(true);mocks.verify.mockResolvedValue("a".repeat(64));mocks.create.mockResolvedValue({id:"cs_test_fixture",url:"https://checkout.stripe.com/fixture"});});
+describe("public checkout route admits only server-verified requests",()=>{
+ it("closed checkout does not call verification, database or payment",async()=>{mocks.gate.mockReturnValue(false);const response=await POST(request());expect(response.status).toBe(503);expect(mocks.verify).not.toHaveBeenCalled();expect(mocks.create).not.toHaveBeenCalled();expect(response.headers.get("cache-control")).toContain("no-store");});
+ it("cross-origin request is rejected before verification",async()=>{mocks.origin.mockReturnValue(false);expect((await POST(request())).status).toBe(403);expect(mocks.verify).not.toHaveBeenCalled();});
+ it("cannot supply a browser-chosen client hash",async()=>{expect((await POST(request({...input,clientHash:"b".repeat(64)}))).status).toBe(400);expect(mocks.verify).not.toHaveBeenCalled();expect(mocks.create).not.toHaveBeenCalled();});
+ it("unverified token never reaches reservation or Stripe",async()=>{mocks.verify.mockRejectedValue(new CheckoutVerificationError("CHECKOUT_VERIFICATION_REQUIRED",422));expect((await POST(request())).status).toBe(422);expect(mocks.create).not.toHaveBeenCalled();});
+ it("forwards only cart, attempt and server-derived hash",async()=>{const response=await POST(request());expect(response.status).toBe(200);expect(mocks.create).toHaveBeenCalledWith({items:input.items,checkoutAttemptId:input.checkoutAttemptId},"https://www.isuntvmall.com","a".repeat(64));expect(JSON.stringify(await response.json())).not.toContain("fixture-token");});
+ it("caps request body before external calls",async()=>{expect((await POST(request({...input,padding:"x".repeat(33000)}))).status).toBe(400);expect(mocks.verify).not.toHaveBeenCalled();expect(mocks.create).not.toHaveBeenCalled();});
+});

@@ -11,5 +11,5 @@ export async function generateMetadata():Promise<Metadata> {
 }
 export default async function RootLayout({children}:Readonly<{children:React.ReactNode}>) {
  const {locale,t}=await getLocale();
- return <html lang={locale} data-scroll-behavior="smooth"><body><LocaleProvider initialLocale={locale}><CartProvider><a className="skip-link" href="#main-content">{t("Skip to content","跳至內容")}</a><SiteHeader/><div className="preview-banner" role="status">{t("Showroom preview · Sample products and hosts. Orders and payments are not open.","展示預覽・商品及主播均為演示，暫未開放訂單與付款。")}</div><main id="main-content">{children}</main><SiteFooter/></CartProvider></LocaleProvider></body></html>;
+ return <html lang={locale} data-scroll-behavior="smooth"><body><LocaleProvider initialLocale={locale}><CartProvider turnstileSiteKey={process.env.TURNSTILE_SITE_KEY?.trim() || ""}><a className="skip-link" href="#main-content">{t("Skip to content","跳至內容")}</a><SiteHeader/><div className="preview-banner" role="status">{t("Showroom preview · Sample products and hosts. Orders and payments are not open.","展示預覽・商品及主播均為演示，暫未開放訂單與付款。")}</div><main id="main-content">{children}</main><SiteFooter/></CartProvider></LocaleProvider></body></html>;
 }

@@ -20,6 +20,7 @@ export function addCartLine(current: CartLine[], productId: string, quantity = 1
 }
 
 interface CartContextValue {
+  turnstileSiteKey: string;
   items: CartLine[];
   getCheckoutAttempt: () => CheckoutAttempt;
   clearCheckoutAttempt: () => void;
@@ -32,7 +33,7 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({ children, turnstileSiteKey="" }: { children: React.ReactNode; turnstileSiteKey?:string }) {
   const attemptRef = useRef<CheckoutAttempt | null>(null);
   const [items, setItems] = useState<CartLine[]>([]);
   const [ready, setReady] = useState(false);
@@ -100,6 +101,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo(
     () => ({
+      turnstileSiteKey,
       items,
       getCheckoutAttempt,
       clearCheckoutAttempt,
@@ -109,7 +111,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeItem,
       clearCart,
     }),
-    [items, addItem, setQuantity, removeItem, clearCart, getCheckoutAttempt, clearCheckoutAttempt],
+    [items, turnstileSiteKey, addItem, setQuantity, removeItem, clearCart, getCheckoutAttempt, clearCheckoutAttempt],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

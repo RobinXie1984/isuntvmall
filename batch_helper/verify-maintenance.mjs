@@ -1,0 +1,22 @@
+import { PGlite } from '@electric-sql/pglite';
+import { readFileSync,readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');const db=new PGlite();let checks=0;
+const q=(sql,args=[])=>db.query(sql,args);const one=async(sql,args=[])=>(await q(sql,args)).rows[0];const check=(name,value)=>{assert.ok(value,name);console.log(`PASS ${++checks}: ${name}`);};
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+for(const file of readdirSync(path.join(root,'supabase/migrations')).filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(path.join(root,'supabase/migrations',file),'utf8'));
+const product=(await one("insert into products(sku,slug,title,price_amount,stock_qty,status) values('EXPIRY-TEST','expiry-test','Expiry fixture',100,100,'published') returning id")).id;
+const make=async(status,expiry,hold='active')=>{const order=(await one(`insert into orders(currency,subtotal_amount,status,reservation_expires_at) values('hkd',100,$1,clock_timestamp()+$2::interval) returning id`,[status,expiry])).id;await q('insert into inventory_reservations(order_id,product_id,quantity,status,expires_at) select $1,$2,1,$3,reservation_expires_at from orders where id=$1',[order,product,hold]);return order;};
+const expired=await make('pending','-1 minute');const live=await make('pending','10 minutes');const paid=await make('paid','-1 minute','consumed');const released=await make('cancelled','-1 minute','released');
+await db.exec('set role service_role');check('service role expires actual past-due hold',(await one('select expire_inventory_reservations() n')).n===1);await db.exec('reset role');
+const state=id=>one('select o.status order_status,h.status hold_status,h.release_reason from orders o join inventory_reservations h on h.order_id=o.id where o.id=$1',[id]);
+let s=await state(expired);check('past-due pending order cancelled and hold released',s.order_status==='cancelled'&&s.hold_status==='released'&&s.release_reason==='expired');
+s=await state(live);check('nonexpired hold remains active and pending',s.order_status==='pending'&&s.hold_status==='active');
+s=await state(paid);check('paid consumed hold is not cancelled or released',s.order_status==='paid'&&s.hold_status==='consumed');
+s=await state(released);check('previously released order untouched',s.order_status==='cancelled'&&s.hold_status==='released'&&s.release_reason===null);
+check('expiry never decrements on-hand stock',(await one('select stock_qty from products where id=$1',[product])).stock_qty===100);
+check('retry after success is idempotent zero',(await one('select expire_inventory_reservations() n')).n===0);
+for(const role of ['anon','authenticated']){await db.exec(`set role ${role}`);await assert.rejects(q('select expire_inventory_reservations()'),/permission denied/);await db.exec('reset role');check(`${role} cannot invoke expiry`,true);}
+console.log(JSON.stringify({maintenanceChecks:checks,realScheduledService:'UNKNOWN',remoteDatabaseCancellation:'UNKNOWN'}));await db.close();

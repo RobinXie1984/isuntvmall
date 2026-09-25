@@ -22,7 +22,7 @@
     "start:vinext": "wrangler dev --config dist/server/wrangler.json",
     "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json",
     "test:reservations": "node scripts/verify-reservations.mjs",
-    "test:backend": "node scripts/verify-staff.mjs && node scripts/verify-live-operations.mjs && node scripts/verify-order-operations.mjs"
+    "test:backend": "node scripts/verify-staff.mjs && node scripts/verify-live-operations.mjs && node scripts/verify-order-operations.mjs && node scripts/verify-checkout-admission.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.112.3",

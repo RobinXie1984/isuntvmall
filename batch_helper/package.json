@@ -4,6 +4,6 @@
   "private": true,
   "type": "module",
   "engines": {"node": ">=22"},
-  "scripts": {"process": "node cli.mjs", "worker": "node worker.mjs", "test": "node --test processor.test.mjs network.test.mjs worker-run.test.mjs scheduled-runner.test.mjs", "test:db": "node verify-workflow.mjs && node verify-buckets.mjs && node verify-capacity.mjs"},
+  "scripts": {"process": "node cli.mjs", "worker": "node worker.mjs", "test": "node --test processor.test.mjs network.test.mjs worker-run.test.mjs scheduled-runner.test.mjs maintenance.test.mjs", "test:db": "node verify-workflow.mjs && node verify-buckets.mjs && node verify-capacity.mjs && node verify-maintenance.mjs"},
   "dependencies": {"sharp": "0.35.4", "@supabase/supabase-js": "2.112.3"}
 }

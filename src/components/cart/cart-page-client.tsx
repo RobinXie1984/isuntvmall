@@ -4,6 +4,7 @@ import { cartLineKey, CHECKOUT_HOLD_REASON } from "@/lib/cart";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { isClosedAttempt } from "@/lib/checkout-attempt";
+import { CheckoutVerification } from "@/components/cart/checkout-verification";
 import { useCart } from "@/components/cart/cart-provider";
 import { productTitle, productImageAlt } from "@/lib/product-copy";
 import { productImage } from "@/lib/product-image";
@@ -13,7 +14,10 @@ import type { Product, LiveSession } from "@/types/commerce";
 
 export function CartPageClient({ products, checkoutReady, sessions, compact = false, cancelledAttemptId }: { products: Product[]; checkoutReady: boolean; sessions: LiveSession[]; compact?: boolean; cancelledAttemptId?: string }) {
   const { t, localize, locale } = useLocale();
-  const { items, setQuantity, removeItem, getCheckoutAttempt, clearCheckoutAttempt } = useCart();
+  const { items, setQuantity, removeItem, getCheckoutAttempt, clearCheckoutAttempt, turnstileSiteKey } = useCart();
+  const [challengeAttempt,setChallengeAttempt]=useState<string|null>(null);
+  const [proof,setProof]=useState<{attemptId:string;token:string}|null>(null);
+  const [challengeRevision,setChallengeRevision]=useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [cancelled, setCancelled] = useState(false);
@@ -28,20 +32,25 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
 
   async function checkout() {
     if (!checkoutReady || busy) return;
-    setBusy(true);
     setError("");
+    const attempt = getCheckoutAttempt();
+    if(!turnstileSiteKey){setError(t("Checkout verification is not ready yet.","結帳驗證尚未準備完成。"));return;}
+    if(challengeAttempt!==attempt.id||proof?.attemptId!==attempt.id){setProof(null);setChallengeAttempt(attempt.id);setError(t("Complete the verification below, then continue.","請完成下方驗證後繼續。"));return;}
+    setBusy(true);
     try {
-      const attempt = getCheckoutAttempt();
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items, checkoutAttemptId: attempt.id }),
+        body: JSON.stringify({ items, checkoutAttemptId: attempt.id, turnstileToken:proof.token }),
       });
       const result = (await response.json()) as { ok?: boolean; url?: string; error?: string; code?: string; expiresAt?: string };
       if (result.code === "CHECKOUT_PAYMENT_PENDING") setPaymentPending(true);
       if (isClosedAttempt(result.code)) {
         clearCheckoutAttempt();
       }
+      if(result.code==="CHECKOUT_VERIFICATION_REQUIRED"){setProof(null);setChallengeRevision(value=>value+1);setError(t("Please complete a fresh verification and retry the same checkout.","請重新驗證，然後重試同一筆結帳。"));setBusy(false);return;}
+      if(["CHECKOUT_CLIENT_RATE_LIMIT","CHECKOUT_CLIENT_ACTIVE_LIMIT","CHECKOUT_STORE_ACTIVE_LIMIT"].includes(result.code??"")){setError(t("Checkout is temporarily busy or you have too many open attempts. Complete or close an existing unpaid checkout, or try later.","結帳暫時繁忙，或你的未完成請求過多。請完成或關閉現有的未付款結帳，或稍後再試。"));setBusy(false);return;}
+      if(result.code==="CHECKOUT_CLIENT_CHANGED"){setError(t("Your connection changed. Resume using the original connection or check the existing checkout before paying again.","你的連線已變更。請使用原本的連線繼續，或先確認現有結帳狀態，勿重複付款。"));setBusy(false);return;}
       if (!response.ok || !result.url) throw new Error(t("Checkout could not be started. Check your payment status before trying again.", "暫時無法開始結帳，請先確認付款狀態，再重新嘗試。"));
       window.location.assign(result.url);
     } catch {
@@ -130,6 +139,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
         {attemptNotice}
         {!checkoutReady && <p className="notice warning">{localize(CHECKOUT_HOLD_REASON)}</p>}
         {error && <p className="form-error" role="alert">{error}</p>}
+        {checkoutReady&&challengeAttempt&&turnstileSiteKey&&<CheckoutVerification key={`${challengeAttempt}-${challengeRevision}`} attemptId={challengeAttempt} siteKey={turnstileSiteKey} onToken={token=>setProof(token?{attemptId:challengeAttempt,token}:null)}/>}
         <button className="button button-block" type="button" disabled={busy || !checkoutReady || paymentPending || rows.some(row => !row.product)} onClick={checkout}>
           {busy ? t("Processing…", "處理中…") : t("Checkout", "結帳")}
         </button>
