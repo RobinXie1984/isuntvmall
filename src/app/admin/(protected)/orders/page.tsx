@@ -1,9 +1,5 @@
-import { getOrders } from "@/lib/data/store";
+import { getStaff,requirePermission } from "@/lib/staff/auth";
 import { getLocale } from "@/lib/locale-server";
-import { adminStatus } from "@/components/admin/admin-language";
-export async function generateMetadata() { const { t } = await getLocale(); return { title: t("Manage orders", "訂單管理") }; }
-export default async function AdminOrdersPage() {
-  const orders = await getOrders(); const { locale, t } = await getLocale();
-  const date = new Intl.DateTimeFormat(locale === "en" ? "en-HK" : "zh-HK", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Hong_Kong" });
-  return <section className="admin-table-card"><div className="admin-card-heading"><div><span className="eyebrow">{t("LATEST 100", "最近 100 筆")}</span><h2>{t("Orders", "訂單")}</h2></div><span>{t(`${orders.length} orders`, `${orders.length} 筆訂單`)}</span></div>{orders.length ? <div className="admin-table-wrap"><table><thead><tr><th>{t("Order", "訂單")}</th><th>{t("Customer", "顧客")}</th><th>{t("Items", "商品")}</th><th>{t("Amount", "金額")}</th><th>{t("Status", "狀態")}</th><th>{t("Time", "時間")}</th></tr></thead><tbody>{orders.map(order => <tr key={order.id}><td><code>{order.id.slice(0, 8)}</code></td><td>{order.customerEmail || t("Not provided", "尚未提供")}</td><td>{order.items.reduce((sum, item) => sum + item.quantity, 0)}</td><td>{new Intl.NumberFormat(locale === "en" ? "en-HK" : "zh-HK", { style: "currency", currency: order.currency.toUpperCase(), maximumFractionDigits: 2 }).format((order.totalAmount ?? order.subtotalAmount) / 100)}</td><td><span className={`status-chip ${order.status}`}>{adminStatus(order.status, locale)}</span></td><td>{date.format(new Date(order.createdAt))}</td></tr>)}</tbody></table></div> : <div className="empty-inline">{t("No orders yet. After checkout is enabled, orders begin as pending payment. Payment is confirmed only after a verified payment notification.", "尚無訂單。結帳啟用後，新訂單會先顯示待付款，並在收到已驗證的付款通知後確認付款。")}</div>}</section>;
-}
+import { OrderWorkspace } from "@/components/admin/order-workspace";
+export async function generateMetadata(){const{t}=await getLocale();return{title:t("Manage orders","訂單管理")};}
+export default async function AdminOrdersPage(){const staff=await getStaff();const{t}=await getLocale();try{if(!staff)throw Error();requirePermission(staff,"orders.read");}catch{return <p>{t("Order access is not available for this account.","此帳戶沒有訂單存取權限。")}</p>;}return <OrderWorkspace role={staff.role}/>;}

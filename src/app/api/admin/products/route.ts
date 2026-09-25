@@ -1,18 +1,2 @@
-import { NextResponse } from "next/server";
-import { isAdminRequest, isSameOriginRequest } from "@/lib/admin-auth";
-import { upsertProduct } from "@/lib/admin/catalog";
-import { productInputSchema } from "@/lib/ingest/products";
-import { errorResponse } from "@/lib/http";
-
-export async function POST(request: Request) {
-  if (process.env.BATCH_HELPER_ENABLED === "true") return errorResponse(null, "Use the named-staff batch review workflow.", 403);
-  if (!isSameOriginRequest(request)) return errorResponse(null, "Invalid request origin.", 403);
-  if (!isAdminRequest(request)) return errorResponse(null, "Admin sign-in required.", 401);
-  try {
-    const product = productInputSchema.parse(await request.json());
-    const saved = await upsertProduct(product);
-    return NextResponse.json({ ok: true, product: saved });
-  } catch (error) {
-    return errorResponse(error, "Product could not be saved.");
-  }
-}
+import { privateResponse } from "@/lib/admin/response";
+export async function POST() { return privateResponse({ok:false,code:"USE_APPROVED_BATCH_WORKFLOW"},410); }

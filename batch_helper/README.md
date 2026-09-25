@@ -75,3 +75,13 @@ The database test imports the actual migrations into local WASM PostgreSQL and c
 ## Limits and next additions
 
 V1 deliberately requires explicit product metadata and one image per product. Multi-image product grouping, variants, CSV joins, per-image crop selection, virus scanning, duplicate-product detection, resumable TUS uploads for large individual files, and remote worker scheduling remain separate additions. Image normalization preserves composition but a human must verify color and product claims after lossy compression. Public rights, food labels, tax, shipping and refund policies remain merchant responsibilities.
+
+## Capacity and scheduled execution
+
+Admission is serialized through a private policy row. Pilot defaults allow up to 1,000 images and 512 MiB of declared input per batch, 1,000 outstanding items per actor and 3,000 store-wide. Conservative retained-storage budgets are 32 GiB per actor and 50 GiB for the store. Whichever limit is reached first stops new allocation; these values are operating limits, not a statement about purchased storage.
+
+Every original upload slot reserves the full 24 MiB bucket limit before its upload capability is issued. This prevents false small file-size declarations from evading the storage budget. The worker separately reserves exact normalized/public-copy byte sizes before uploading each immutable path. Reusing the same path and hash is free; a new output revision, orphan or public copy consumes capacity. Publishing frees the outstanding-item count but **never frees retained-original or derivative capacity**. Historical rows receive conservative original and revision allowances during migration. Inventory objects outside the known item history before activation.
+
+The service-only `batch_capacity` RPC reports reserved capacity, not measured disk usage. `batch_configure_capacity` requires a current super admin and audits changes. Explicit pauses stop new allocation; existing exact idempotent requests remain recoverable. Ordinary staff cannot expand their allowance or delete reservation rows. No automatic cleanup or quota release is implemented.
+
+[Deployment runbook](deploy/RUNBOOK.md) prepares one named scheduled runner, bounded status/health reporting, crash-lock recovery and configuration examples. It does not install or enable a scheduler. A genuine multi-connection PostgreSQL race test remains an activation check; local transaction tests run in single-connection PGlite and do not pretend to prove independent connection concurrency.

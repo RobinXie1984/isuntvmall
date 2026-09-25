@@ -39,6 +39,9 @@ export interface CartSource {
 }
 
 export interface LiveSession {
+  titleZh?: string;
+  descriptionZh?: string;
+  playbackMode?: "embedded" | "external_link";
   kol: Kol | null;
   id: string;
   slug: string;

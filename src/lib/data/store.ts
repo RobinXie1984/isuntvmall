@@ -97,6 +97,9 @@ function mapLiveSession(row: RecordValue, includeDrafts = false): LiveSession {
     title: String(row.title),
     description: String(row.description ?? ""),
     hostName: String(row.host_name ?? "SunTV"),
+    titleZh: row.title_zh ? String(row.title_zh) : undefined,
+    descriptionZh: row.description_zh ? String(row.description_zh) : undefined,
+    playbackMode: row.playback_mode as LiveSession["playbackMode"],
     kol: kolRow ? mapKol(kolRow) : null,
     platform: row.platform as LiveSession["platform"],
     externalUrl: String(row.external_url),
@@ -116,10 +119,10 @@ export async function getLiveSessions(options: { includeAll?: boolean } = {}) {
     .from("live_sessions")
     .select("*, kols(*), live_products(position, products(*, product_images(*)))")
     .order("starts_at", { ascending: true });
-  if (!options.includeAll) query = query.in("status", ["live", "scheduled", "ended", "preview"]);
+  if (!options.includeAll) query = query.eq("is_public",true).in("status", ["live", "scheduled", "ended"]);
   const { data, error } = await query;
   if (error) throw new Error(`Unable to load livestreams: ${error.message}`);
-  return (data as RecordValue[]).map(row => mapLiveSession(row, Boolean(options.includeAll)));
+  return (data as RecordValue[]).filter(row => options.includeAll || unwrapRelatedProduct(row.kols)?.status === "active").map(row => mapLiveSession(row, Boolean(options.includeAll)));
 }
 
 export async function getLiveSessionBySlug(slug: string) {

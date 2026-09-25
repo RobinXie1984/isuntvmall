@@ -7,7 +7,7 @@ const check=(name,ok)=>{assert.ok(ok,name);console.log(`PASS ${++passed}: ${name
 const query=(sql,args=[])=>db.query(sql,args);
 const one=async(sql,args=[])=> (await query(sql,args)).rows[0];
 const fails=async(fn,needle)=>{try{await fn();return false}catch(e){return String(e).includes(needle)}};
-await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);`);
+await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);`);
 for(const f of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${f}`,'utf8'));
 await db.exec(readFileSync('supabase/seed.sql','utf8'));
 check('all actual migrations + seed execute in local WASM PostgreSQL',true);
@@ -35,7 +35,12 @@ check('paid attempt cannot rotate into a duplicate payment',await fails(()=>rese
 await release(a);check('release after paid does not restore sold stock',await stock()===0 && (await state(a)).status==='paid');
 await query('update products set stock_qty=10,price_amount=100 where id=$1',[p]);
 const room='aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',kol='dddddddd-dddd-4ddd-8ddd-dddddddddddd';
-await query(`update live_sessions set status='live' where id=$1`,[room]);
+await query(`update live_sessions set status='live',is_public=false where id=$1`,[room]);
+check('unpublished room cannot receive new checkout attribution',await fails(()=>reserve([{...line,live_session_id:room,kol_id:kol}]),'INVALID_ATTRIBUTION'));
+await query(`update live_sessions set is_public=true where id=$1`,[room]);
+await query(`update kols set status='inactive' where id=$1`,[kol]);
+check('inactive host cannot receive new checkout attribution',await fails(()=>reserve([{...line,live_session_id:room,kol_id:kol}]),'INVALID_ATTRIBUTION'));
+await query(`update kols set status='active' where id=$1`,[kol]);
 const split=await reserve([line,{...line,quantity:2,live_session_id:room,kol_id:kol}]);
 check('per-room attribution aggregates shared stock hold',(await one('select quantity from inventory_reservations where order_id=$1',[split])).quantity===3);
 await event(split,facts(split,{amount_subtotal:300,amount_total:300}));check('split same-SKU purchase reduces exactly total three',await stock()===7);

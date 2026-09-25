@@ -24,7 +24,8 @@ async function download(bucket, path, cap) {
   if (data.size > cap) throw new Error('STORAGE_SIZE_LIMIT');
   return Buffer.from(await data.arrayBuffer());
 }
-async function immutableUpload(bucket, path, bytes) {
+async function immutableUpload(bucket, path, bytes, guard) {
+  await rpc('batch_reserve_object', { ...guard, p_bucket: bucket, p_object_path: path, p_byte_size: bytes.length, p_sha256: sha256(bytes) });
   const { error } = await db.storage.from(bucket).upload(path, bytes, { contentType: 'image/webp', upsert: false, cacheControl: '31536000' });
   // A crash may leave the immutable object before the database commit. Accept
   // only an exact byte match; never replace an existing object.
@@ -50,7 +51,7 @@ for (let index = 0; index < limit && !runController.signal.aborted; index++) {
       const result = await normalizeImage(bytes, batch.data.style_snapshot, item.mime);
       if (item.source_sha256 && item.source_sha256 !== result.sourceSha256) throw new Error('ORIGINAL_CHANGED');
       const path = `${item.batch_id}/${item.id}/r${item.revision}-${result.outputSha256}.webp`;
-      await immutableUpload('batch-processed', path, result.bytes);
+      await immutableUpload('batch-processed', path, result.bytes, guard);
       await rpc('batch_processed', { ...guard, p_source_sha256: result.sourceSha256, p_output_sha256: result.outputSha256, p_processed_path: path, p_preset_sha256: result.presetSha256, p_processor_version: result.processor });
     } else if (item.status === 'publishing') {
       // Fresh approval check before public copy, then SQL checks it again when
@@ -60,7 +61,7 @@ for (let index = 0; index < limit && !runController.signal.aborted; index++) {
       const bytes = await download('batch-processed', item.processed_path, 8 * 1024 * 1024);
       if (sha256(bytes) !== item.output_sha256) throw new Error('APPROVED_IMAGE_CHANGED');
       const path = `batch/${item.id}/r${item.revision}-${item.output_sha256}.webp`;
-      await immutableUpload('product-images', path, bytes);
+      await immutableUpload('product-images', path, bytes, guard);
       const { data } = db.storage.from('product-images').getPublicUrl(path);
       await rpc('batch_publish', { ...guard, p_image_url: data.publicUrl, p_public_path: path, p_output_sha256: item.output_sha256 });
     } else throw new Error('UNKNOWN_CLAIM_STATE');

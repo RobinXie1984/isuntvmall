@@ -1,15 +1,14 @@
-import { NextResponse } from "next/server";
-import { isAdminRequest, isSameOriginRequest } from "@/lib/admin-auth";
+import { requireStaff,requirePermission,requireStaffOrigin } from "@/lib/staff/auth";
+import { privateResponse,operationFailure } from "@/lib/admin/response";
+import { readBatchJson } from "@/lib/batch/contracts";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
-import { errorResponse } from "@/lib/http";
 import { kolInputSchema } from "@/lib/ingest/kols";
 export async function POST(request:Request){
- if(!isSameOriginRequest(request))return errorResponse(null,"Invalid request origin.",403);
- if(!isAdminRequest(request))return errorResponse(null,"Admin sign-in required.",401);
  try {
-  const input=kolInputSchema.parse(await request.json());
-  const {data,error}=await getSupabaseAdmin().from("kols").upsert({slug:input.slug,display_name:input.displayName,bio:input.bio,status:input.status},{onConflict:"slug"}).select("id, slug").single();
+  requireStaffOrigin(request); const staff=await requireStaff(request);requirePermission(staff,"team.manage");
+  const input=kolInputSchema.parse(await readBatchJson(request,16384));
+  const {data,error}=await getSupabaseAdmin().rpc("backend_save_kol",{p_actor:staff.id,p_slug:input.slug,p_name:input.displayName,p_bio:input.bio,p_status:input.status});
   if(error)throw new Error("Host could not be saved.");
-  return NextResponse.json({ok:true,kol:data});
- }catch(error){return errorResponse(error,"Host could not be saved.");}
+  return privateResponse({ok:true,kol:data});
+ }catch(error){return operationFailure(error);}
 }

@@ -34,7 +34,7 @@ export const batchActionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.enum(["approve", "reject"]), revision: z.number().int().positive(), reason: z.string().max(1000).default("") }).strict(),
 ]);
 export type DraftProduct = z.infer<typeof draftProductSchema>;
-export type BatchRole = "super_admin" | "catalog_editor";
+export type BatchRole = "super_admin" | "operator" | "catalog_editor" | "kol";
 export type BatchStatus = "awaiting_upload" | "queued" | "processing" | "review" | "rejected" | "approved" | "publishing" | "published" | "failed";
 export type BatchItem = { id: string; batch_id: string; filename: string; mime: string; byte_size: number; original_path: string; processed_path: string | null; product_data: DraftProduct; status: BatchStatus; revision: number; error: string | null; source_sha256: string | null; output_sha256: string | null; approved_by: string | null; product_id: string | null; reviewNote?: string; originalUrl?: string; processedUrl?: string };
 export type MediaBatch = { id: string; title: string; style_id: string; created_at: string; created_by: string };

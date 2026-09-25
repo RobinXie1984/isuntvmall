@@ -5,7 +5,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const db=new PGlite();let passed=0;
-await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
 const migration='20260925091419_media_batch_workflow.sql';
 for(const file of readdirSync(path.join(root,'supabase/migrations')).filter(f=>f.endsWith('.sql')&&f<migration).sort())await db.exec(readFileSync(path.join(root,'supabase/migrations',file),'utf8'));
 await db.exec("insert into storage.buckets values('batch-originals','batch-originals',false,25165824,array['image/jpeg','image/png','image/webp']),('batch-processed','batch-processed',false,8388608,array['image/webp']);");

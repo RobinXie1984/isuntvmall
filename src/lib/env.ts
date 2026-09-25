@@ -43,18 +43,11 @@ export function getSiteUrl(requestOrigin?: string) {
   throw new Error("NEXT_PUBLIC_SITE_URL must be configured in production.");
 }
 
-export function getAdminConfig() {
-  const password = read("ADMIN_PASSWORD");
-  const sessionSecret = read("ADMIN_SESSION_SECRET");
-  if (!password || !sessionSecret || sessionSecret.length < 32) return null;
-  return { password, sessionSecret };
-}
-
 export function getDeploymentReadiness() {
   return {
     supabase: hasSupabaseConfig(),
     stripe: hasStripeConfig(),
-    admin: Boolean(getAdminConfig()),
+    admin: hasSupabaseConfig() && Boolean(read("SUPABASE_PUBLISHABLE_KEY")),
     siteUrl: Boolean(read("NEXT_PUBLIC_SITE_URL")),
   };
 }

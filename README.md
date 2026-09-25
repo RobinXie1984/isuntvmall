@@ -10,7 +10,9 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 - YouTube player example; explicit provider-aware Facebook/Instagram viewing boundaries.
 - Persistent bag across rooms with per-line attribution and in-room review that keeps the player mounted.
 - Reservation-backed checkout implementation with frozen order snapshots, stable retry IDs, expiration and manual-review payment exceptions; real checkout remains disabled pending acceptance.
-- Product catalog, bounded CSV ingestion, and centrally managed host/session administration.
+- Approved product catalog, private merchandise batches, and versioned host/session administration.
+- Six named staff roles, privileged MFA, immediate membership checks and session revocation.
+- Assigned support/fulfillment queues, payment-separated shipping, refund review and scoped aggregate reports.
 - Bilingual English/Chinese interface and responsive customer pages.
 
 ## Styles and merchandise preparation
@@ -19,7 +21,7 @@ Explore `/styles` for six independent design directions. The live storefront rem
 
 `/batch-helper` is a labeled workflow preview. The separate [batch helper](batch_helper/README.md) contains an executable image processor, resumable worker and migration-backed approval workflow. Each batch accepts up to 1,000 images, one image per new product. Images are normalized without cropping or changing product details. English and Traditional Chinese merchandise copy is required before approval.
 
-Named-user team access, private storage, revision-bound super-admin approval and publication exist in source but **online batch mode remains disabled**. Provisioning, aggregate intake limits, storage-policy checks and an authenticated end-to-end test are required before activation. No staff accounts or database project are assumed by this release. Legacy shared-password sessions cannot approve batches.
+Named-user team access, private storage, revision-bound super-admin approval and publication exist in source but **online batch mode remains disabled**. Durable aggregate intake limits are implemented. Provisioning, storage-policy checks and an authenticated end-to-end test are required before activation. No staff accounts or database project are assumed by this release. Shared-password access is retired; legacy product/import/upload write routes are permanently closed.
 
 See the [backend plan and role recommendations](docs/BACKEND-PLAN.md) for customer/admin flows, data model, provider boundaries and the controlled pilot plan.
 
@@ -37,6 +39,7 @@ npm run lint
 npm run typecheck
 npm run test:run
 npm run test:reservations
+npm run test:backend
 npm run build
 npm run build:vinext
 npm run start:vinext
@@ -54,13 +57,13 @@ Do not point this at a production database or enable payment processing without 
 
 1. Approve the merchant catalog, actual inventory, host identities and authorized stream URLs.
 2. Provision a dedicated database, apply and verify migrations, and provision individual operator access appropriate to the launch scope.
-3. Verify the implemented stock reservation, expiration/release and idempotent fulfillment paths on the actual managed PostgreSQL deployment, including overlapping transactions from independent connections. The included local PGlite checks execute actual migrations but do not prove production concurrency. Add checkout abuse controls before exposing inventory holds publicly.
+3. Verify the implemented stock reservation, expiration/release and idempotent fulfillment paths on the actual managed PostgreSQL deployment, including overlapping transactions from independent connections. The included PGlite checks execute actual migrations. A separate local PostgreSQL 17.11 run passed five contention scenarios with eight connections each; it does not prove managed production behavior. Add checkout abuse controls before exposing inventory holds publicly.
 4. Verify hosted checkout, exact amount/currency binding, signed webhook replay, cancellation, refunds and retry behavior using the provider's test environment.
 5. Provide actual shipping, refund, privacy and contact policies; verify regional payment and fulfillment settings.
 6. Run desktop/mobile and deployed-origin player checks. Facebook/Instagram capability depends on supported provider behavior and authorized accounts; embedding, comment ordering and simulcasting are separate integrations.
 7. Review and intentionally remove the code-level payment hold only after the evidence above passes.
 
-KOL self-service, payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this preview. The current admin is central-operator tooling, not a claim of complete KOL role isolation.
+The named KOL workflow supports own-room drafts, requests, approved product pins and own aggregate results in source. Its production account and provider tests remain pending. Payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this release. Refund approval records a decision; it does not execute a payment or restock inventory. Settings currently display readiness only; no merchant policies are invented or published.
 
 ## Source boundaries
 

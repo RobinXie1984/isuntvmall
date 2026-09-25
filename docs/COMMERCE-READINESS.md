@@ -18,7 +18,7 @@ Expired holds are released lazily on the next reservation or by the server-only 
 
 Run `npm ci`, `npm run test:run`, and `npm run test:reservations`. The SQL script applies all actual migrations and the seed to a disposable PGlite PostgreSQL instance, then checks failure paths. It never uses Supabase connection credentials. Vitest uses mocked provider responses for timeouts, definite failure, retry, expiration, and confirmed cancellation.
 
-These are sequential SQL execution checks, **not evidence of overlapping database connections**. Native PostgreSQL binaries were unavailable in the inspected test environment. Independent multi-connection contention tests against an authorized disposable PostgreSQL/Supabase environment remain UNKNOWN.
+The PGlite checks are sequential. A separate disposable PostgreSQL 17.11 run on 25 September passed 11 assertions across five contention cases, each with eight distinct backend connections observed waiting concurrently: last-unit reservation, global batch admission, retained-byte capacity, stale order revisions and duplicate order-request replay. The last-unit race committed one reservation; seven competing attempts received OUT_OF_STOCK. The temporary server was stopped after the run. `scripts/verify-native-concurrency.mjs` reproduces these checks against an explicitly prepared empty database over a local Unix socket. Managed Supabase deployment behavior, expiry-versus-payment races and provider lifecycle checks remain unverified.
 
 ## Required before enabling commerce
 

@@ -1,0 +1,34 @@
+import { PGlite } from '@electric-sql/pglite';
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+import { randomUUID } from 'node:crypto';
+const db = new PGlite(); let checks = 0;
+const q = (sql,args=[])=>db.query(sql,args);
+const one = async(sql,args=[])=>(await q(sql,args)).rows[0];
+const check=(name,value)=>{assert.ok(value,name);console.log(`PASS ${++checks}: ${name}`);};
+const fails=async(fn,message)=>{try{await fn();return false;}catch(error){return String(error).includes(message);}};
+await db.exec('create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create table auth.users(id uuid primary key,is_anonymous boolean default false); create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz); create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+for (const file of ['20260818082052_initial_commerce.sql','20260923120340_multi_kol_attribution.sql','20260923122841_inventory_reservations.sql','20260925091419_media_batch_workflow.sql','20260925105346_staff_named_auth.sql']) await db.exec(readFileSync(`supabase/migrations/${file}`,'utf8'));
+check('actual staff migration executes',true);
+const roles=['super_admin','operator','catalog_editor','kol','order_operator','analyst']; const users=Object.fromEntries(roles.map(role=>[role,randomUUID()])); const host=randomUUID(); const newUser=randomUUID();
+for (const id of [...Object.values(users),newUser]) await q('insert into auth.users(id) values($1)',[id]);
+await q("insert into kols(id,slug,display_name,status) values($1,'staff-test','Test host','active')",[host]);
+for (const role of roles) await q('insert into staff_members(user_id,role,kol_id) values($1,$2,$3)',[users[role],role,role==='kol'?host:null]);
+for (const role of roles) { const allowed=['super_admin','operator','catalog_editor','kol'].includes(role); check(`${role} batch admission is ${allowed?'allowed':'denied'}`,allowed ? (await one('select batch_require_staff($1) role',[users[role]])).role===role : await fails(()=>q('select batch_require_staff($1)',[users[role]]),'STAFF_FORBIDDEN')); if(role!=='super_admin')check(`${role} cannot approve`,await fails(()=>q('select batch_require_staff($1,true)',[users[role]]),'STAFF_FORBIDDEN')); }
+const owner=users.catalog_editor,batch=randomUUID();await q("insert into media_batches(id,created_by,title,style_id,style_snapshot,request_id,request_fingerprint) values($1,$2,'test','muji','{}',$3,'test')",[batch,owner,randomUUID()]);
+check('operator cannot gain ownership of another submitter batch',await fails(()=>q('select batch_require_owner($1,$2)',[users.operator,batch]),'BATCH_FORBIDDEN'));
+check('KOL cannot gain ownership of another submitter batch',await fails(()=>q('select batch_require_owner($1,$2)',[users.kol,batch]),'BATCH_FORBIDDEN'));
+await q('select batch_require_owner($1,$2)',[users.super_admin,batch]);check('super administrator retains reviewed batch oversight',true);
+await q('update staff_members set active=false where user_id=$1',[owner]);check('revoked staff blocked immediately in SQL',await fails(()=>q('select batch_require_staff($1)',[owner]),'STAFF_FORBIDDEN'));
+check('analyst cannot alter team membership',await fails(()=>q("select staff_set_member($1,$2,'super_admin',true,null)",[users.analyst,newUser]),'STAFF_FORBIDDEN'));
+check('self-role changes prohibited',await fails(()=>q("select staff_set_member($1,$1,'analyst',true,null)",[users.super_admin]),'SELF_MEMBERSHIP_CHANGE_DENIED'));
+check('KOL role without ownership binding prohibited',await fails(()=>q("select staff_set_member($1,$2,'kol',true,null)",[users.super_admin,newUser]),'KOL_BINDING_REQUIRED'));
+await q("select staff_set_member($1,$2,'kol',true,$3)",[users.super_admin,newUser,host]);check('explicit KOL membership bound to requested profile',(await one('select kol_id from staff_members where user_id=$1',[newUser])).kol_id===host);
+check('membership audit contains actor+target',(await one('select count(*)::int n from staff_audit where actor_id=$1 and target_id=$2',[users.super_admin,newUser])).n===1);
+const session=randomUUID();await q('insert into auth.sessions(id,user_id) values($1,$2)',[session,newUser]);check('active named session recognized',(await one('select staff_session_active($1,$2) active',[newUser,session])).active===true);
+check('session does not authorize another identity',(await one('select staff_session_active($1,$2) active',[users.analyst,session])).active===false);
+await q('insert into staff_revoked_sessions(session_id,user_id) values($1,$2)',[session,newUser]);check('revocation ledger defeats still-valid token session',(await one('select staff_session_active($1,$2) active',[newUser,session])).active===false);
+const expired=randomUUID();await q("insert into auth.sessions(id,user_id,not_after) values($1,$2,now()-interval '1 second')",[expired,newUser]);check('expired session rejected',(await one('select staff_session_active($1,$2) active',[newUser,expired])).active===false);
+await db.exec('set role service_role'); check('service role can call bounded session lookup',(await one('select staff_session_active($1,$2) active',[newUser,expired])).active===false); await db.exec('reset role');
+for(const role of ['anon','authenticated']){await db.exec(`set role ${role}`);check(`${role} cannot read staff`,await fails(()=>q('select * from staff_members'),'permission denied'));check(`${role} cannot read invitations`,await fails(()=>q('select * from staff_invitations'),'permission denied'));check(`${role} cannot grant roles`,await fails(()=>q("select staff_set_member($1,$2,'super_admin',true,null)",[users.super_admin,newUser]),'permission denied'));check(`${role} cannot inspect sessions`,await fails(()=>q('select staff_session_active($1,$2)',[newUser,session]),'permission denied'));await db.exec('reset role');}
+await db.close();console.log(JSON.stringify({passed:checks}));

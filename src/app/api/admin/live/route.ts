@@ -1,17 +1,6 @@
-import { NextResponse } from "next/server";
-import { isAdminRequest, isSameOriginRequest } from "@/lib/admin-auth";
-import { upsertLiveSession } from "@/lib/admin/catalog";
-import { errorResponse } from "@/lib/http";
-import { liveSessionInputSchema } from "@/lib/ingest/live";
-
-export async function POST(request: Request) {
-  if (!isSameOriginRequest(request)) return errorResponse(null, "Invalid request origin.", 403);
-  if (!isAdminRequest(request)) return errorResponse(null, "Admin sign-in required.", 401);
-  try {
-    const input = liveSessionInputSchema.parse(await request.json());
-    const saved = await upsertLiveSession(input);
-    return NextResponse.json({ ok: true, livestream: saved });
-  } catch (error) {
-    return errorResponse(error, "Livestream could not be saved.");
-  }
-}
+import { requireStaff } from "@/lib/staff/auth";
+import { getLiveDrafts } from "@/lib/live/operations";
+import { privateResponse,operationFailure } from "@/lib/admin/response";
+import { z } from "zod";
+export async function GET(request:Request){try{const staff=await requireStaff(request);const page=z.coerce.number().int().min(0).max(10000).parse(new URL(request.url).searchParams.get("page")||0);return privateResponse(await getLiveDrafts(staff,page));}catch(error){return operationFailure(error);}}
+export async function POST(){return privateResponse({ok:false,code:"USE_VERSIONED_LIVE_WORKFLOW"},410);}

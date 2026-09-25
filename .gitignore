@@ -42,3 +42,6 @@ BASELINE-MANIFEST.json
 # Batch helper local dependencies and generated runs
 /batch_helper/node_modules/
 /batch_helper/.work/
+
+# Disposable native database verification evidence
+/native-concurrency-receipt.json

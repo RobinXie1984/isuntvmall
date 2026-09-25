@@ -1,0 +1,8 @@
+{
+  "name": "isuntvmall-batch-worker",
+  "intervalSeconds": 60,
+  "limit": 20,
+  "maxSeconds": 45,
+  "staleAfterSeconds": 180,
+  "stateDirectory": "./state"
+}
