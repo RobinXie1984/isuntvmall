@@ -13,6 +13,16 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 - Product catalog, bounded CSV ingestion, and centrally managed host/session administration.
 - Bilingual English/Chinese interface and responsive customer pages.
 
+## Styles and merchandise preparation
+
+Explore `/styles` for six independent design directions. The live storefront remains **muji**. Reusable tokens, image recipes and guidance live in `style/{muji,apple,amazon,openai,daks-burberry,hermes-valentino}`.
+
+`/batch-helper` is a labeled workflow preview. The separate [batch helper](batch_helper/README.md) contains an executable image processor, resumable worker and migration-backed approval workflow. Each batch accepts up to 1,000 images, one image per new product. Images are normalized without cropping or changing product details. English and Traditional Chinese merchandise copy is required before approval.
+
+Named-user team access, private storage, revision-bound super-admin approval and publication exist in source but **online batch mode remains disabled**. Provisioning, aggregate intake limits, storage-policy checks and an authenticated end-to-end test are required before activation. No staff accounts or database project are assumed by this release. Legacy shared-password sessions cannot approve batches.
+
+See the [backend plan and role recommendations](docs/BACKEND-PLAN.md) for customer/admin flows, data model, provider boundaries and the controlled pilot plan.
+
 ## Stack
 
 Next.js / React source with a vinext adapter for Cloudflare Workers. PostgreSQL/Supabase schema and Stripe integration are retained for future commerce activation. No database or payment credentials are bundled. Public preview works with clearly marked sample data.

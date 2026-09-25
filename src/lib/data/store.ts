@@ -25,7 +25,9 @@ function mapProduct(row: RecordValue): Product {
     sku: String(row.sku),
     slug: String(row.slug),
     title: String(row.title),
+    titleZh: typeof row.title_zh === "string" ? row.title_zh : undefined,
     description: String(row.description ?? ""),
+    descriptionZh: typeof row.description_zh === "string" ? row.description_zh : undefined,
     priceAmount: Number(row.price_amount),
     currency: String(row.currency),
     stockQty: Number(row.stock_qty),
@@ -42,16 +44,19 @@ export async function getProducts(options: { includeDrafts?: boolean } = {}) {
     return options.includeDrafts ? demoProducts : demoProducts.filter((product) => product.status === "published");
   }
 
-  let query = getSupabaseAdmin()
-    .from("products")
-    .select("*, product_images(*)")
-    .order("featured", { ascending: false })
-    .order("created_at", { ascending: false });
-
-  if (!options.includeDrafts) query = query.eq("status", "published");
-  const { data, error } = await query;
-  if (error) throw new Error(`Unable to load products: ${error.message}`);
-  return (data as RecordValue[]).map(mapProduct);
+  const rows: RecordValue[] = [];
+  // Explicit pages avoid silently truncating a multi-batch catalogue at the
+  // provider's default row limit. Public shop rendering is paginated separately.
+  for (let offset = 0; ; offset += 500) {
+    let query = getSupabaseAdmin().from("products").select("*, product_images(*)")
+      .order("featured", { ascending: false }).order("created_at", { ascending: false }).order("id");
+    if (!options.includeDrafts) query = query.eq("status", "published");
+    const { data, error } = await query.range(offset, offset + 499);
+    if (error) throw new Error("Unable to load products.");
+    rows.push(...data as RecordValue[]);
+    if (data.length < 500) break;
+  }
+  return rows.map(mapProduct);
 }
 
 export async function getProductsByIds(ids: string[]) {
@@ -66,8 +71,10 @@ export async function getProductsByIds(ids: string[]) {
 }
 
 export async function getProductBySlug(slug: string) {
-  const products = await getProducts({ includeDrafts: false });
-  return products.find((product) => product.slug === slug) ?? null;
+  if (!hasSupabaseConfig()) return demoProducts.find(product => product.slug === slug && product.status === "published") ?? null;
+  const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*)").eq("slug", slug).eq("status", "published").maybeSingle();
+  if (error) throw new Error("Unable to load product.");
+  return data ? mapProduct(data as RecordValue) : null;
 }
 
 function unwrapRelatedProduct(value: unknown) {

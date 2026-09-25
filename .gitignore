@@ -38,3 +38,7 @@ dist/
 package-lock.baseline.json
 BASELINE-MANIFEST.json
 *.tsbuildinfo
+
+# Batch helper local dependencies and generated runs
+/batch_helper/node_modules/
+/batch_helper/.work/

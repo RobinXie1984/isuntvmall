@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { isClosedAttempt } from "@/lib/checkout-attempt";
 import { useCart } from "@/components/cart/cart-provider";
+import { productTitle, productImageAlt } from "@/lib/product-copy";
 import { productImage } from "@/lib/product-image";
 import { formatLocalizedMoney } from "@/lib/i18n";
 import { useLocale } from "@/components/i18n/locale-provider";
@@ -103,13 +104,13 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
         </article>)}
         {rows.map(({ item, product }) => product && (
           <article className="cart-line" key={cartLineKey(item)}>
-            <img src={productImage(product)} alt={localize(product.images[0]?.altText || product.title)} />
+            <img src={productImage(product)} alt={productImageAlt(product, locale, localize)} />
             <div className="cart-line-copy">
               <span className="product-category">{localize(product.category)}</span>
-              {compact ? <strong>{localize(product.title)}</strong> : <Link href={`/product/${product.slug}`}>{localize(product.title)}</Link>}
+              {compact ? <strong>{productTitle(product, locale, localize)}</strong> : <Link href={`/product/${product.slug}`}>{productTitle(product, locale, localize)}</Link>}
               <span>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</span>
               <small className="attribution">{item.source ? t(`From: ${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `來自：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`) : t("Direct selection", "直接選購")}</small>
-              <div className="quantity-control" aria-label={t(`${localize(product.title)} quantity`, `${localize(product.title)}數量`)}>
+              <div className="quantity-control" aria-label={t(`${productTitle(product, locale, localize)} quantity`, `${productTitle(product, locale, localize)}數量`)}>
                 <button type="button" onClick={() => setQuantity(cartLineKey(item), item.quantity - 1)} aria-label={t("Decrease quantity", "減少數量")}>−</button>
                 <span>{item.quantity}</span>
                 <button type="button" onClick={() => setQuantity(cartLineKey(item), item.quantity + 1)} aria-label={t("Increase quantity", "增加數量")}>＋</button>

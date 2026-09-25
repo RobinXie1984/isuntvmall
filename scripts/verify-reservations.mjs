@@ -7,7 +7,7 @@ const check=(name,ok)=>{assert.ok(ok,name);console.log(`PASS ${++passed}: ${name
 const query=(sql,args=[])=>db.query(sql,args);
 const one=async(sql,args=[])=> (await query(sql,args)).rows[0];
 const fails=async(fn,needle)=>{try{await fn();return false}catch(e){return String(e).includes(needle)}};
-await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);`);
+await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);`);
 for(const f of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${f}`,'utf8'));
 await db.exec(readFileSync('supabase/seed.sql','utf8'));
 check('all actual migrations + seed execute in local WASM PostgreSQL',true);

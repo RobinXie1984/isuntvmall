@@ -8,6 +8,7 @@ const MAX_CSV_BYTES = 2 * 1024 * 1024;
 const MAX_ROWS = 500;
 
 export async function POST(request: Request) {
+  if (process.env.BATCH_HELPER_ENABLED === "true") return errorResponse(null, "Use the named-staff batch review workflow.", 403);
   if (!isSameOriginRequest(request)) return errorResponse(null, "Invalid request origin.", 403);
   if (!isAdminRequest(request)) return errorResponse(null, "Admin sign-in required.", 401);
   try {

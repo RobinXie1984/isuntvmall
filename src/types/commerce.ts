@@ -17,7 +17,9 @@ export interface Product {
   sku: string;
   slug: string;
   title: string;
+  titleZh?: string;
   description: string;
+  descriptionZh?: string;
   priceAmount: number;
   currency: string;
   stockQty: number;
