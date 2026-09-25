@@ -1,6 +1,7 @@
 import type { Kol, LiveSession, Product } from "@/types/commerce";
 
 import { expandedProducts } from "./expanded-catalogue";
+import { holidayProducts } from "./holiday-catalogue";
 
 const createdAt = "2026-08-18T08:00:00.000Z";
 
@@ -102,6 +103,7 @@ export const demoProducts: Product[] = [
     images: [{ id: "img-earbuds", sourceUrl: "/demo/earbuds.svg", storagePath: null, altText: "黑色无线耳机", position: 0 }],
   },
   ...expandedProducts,
+  ...holidayProducts,
 ];
 
 // Fictional showroom identities, never represented as contracted KOLs.

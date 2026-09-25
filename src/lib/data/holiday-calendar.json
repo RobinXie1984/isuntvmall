@@ -1,0 +1,1542 @@
+[
+  {
+    "id": "hk-new-year",
+    "region": "hk",
+    "date": "2026-01-01",
+    "name": [
+      "New Year’s Day",
+      "元旦"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "jp-new-year",
+    "region": "jp",
+    "date": "2026-01-01",
+    "name": [
+      "New Year’s Day",
+      "元旦"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "tw-new-year",
+    "region": "tw",
+    "date": "2026-01-01",
+    "name": [
+      "Founding Day of the Republic of China",
+      "中華民國開國紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "us-new-year",
+    "region": "us",
+    "date": "2026-01-01",
+    "name": [
+      "New Year’s Day",
+      "元旦"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "jp-coming-age",
+    "region": "jp",
+    "date": "2026-01-12",
+    "name": [
+      "Coming of Age Day",
+      "成人之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "us-mlk",
+    "region": "us",
+    "date": "2026-01-19",
+    "name": [
+      "Martin Luther King Jr. Day",
+      "馬丁路德金紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "jp-setsubun",
+    "region": "jp",
+    "date": "2026-02-03",
+    "name": [
+      "Setsubun",
+      "節分"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A Japanese seasonal tradition, distinct from Lunar New Year.",
+      "日本季節習俗，與農曆新年不同。"
+    ],
+    "sourceUrl": "https://www.city.shibukawa.lg.jp/manage/contents/upload/6981aa78dc299.pdf",
+    "collectionId": "lunar-new-year"
+  },
+  {
+    "id": "jp-foundation",
+    "region": "jp",
+    "date": "2026-02-11",
+    "name": [
+      "National Foundation Day",
+      "建國紀念之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "hk-valentine",
+    "region": "hk",
+    "date": "2026-02-14",
+    "name": [
+      "Valentine’s Day",
+      "情人節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion for affection and friendship.",
+      "傳達心意與友誼的文化節日。"
+    ],
+    "sourceUrl": "https://www.loc.gov/item/today-in-history/february-14/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-valentine",
+    "region": "jp",
+    "date": "2026-02-14",
+    "name": [
+      "Valentine’s Day",
+      "情人節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion for affection and friendship.",
+      "傳達心意與友誼的文化節日。"
+    ],
+    "sourceUrl": "https://www.loc.gov/item/today-in-history/february-14/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "tw-valentine",
+    "region": "tw",
+    "date": "2026-02-14",
+    "name": [
+      "Valentine’s Day",
+      "情人節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion for affection and friendship.",
+      "傳達心意與友誼的文化節日。"
+    ],
+    "sourceUrl": "https://www.loc.gov/item/today-in-history/february-14/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "us-valentine",
+    "region": "us",
+    "date": "2026-02-14",
+    "name": [
+      "Valentine’s Day",
+      "情人節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion for affection and friendship.",
+      "傳達心意與友誼的文化節日。"
+    ],
+    "sourceUrl": "https://www.loc.gov/item/today-in-history/february-14/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "tw-before-new-year-eve",
+    "region": "tw",
+    "date": "2026-02-15",
+    "name": [
+      "Day before Lunar New Year’s Eve",
+      "除夕前一日"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed February 20. The government office break, including weekends, runs February 14–22.",
+      "2月20日補假；政府機關含週末連假為2月14日至22日。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "lunar-new-year"
+  },
+  {
+    "id": "tw-new-year-eve",
+    "region": "tw",
+    "date": "2026-02-16",
+    "name": [
+      "Lunar New Year’s Eve",
+      "農曆除夕"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "lunar-new-year"
+  },
+  {
+    "id": "us-washington",
+    "region": "us",
+    "date": "2026-02-16",
+    "name": [
+      "Washington’s Birthday",
+      "華盛頓誕辰紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "hk-lunar-new-year",
+    "region": "hk",
+    "date": "2026-02-17",
+    "name": [
+      "Lunar New Year",
+      "農曆新年"
+    ],
+    "kind": "public",
+    "note": [
+      "The first three days of Lunar New Year are general holidays.",
+      "農曆年初一至初三為公眾假期。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "lunar-new-year",
+    "endDate": "2026-02-19"
+  },
+  {
+    "id": "tw-lunar-new-year",
+    "region": "tw",
+    "date": "2026-02-17",
+    "name": [
+      "Lunar New Year",
+      "春節"
+    ],
+    "kind": "public",
+    "note": [
+      "First to third lunar day; the office break includes additional days and weekends.",
+      "農曆初一至初三；政府機關連假另包括其他假日及週末。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "lunar-new-year",
+    "endDate": "2026-02-19"
+  },
+  {
+    "id": "jp-emperor",
+    "region": "jp",
+    "date": "2026-02-23",
+    "name": [
+      "Emperor’s Birthday",
+      "天皇誕辰"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "tw-peace",
+    "region": "tw",
+    "date": "2026-02-28",
+    "name": [
+      "Peace Memorial Day",
+      "和平紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed February 27. A day for remembrance and reflection.",
+      "2月27日補假；追思與省思的日子。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-lantern",
+    "region": "hk",
+    "date": "2026-03-03",
+    "name": [
+      "Lantern Festival",
+      "元宵節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The fifteenth day of the first lunar month.",
+      "農曆正月十五。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "lantern-wishes"
+  },
+  {
+    "id": "jp-hinamatsuri",
+    "region": "jp",
+    "date": "2026-03-03",
+    "name": [
+      "Hinamatsuri",
+      "女兒節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A traditional occasion for children’s wellbeing.",
+      "祝願孩子健康成長的傳統節日。"
+    ],
+    "sourceUrl": "https://www.city.maizuru.kyoto.jp/kurashi/cmsfiles/contents/0000014/14500/English.pdf",
+    "collectionId": "children-play"
+  },
+  {
+    "id": "tw-lantern",
+    "region": "tw",
+    "date": "2026-03-03",
+    "name": [
+      "Lantern Festival",
+      "元宵節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The fifteenth day of the first lunar month.",
+      "農曆正月十五。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "lantern-wishes"
+  },
+  {
+    "id": "jp-hanami",
+    "region": "jp",
+    "date": "2026-03-15",
+    "name": [
+      "Cherry Blossom Season",
+      "櫻花季"
+    ],
+    "kind": "seasonal",
+    "note": [
+      "Approximate planning window through May 10, not fixed festival dates. Blooms vary by location, weather and variety.",
+      "約略規劃期至5月10日，並非固定節日日期；花期因地區、天氣與品種而異。"
+    ],
+    "sourceUrl": "https://www.japan.travel/en/us/press-release/japans-cherry-blossom-season-moves-north-as-spring-unfolds/",
+    "collectionId": "spring-picnic",
+    "endDate": "2026-05-10"
+  },
+  {
+    "id": "jp-spring-equinox",
+    "region": "jp",
+    "date": "2026-03-20",
+    "name": [
+      "Vernal Equinox Day",
+      "春分之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "spring-picnic"
+  },
+  {
+    "id": "hk-good-friday",
+    "region": "hk",
+    "date": "2026-04-03",
+    "name": [
+      "Good Friday",
+      "耶穌受難節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "easter"
+  },
+  {
+    "id": "hk-easter-saturday",
+    "region": "hk",
+    "date": "2026-04-04",
+    "name": [
+      "Day following Good Friday",
+      "耶穌受難節翌日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "easter"
+  },
+  {
+    "id": "tw-children",
+    "region": "tw",
+    "date": "2026-04-04",
+    "name": [
+      "Children’s Day",
+      "兒童節"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed April 3.",
+      "4月3日補假。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "children-play"
+  },
+  {
+    "id": "hk-ching-ming",
+    "region": "hk",
+    "date": "2026-04-05",
+    "name": [
+      "Ching Ming Festival",
+      "清明節"
+    ],
+    "kind": "public",
+    "note": [
+      "A time of remembrance. General holiday observed April 6.",
+      "慎終追遠；公眾假期為4月6日。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "tw-ching-ming",
+    "region": "tw",
+    "date": "2026-04-05",
+    "name": [
+      "Tomb Sweeping Day",
+      "清明節"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed April 6. A time to remember loved ones.",
+      "4月6日補假；追念摯愛。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "us-easter",
+    "region": "us",
+    "date": "2026-04-05",
+    "name": [
+      "Easter Sunday",
+      "復活節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A religious and cultural observance, not a federal holiday.",
+      "宗教與文化節日，並非聯邦假日。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "easter"
+  },
+  {
+    "id": "hk-easter-monday",
+    "region": "hk",
+    "date": "2026-04-06",
+    "name": [
+      "Easter Monday",
+      "復活節星期一"
+    ],
+    "kind": "public",
+    "note": [
+      "The additional general holiday falls on April 7 because April 6 is the Ching Ming substitute holiday.",
+      "4月6日為清明節補假，額外公眾假期為4月7日。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "easter"
+  },
+  {
+    "id": "jp-showa",
+    "region": "jp",
+    "date": "2026-04-29",
+    "name": [
+      "Showa Day",
+      "昭和之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-labour",
+    "region": "hk",
+    "date": "2026-05-01",
+    "name": [
+      "Labour Day",
+      "勞動節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "tw-labour",
+    "region": "tw",
+    "date": "2026-05-01",
+    "name": [
+      "Labour Day",
+      "勞動節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-constitution",
+    "region": "jp",
+    "date": "2026-05-03",
+    "name": [
+      "Constitution Memorial Day",
+      "憲法紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "jp-greenery",
+    "region": "jp",
+    "date": "2026-05-04",
+    "name": [
+      "Greenery Day",
+      "綠之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "spring-picnic"
+  },
+  {
+    "id": "jp-children",
+    "region": "jp",
+    "date": "2026-05-05",
+    "name": [
+      "Children’s Day",
+      "兒童之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "children-play"
+  },
+  {
+    "id": "jp-substitute",
+    "region": "jp",
+    "date": "2026-05-06",
+    "name": [
+      "Substitute Holiday",
+      "補假"
+    ],
+    "kind": "public",
+    "note": [
+      "Additional holiday under the national holidays law after May 3 falls on Sunday.",
+      "5月3日適逢星期日，依祝日法補假。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "spring-picnic"
+  },
+  {
+    "id": "hk-mothers",
+    "region": "hk",
+    "date": "2026-05-10",
+    "name": [
+      "Mother’s Day",
+      "母親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The second Sunday in May.",
+      "五月第二個星期日。"
+    ],
+    "sourceUrl": "https://www.amo.gov.hk/tc/news/index_id_184.html?year=2026",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-mothers",
+    "region": "jp",
+    "date": "2026-05-10",
+    "name": [
+      "Mother’s Day",
+      "母親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The second Sunday in May.",
+      "五月第二個星期日。"
+    ],
+    "sourceUrl": "https://www.pref.nagasaki.jp/press-contents/46858.html",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "tw-mothers",
+    "region": "tw",
+    "date": "2026-05-10",
+    "name": [
+      "Mother’s Day",
+      "母親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The second Sunday in May.",
+      "五月第二個星期日。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/uploads/dgpa/files/202510/115%E5%B9%B4%E8%BE%A6%E5%85%AC%E6%97%A5%E6%9B%86%E8%A1%A8-6.pdf",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "us-mothers",
+    "region": "us",
+    "date": "2026-05-10",
+    "name": [
+      "Mother’s Day",
+      "母親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The second Sunday in May.",
+      "五月第二個星期日。"
+    ],
+    "sourceUrl": "https://guides.loc.gov/chronicling-america-mothers-day",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "hk-buddha",
+    "region": "hk",
+    "date": "2026-05-24",
+    "name": [
+      "Birthday of the Buddha",
+      "佛誕"
+    ],
+    "kind": "public",
+    "note": [
+      "General holiday observed May 25. A respectful moment for reflection.",
+      "公眾假期為5月25日；靜心思念。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "us-memorial",
+    "region": "us",
+    "date": "2026-05-25",
+    "name": [
+      "Memorial Day",
+      "陣亡將士紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-dragon-boat",
+    "region": "hk",
+    "date": "2026-06-19",
+    "name": [
+      "Tuen Ng Festival",
+      "端午節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "dragon-boat"
+  },
+  {
+    "id": "tw-dragon-boat",
+    "region": "tw",
+    "date": "2026-06-19",
+    "name": [
+      "Dragon Boat Festival",
+      "端午節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "dragon-boat"
+  },
+  {
+    "id": "us-juneteenth",
+    "region": "us",
+    "date": "2026-06-19",
+    "name": [
+      "Juneteenth National Independence Day",
+      "六月節"
+    ],
+    "kind": "public",
+    "note": [
+      "A day to mark emancipation and reflect on freedom.",
+      "紀念解放，思考自由意義的一天。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-fathers",
+    "region": "hk",
+    "date": "2026-06-21",
+    "name": [
+      "Father’s Day",
+      "父親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The third Sunday in June.",
+      "六月第三個星期日。"
+    ],
+    "sourceUrl": "https://www.youth.gov.hk/sc/community-participation/stories/a053ff24-10a7-4ce1-8978-133fae288adf",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-fathers",
+    "region": "jp",
+    "date": "2026-06-21",
+    "name": [
+      "Father’s Day",
+      "父親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The third Sunday in June.",
+      "六月第三個星期日。"
+    ],
+    "sourceUrl": "https://www.s-i-a.or.jp/child/japanese/pdf/gyouji_jp.pdf",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "us-fathers",
+    "region": "us",
+    "date": "2026-06-21",
+    "name": [
+      "Father’s Day",
+      "父親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The third Sunday in June.",
+      "六月第三個星期日。"
+    ],
+    "sourceUrl": "https://blogs.loc.gov/teachers/2017/06/celebrating-fathers-day-with-primary-sources-from-the-library-of-congress/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "hk-establishment",
+    "region": "hk",
+    "date": "2026-07-01",
+    "name": [
+      "HKSAR Establishment Day",
+      "香港特別行政區成立紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "us-independence",
+    "region": "us",
+    "date": "2026-07-04",
+    "name": [
+      "Independence Day",
+      "獨立紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed by most federal employees on July 3.",
+      "多數聯邦僱員於7月3日補假。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "jp-tanabata",
+    "region": "jp",
+    "date": "2026-07-07",
+    "name": [
+      "Tanabata",
+      "七夕祭"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Common date; some regional festivals take place in August.",
+      "常見日期；部分地區於八月舉辦。"
+    ],
+    "sourceUrl": "https://www.city.maizuru.kyoto.jp/kurashi/cmsfiles/contents/0000014/14500/English.pdf",
+    "collectionId": "lantern-wishes"
+  },
+  {
+    "id": "jp-marine",
+    "region": "jp",
+    "date": "2026-07-20",
+    "name": [
+      "Marine Day",
+      "海之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "summer-journeys"
+  },
+  {
+    "id": "tw-fathers",
+    "region": "tw",
+    "date": "2026-08-08",
+    "name": [
+      "Father’s Day",
+      "父親節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "August 8 in Taiwan.",
+      "台灣為8月8日。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/uploads/dgpa/files/202510/115%E5%B9%B4%E8%BE%A6%E5%85%AC%E6%97%A5%E6%9B%86%E8%A1%A8-6.pdf",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-mountain",
+    "region": "jp",
+    "date": "2026-08-11",
+    "name": [
+      "Mountain Day",
+      "山之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "summer-journeys"
+  },
+  {
+    "id": "jp-obon",
+    "region": "jp",
+    "date": "2026-08-13",
+    "name": [
+      "Obon",
+      "盂蘭盆節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Common August observance; dates vary by region and some places observe in July.",
+      "常見八月日期；地區習俗不同，部分地區於七月舉行。"
+    ],
+    "sourceUrl": "https://www.japan.travel/en/guide/august/",
+    "collectionId": "quiet-remembrance",
+    "endDate": "2026-08-16"
+  },
+  {
+    "id": "hk-qixi",
+    "region": "hk",
+    "date": "2026-08-19",
+    "name": [
+      "Qixi Festival",
+      "七夕"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The seventh day of the seventh lunar month.",
+      "農曆七月初七。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "tw-qixi",
+    "region": "tw",
+    "date": "2026-08-19",
+    "name": [
+      "Qixi Festival",
+      "七夕"
+    ],
+    "kind": "cultural",
+    "note": [
+      "The seventh day of the seventh lunar month.",
+      "農曆七月初七。"
+    ],
+    "sourceUrl": "https://news.immigration.gov.tw/NewsSection/Detail/5f380694-3dff-4881-b5ab-2ecd6e3a143a?lang=TW",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "hk-ghost",
+    "region": "hk",
+    "date": "2026-08-27",
+    "name": [
+      "Hungry Ghost Festival",
+      "中元節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A time for remembrance; local observances vary.",
+      "追思與敬意；各地習俗不一。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "tw-ghost",
+    "region": "tw",
+    "date": "2026-08-27",
+    "name": [
+      "Hungry Ghost Festival",
+      "中元節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A time for remembrance; local observances vary.",
+      "追思與敬意；各地習俗不一。"
+    ],
+    "sourceUrl": "https://klctb.klcg.gov.tw/News_Content.aspx?n=7638&s=16995",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "us-labour",
+    "region": "us",
+    "date": "2026-09-07",
+    "name": [
+      "Labor Day",
+      "勞動節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-aged",
+    "region": "jp",
+    "date": "2026-09-21",
+    "name": [
+      "Respect for the Aged Day",
+      "敬老之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "jp-citizens",
+    "region": "jp",
+    "date": "2026-09-22",
+    "name": [
+      "Holiday between National Holidays",
+      "國民假日"
+    ],
+    "kind": "public",
+    "note": [
+      "Additional holiday between Respect for the Aged Day and Autumnal Equinox Day.",
+      "敬老之日與秋分之日之間的額外假日。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "autumn-craft"
+  },
+  {
+    "id": "jp-autumn-equinox",
+    "region": "jp",
+    "date": "2026-09-23",
+    "name": [
+      "Autumnal Equinox Day",
+      "秋分之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-mid-autumn",
+    "region": "hk",
+    "date": "2026-09-25",
+    "name": [
+      "Mid-Autumn Festival",
+      "中秋節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Festival evening is September 25; the general holiday is September 26.",
+      "中秋正日為9月25日，公眾假期為9月26日。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/Press-Releases/110730/Moon-watching-tips-for-Mid-Autumn-Festival-2026",
+    "collectionId": "mid-autumn"
+  },
+  {
+    "id": "tw-mid-autumn",
+    "region": "tw",
+    "date": "2026-09-25",
+    "name": [
+      "Mid-Autumn Festival",
+      "中秋節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "mid-autumn"
+  },
+  {
+    "id": "hk-mid-autumn-holiday",
+    "region": "hk",
+    "date": "2026-09-26",
+    "name": [
+      "Day following Mid-Autumn Festival",
+      "中秋節翌日"
+    ],
+    "kind": "public",
+    "note": [
+      "The general holiday follows the September 25 festival.",
+      "中秋正日為9月25日，翌日為公眾假期。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "mid-autumn"
+  },
+  {
+    "id": "tw-teachers",
+    "region": "tw",
+    "date": "2026-09-28",
+    "name": [
+      "Confucius’ Birthday and Teachers’ Day",
+      "孔子誕辰紀念日及教師節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "hk-national",
+    "region": "hk",
+    "date": "2026-10-01",
+    "name": [
+      "National Day",
+      "國慶日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "tw-national",
+    "region": "tw",
+    "date": "2026-10-10",
+    "name": [
+      "National Day",
+      "國慶日"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed October 9.",
+      "10月9日補假。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "jp-sports",
+    "region": "jp",
+    "date": "2026-10-12",
+    "name": [
+      "Sports Day",
+      "運動之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "summer-journeys"
+  },
+  {
+    "id": "us-columbus",
+    "region": "us",
+    "date": "2026-10-12",
+    "name": [
+      "Columbus Day",
+      "哥倫布日"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-chung-yeung",
+    "region": "hk",
+    "date": "2026-10-18",
+    "name": [
+      "Chung Yeung Festival",
+      "重陽節"
+    ],
+    "kind": "public",
+    "note": [
+      "Remembering ancestors and caring for elders. General holiday observed October 19.",
+      "慎終追遠、敬老關懷；公眾假期為10月19日。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "tw-retrocession",
+    "region": "tw",
+    "date": "2026-10-25",
+    "name": [
+      "Taiwan Retrocession and Battle of Guningtou Commemoration",
+      "臺灣光復暨金門古寧頭大捷紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "Observed October 26. A moment for historical reflection.",
+      "10月26日補假；回顧歷史與省思。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "hk-halloween",
+    "region": "hk",
+    "date": "2026-10-31",
+    "name": [
+      "Halloween",
+      "萬聖節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; local participation varies.",
+      "文化節日；各地參與方式不一。"
+    ],
+    "sourceUrl": "https://guides.loc.gov/halloween",
+    "collectionId": "halloween"
+  },
+  {
+    "id": "jp-halloween",
+    "region": "jp",
+    "date": "2026-10-31",
+    "name": [
+      "Halloween",
+      "萬聖節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; local participation varies.",
+      "文化節日；各地參與方式不一。"
+    ],
+    "sourceUrl": "https://guides.loc.gov/halloween",
+    "collectionId": "halloween"
+  },
+  {
+    "id": "tw-halloween",
+    "region": "tw",
+    "date": "2026-10-31",
+    "name": [
+      "Halloween",
+      "萬聖節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; local participation varies.",
+      "文化節日；各地參與方式不一。"
+    ],
+    "sourceUrl": "https://guides.loc.gov/halloween",
+    "collectionId": "halloween"
+  },
+  {
+    "id": "us-halloween",
+    "region": "us",
+    "date": "2026-10-31",
+    "name": [
+      "Halloween",
+      "萬聖節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; local participation varies.",
+      "文化節日；各地參與方式不一。"
+    ],
+    "sourceUrl": "https://guides.loc.gov/halloween",
+    "collectionId": "halloween"
+  },
+  {
+    "id": "jp-culture",
+    "region": "jp",
+    "date": "2026-11-03",
+    "name": [
+      "Culture Day",
+      "文化之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "autumn-craft"
+  },
+  {
+    "id": "us-veterans",
+    "region": "us",
+    "date": "2026-11-11",
+    "name": [
+      "Veterans Day",
+      "退伍軍人節"
+    ],
+    "kind": "public",
+    "note": [
+      "A moment for remembrance, gratitude and reflection.",
+      "以追思、感恩與省思相待。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "quiet-remembrance"
+  },
+  {
+    "id": "jp-shichi-go-san",
+    "region": "jp",
+    "date": "2026-11-15",
+    "name": [
+      "Shichi-Go-San",
+      "七五三"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Traditional date; family visits may be scheduled nearby.",
+      "傳統日期；家庭參拜亦可安排在前後日子。"
+    ],
+    "sourceUrl": "https://www.city.maizuru.kyoto.jp/kurashi/cmsfiles/contents/0000014/14500/English.pdf",
+    "collectionId": "children-play"
+  },
+  {
+    "id": "jp-labour-thanks",
+    "region": "jp",
+    "date": "2026-11-23",
+    "name": [
+      "Labour Thanksgiving Day",
+      "勤勞感謝之日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html",
+    "collectionId": "family-gratitude"
+  },
+  {
+    "id": "us-thanksgiving",
+    "region": "us",
+    "date": "2026-11-26",
+    "name": [
+      "Thanksgiving Day",
+      "感恩節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "thanksgiving"
+  },
+  {
+    "id": "hk-winter-solstice",
+    "region": "hk",
+    "date": "2026-12-22",
+    "name": [
+      "Winter Solstice",
+      "冬至"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A seasonal gathering date in local time.",
+      "以當地時間計算的節令團聚日。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "winter-solstice"
+  },
+  {
+    "id": "tw-winter-solstice",
+    "region": "tw",
+    "date": "2026-12-22",
+    "name": [
+      "Winter Solstice",
+      "冬至"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A seasonal gathering date in local time.",
+      "以當地時間計算的節令團聚日。"
+    ],
+    "sourceUrl": "https://www.hko.gov.hk/en/gts/time/calendar/pdf/files/2026e.pdf",
+    "collectionId": "winter-solstice"
+  },
+  {
+    "id": "hk-christmas",
+    "region": "hk",
+    "date": "2026-12-25",
+    "name": [
+      "Christmas Day",
+      "聖誕節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "winter-gifting"
+  },
+  {
+    "id": "jp-christmas",
+    "region": "jp",
+    "date": "2026-12-25",
+    "name": [
+      "Christmas",
+      "聖誕節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; not the name of a national public holiday here.",
+      "文化節日，並非此地國定假日的名稱。"
+    ],
+    "sourceUrl": "https://www.japan.travel/en/guide/december/",
+    "collectionId": "winter-gifting"
+  },
+  {
+    "id": "tw-christmas",
+    "region": "tw",
+    "date": "2026-12-25",
+    "name": [
+      "Christmas",
+      "聖誕節"
+    ],
+    "kind": "cultural",
+    "note": [
+      "A cultural occasion; not the name of a national public holiday here.",
+      "文化節日，並非此地國定假日的名稱。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "winter-gifting"
+  },
+  {
+    "id": "tw-constitution",
+    "region": "tw",
+    "date": "2026-12-25",
+    "name": [
+      "Constitution Day",
+      "行憲紀念日"
+    ],
+    "kind": "public",
+    "note": [
+      "The public holiday is Constitution Day; Christmas is a separate cultural occasion.",
+      "此公眾假期為行憲紀念日；聖誕節另列為文化節日。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "national-gatherings"
+  },
+  {
+    "id": "us-christmas",
+    "region": "us",
+    "date": "2026-12-25",
+    "name": [
+      "Christmas Day",
+      "聖誕節"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "winter-gifting"
+  },
+  {
+    "id": "hk-boxing",
+    "region": "hk",
+    "date": "2026-12-26",
+    "name": [
+      "First weekday after Christmas Day",
+      "聖誕節後第一個周日"
+    ],
+    "kind": "public",
+    "note": [
+      "A date for thoughtful seasonal planning.",
+      "用心安排節令生活。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "winter-gifting"
+  },
+  {
+    "id": "hk-gregorian-new-year-eve",
+    "region": "hk",
+    "date": "2026-12-31",
+    "name": [
+      "New Year’s Eve",
+      "除夕跨年夜"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Year-end gatherings; not an additional national public holiday.",
+      "歲末相聚，並非額外國定假日。"
+    ],
+    "sourceUrl": "https://www.info.gov.hk/gia/general/202505/16/P2025051300353.htm",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "jp-gregorian-new-year-eve",
+    "region": "jp",
+    "date": "2026-12-31",
+    "name": [
+      "New Year’s Eve",
+      "除夕跨年夜"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Year-end gatherings; not an additional national public holiday.",
+      "歲末相聚，並非額外國定假日。"
+    ],
+    "sourceUrl": "https://www.japan.travel/en/guide/december/",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "tw-gregorian-new-year-eve",
+    "region": "tw",
+    "date": "2026-12-31",
+    "name": [
+      "New Year’s Eve",
+      "除夕跨年夜"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Year-end gatherings; not an additional national public holiday.",
+      "歲末相聚，並非額外國定假日。"
+    ],
+    "sourceUrl": "https://www.dgpa.gov.tw/information?pid=12574&uid=2",
+    "collectionId": "new-year"
+  },
+  {
+    "id": "us-gregorian-new-year-eve",
+    "region": "us",
+    "date": "2026-12-31",
+    "name": [
+      "New Year’s Eve",
+      "除夕跨年夜"
+    ],
+    "kind": "cultural",
+    "note": [
+      "Year-end gatherings; not an additional national public holiday.",
+      "歲末相聚，並非額外國定假日。"
+    ],
+    "sourceUrl": "https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/",
+    "collectionId": "new-year"
+  }
+]

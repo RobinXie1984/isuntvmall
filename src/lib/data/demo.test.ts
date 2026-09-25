@@ -5,8 +5,8 @@ import { demoProducts, getDemoLiveSessions } from "./demo";
 import { productImage } from "../product-image";
 
 describe("expanded showroom catalogue", () => {
-  it("offers 46 distinct, preview-only products with safe cart identifiers", () => {
-    expect(demoProducts).toHaveLength(46);
+  it("offers 96 distinct, preview-only products with safe cart identifiers", () => {
+    expect(demoProducts).toHaveLength(96);
     for (const field of ["id", "slug", "sku"] as const) {
       expect(new Set(demoProducts.map(product => product[field])).size).toBe(demoProducts.length);
     }
