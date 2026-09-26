@@ -13,6 +13,7 @@ export const draftProductSchema = z.object({
   category: z.string().trim().min(1).max(80).default("General"),
   priceAmount: z.number().int().min(1).max(100000000).nullable().default(null),
   currency: z.literal("hkd").default("hkd"),
+  isDemo: z.boolean().default(false),
   stockQty: z.number().int().min(0).max(1000000).default(0),
 }).strict();
 export const createBatchSchema = z.object({

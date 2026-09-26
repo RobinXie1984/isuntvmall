@@ -11,8 +11,10 @@ export function parseBatchManifest(text: string): Map<string, DraftProduct> {
     if (!name || entries.has(name) || /[\\/\u0000-\u001f]/.test(name)) throw new Error("INVALID_MANIFEST");
     const amount = (row.price_hkd ?? "").trim(); const stock = (row.stock ?? "0").trim();
     if ((amount && !/^\d{1,7}(\.\d{1,2})?$/.test(amount)) || !/^\d{1,7}$/.test(stock)) throw new Error("INVALID_MANIFEST");
+    const demo = (row.is_demo ?? "").trim();
+    if (demo && demo !== "true" && demo !== "false") throw new Error("INVALID_MANIFEST");
     const [whole, fraction = ""] = amount.split(".");
-    const product = draftProductSchema.parse({ sku: row.sku, title: row.title, description: row.description || "", titleZh: row.title_zh || "", descriptionZh: row.description_zh || "", category: row.category || "General", priceAmount: amount ? Number(whole) * 100 + Number(fraction.padEnd(2, "0")) : null, currency: "hkd", stockQty: Number(stock) });
+    const product = draftProductSchema.parse({ sku: row.sku, title: row.title, description: row.description || "", titleZh: row.title_zh || "", descriptionZh: row.description_zh || "", category: row.category || "General", priceAmount: amount ? Number(whole) * 100 + Number(fraction.padEnd(2, "0")) : null, currency: "hkd", stockQty: Number(stock), isDemo: demo === "true" });
     entries.set(name, product);
   }
   return entries;

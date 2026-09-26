@@ -13,7 +13,8 @@
   },
   "account_id": "c805fea6fe0eb47cd90cd5e19f0ff00e",
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://www.isuntvmall.com"
+    "NEXT_PUBLIC_SITE_URL": "https://www.isuntvmall.com",
+    "BATCH_HELPER_ENABLED": "true"
   },
   "workers_dev": true,
   "routes": [

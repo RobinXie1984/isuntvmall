@@ -1,2 +1,2 @@
-filename,sku,title,description,title_zh,description_zh,category,price_hkd,stock
-my-mug.jpg,MY-MUG-001,My mug,Describe actual materials and size.,我的杯子,請描述實際材料與尺寸。,Lifestyle,68.00,10
+filename,sku,title,description,title_zh,description_zh,category,price_hkd,stock,is_demo
+my-mug.jpg,MY-MUG-001,My mug,Describe actual materials and size.,我的杯子,請描述實際材料與尺寸。,Lifestyle,68.00,10,false

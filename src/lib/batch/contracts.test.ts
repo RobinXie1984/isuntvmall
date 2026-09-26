@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { batchActionSchema, createBatchSchema, readBatchJson } from "./contracts";
+import { batchActionSchema, createBatchSchema, draftProductSchema, readBatchJson } from "./contracts";
 import { parseBatchManifest } from "./manifest";
 const id = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const item = { filename: "cup.jpg", mime: "image/jpeg", byte_size: 2048 };
@@ -17,6 +17,22 @@ describe("batch intake boundaries", () => {
   it("requires a revision and rejects client approval/hash injection", () => {
     expect(batchActionSchema.safeParse({ action: "approve", revision: 1 }).success).toBe(true);
     for (const input of [{ action: "approve" }, { action: "approve", revision: 0 }, { action: "approve", revision: 1, approvedBy: id }, { action: "upload", revision: 1, path: "other-user/file.jpg" }]) expect(batchActionSchema.safeParse(input).success).toBe(false);
+  });
+  it("defaults to real merchandise and preserves only explicit boolean demo flags through intake and edits", () => {
+    const product = { sku: "CUP", title: "Cup" };
+    expect(draftProductSchema.parse(product).isDemo).toBe(false);
+    for (const isDemo of [true, false]) {
+      const data = { ...product, isDemo };
+      expect(createBatchSchema.parse({ ...body, items: [{ ...item, product_data: data }] }).items[0].product_data?.isDemo).toBe(isDemo);
+      expect(batchActionSchema.parse({ action: "edit", revision: 2, productData: data })).toMatchObject({ productData: { isDemo } });
+    }
+    for (const isDemo of ["false", "true", 0, 1, null]) expect(draftProductSchema.safeParse({ ...product, isDemo }).success).toBe(false);
+  });
+  it("accepts an optional explicit CSV demo flag without silently coercing invalid values", () => {
+    const header = "filename,sku,title,is_demo\n";
+    expect(parseBatchManifest("filename,sku,title\ncup.jpg,CUP,Cup").get("cup.jpg")?.isDemo).toBe(false);
+    for (const value of ["", "false", "true"]) expect(parseBatchManifest(header + `cup.jpg,CUP,Cup,${value}`).get("cup.jpg")?.isDemo).toBe(value === "true");
+    for (const value of ["yes", "TRUE", "1", "null"]) expect(() => parseBatchManifest(header + `cup.jpg,CUP,Cup,${value}`)).toThrow("INVALID_MANIFEST");
   });
   it("bounds streamed JSON even without a content-length header", async () => {
     expect(await readBatchJson(request('{"ok":true}'), 100)).toEqual({ ok: true });
