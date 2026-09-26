@@ -7,7 +7,7 @@ import { getLocale } from "@/lib/locale-server";
 import "./globals.css";
 export async function generateMetadata():Promise<Metadata> {
  const {t}=await getLocale();
- return {title:{default:t("iSunTVMall — Considered everyday","iSunTVMall — 用心選好物"),template:"%s · iSunTVMall"},description:t("Thoughtful everyday finds, independent hosts, and a simpler way to shop.","用心挑選日常好物，與主播一起探索生活。")};
+ return {title:{default:t("iSunTVMall — Considered everyday","iSunTVMall — 用心選好物"),template:"%s · iSunTVMall"},description:t("Thoughtful everyday finds, independent hosts, and a simpler way to shop.","用心挑選日常好物，與主播一起探索生活。"),icons:{icon:[{url:"/brand/favicon-32.png",sizes:"32x32",type:"image/png"},{url:"/brand/icon-192.png",sizes:"192x192",type:"image/png"}],shortcut:"/brand/favicon-32.png",apple:[{url:"/brand/apple-touch-icon.png",sizes:"180x180",type:"image/png"}]},manifest:"/site.webmanifest"};
 }
 export default async function RootLayout({children}:Readonly<{children:React.ReactNode}>) {
  const {locale,t}=await getLocale();
