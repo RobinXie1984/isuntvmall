@@ -1,6 +1,14 @@
 # Commerce release boundary
 
-Checkout remains **HOLD** in code. Credentials alone cannot enable it. The preview does not place orders, reserve real stock, contact payment providers, or accept webhook mutations. No production database migrations or provider calls were performed for this implementation.
+Checkout remains **HOLD** in code. Credentials alone cannot enable it. The preview does not place orders, reserve real stock, contact payment providers, or accept webhook mutations. The managed backend is now connected; that does not release checkout or establish payment-provider readiness.
+
+## Managed deployment evidence — 26 September 2026
+
+For source `c4d0079`, deployment checks confirmed project `fikmqessuraosgoyxede` has all eleven migrations applied and twenty-four application tables with row-level security enabled, with no anonymous application-table grants. Cloudflare and Studio runtimes are connected through approved secret configuration using the existing service-role fallback `SUPABASE_SERVICE_ROLE_KEY`. No secret values are included in this document.
+
+The connected showroom contains 96 demo products, 96 images, three fictional hosts, three public preview rooms and eighteen product links. The owner invitation was issued and application membership provisioned; delivery, private password setup and successful MFA remain **UNKNOWN**. No successful owner-authenticated session, verified broadcast or merchant approval is inferred from those records. The batch scheduler is not installed and authenticated end-to-end batch processing/review/publication remains **UNKNOWN**.
+
+The current application suite passed 184 checks and the connected deployment passed 143 HTTP checks. These bounded results establish the checked pages and guarded endpoints, not all managed database, Auth, storage or payment behavior. Recovery rehearsal, real provider/widget verification, payment merchant/lifecycle tests and the independent checkout gate remain open requirements. See [managed deployment](../supabase/DEPLOYMENT.md).
 
 ## Implemented and locally checked
 
@@ -32,15 +40,15 @@ Run `npm ci`, `npm run test:run`, and `npm run test:reservations`. The SQL scrip
 
 The 25 September verification report records 170 application tests and 36 checkout-admission SQL checks. Run `npm run test:backend` for admission and other backend SQL checks; the worker package's `npm test` and `npm run test:db` cover optional maintenance and its expiry SQL. Provider verification responses are mocked in application tests.
 
-PGlite checks are sequential. The separate disposable PostgreSQL 17.11 run passed 15 assertions across nine contention scenarios, each with eight distinct concurrent connections: last-unit reservation, global batch admission, retained-byte capacity, stale order revisions, duplicate order-request replay, checkout recent-attempt limits, per-client active holds, store-wide active holds and exact checkout retries. The last-unit race committed one reservation; seven competing attempts received OUT_OF_STOCK. `scripts/verify-native-concurrency.mjs` reproduces these checks against an explicitly prepared empty database over a local Unix socket. These results do not establish managed Supabase behavior, expiry-versus-payment races, a live worker, remote statement timeout enforcement or provider lifecycle readiness.
+PGlite checks are sequential. The separate 25 September disposable PostgreSQL 17.11 run passed 15 assertions across nine contention scenarios, each with eight distinct concurrent connections: last-unit reservation, global batch admission, retained-byte capacity, stale order revisions, duplicate order-request replay, checkout recent-attempt limits, per-client active holds, store-wide active holds and exact checkout retries. The last-unit race committed one reservation; seven competing attempts received OUT_OF_STOCK. `scripts/verify-native-concurrency.mjs` reproduces these checks against an explicitly prepared empty database over a local Unix socket. These results do not establish managed Supabase behavior, expiry-versus-payment races, a live worker, remote statement timeout enforcement or provider lifecycle readiness.
 
 ## Required before enabling commerce
 
-- Authorized, active Supabase project; migration review/application, RLS/service-role access verification, backup/recovery rehearsal, and two-connection last-unit/expiry-versus-payment tests.
+- Complete the remaining managed-backend workflow checks after the verified migration/RLS deployment: real owner invitation acceptance/MFA, scoped service-role and private storage operations, end-to-end batch approval/publication, backup/recovery rehearsal, and independent-connection last-unit/expiry-versus-payment tests on the approved project.
 - Verified merchant Stripe account, test-mode session and webhook lifecycle, signing secret, events enabled, deployed raw-body signature validation, expiry/retry/reconciliation test, and operational alerts. Real provider behavior remains UNKNOWN.
 - An operator process and protected interface for manual-review/refund/dispute reconciliation. V1 records exceptions but has no automatic refund execution, accounting reconciliation, or notification delivery.
 - Approved shipping rates, destinations, tax handling, return/refund rules, privacy/retention, merchant/support identity, and real catalog availability. Current subtotal/total arithmetic checks do not prove that the configured shipping/tax policy is commercially correct.
-- Activate and verify the implemented abuse controls on the deployed origin: real Turnstile widget/secret/hostname/action, trusted edge-header provenance, server-only client-hash secret, owner-approved quota policy, and mobile/shared-address/retry behavior. Anonymous UUIDs remain attempt capabilities, not customer authentication. No real provider/widget or Supabase activation is established.
+- Activate and verify the implemented abuse controls on the deployed origin: real Turnstile widget/secret/hostname/action, trusted edge-header provenance, server-only client-hash secret, owner-approved quota policy, and mobile/shared-address/retry behavior. Anonymous UUIDs remain attempt capabilities, not customer authentication. The managed Supabase connection is established; real Turnstile/widget activation and deployed admission behavior remain unverified.
 - Review global-lock throughput; install and verify the opt-in expiry schedule, fresh maintenance health and an expired test hold; prove managed statement/lock timeouts and provider timeout handling; establish operator failure alerts. Deploy preview code separately from any deliberate release-gate removal.
 
 The platform currently demonstrates multi-host watching/shopping and preserves attribution. It does not claim production payment readiness, automatic social comment ordering, KOL payout accounting, or real stream permissions.
