@@ -2,6 +2,12 @@
 
 A working, bounded image-normalization engine and a durable approval workflow. The storefront remains MUJI. Selecting another preset affects this batch's presentation only. No paid AI service, background removal, recoloring or product invention is used.
 
+## Managed one-item proof — 26 September 2026
+
+Production batch access is enabled. Owner sign-in and TOTP MFA are confirmed. One explicitly marked demo item completed authenticated upload, original/output review and exact-revision approval; bounded manual worker passes performed normalization and publication. Thirty-one final read-only checks passed: original and processed objects were service-readable with expected hashes but denied unsigned public access; the public derivative matched the approved output hash; the product retained demo status, zero stock and reviewed English/Traditional Chinese copy; no orders were created. The showroom now contains 97 demo products.
+
+This is one-item evidence, not a scale benchmark or an ordinary authenticated-user storage isolation test. The prepared `com.isuntvmall.batch-worker` LaunchAgent was activated in `gui/501` at 10:30:21 UTC on 26 September, using the 60-second interval, 20-job limit and 45-second run budget. Two automatic idle cycles exited zero with zero completed/failed jobs and released locks; database counts were unchanged, including zero orders/reservations. This is automatic idle-health evidence, not a nonempty scheduled workload or unattended restart/recovery test. The user LaunchAgent requires Studio to remain awake with its GUI user session available. Checkout and inventory-expiry maintenance remain disabled; approval of a demo item does not authorize real sales.
+
 ## What V1 does
 
 - One JPEG, PNG or WebP becomes one draft product. Up to 1,000 image records per batch; larger catalogues use several batches.
@@ -45,7 +51,7 @@ SDK requests have a 30-second deadline that covers headers and body reads; optio
 
 The migration refuses any existing bucket whose privacy, maximum size or allowed MIME set differs from the expected configuration. It does not silently modify conflicting user settings. `batch-originals` and `batch-processed` must be private; `product-images` remains public with its existing eight-MiB image policy.
 
-No daemon, scheduled job, staff account, credential or remote database is created by this package. The online workflow is inactive until the owning deployment has a configured Supabase project, applies the migration, explicitly provisions staff membership, enables batch mode, and arranges operator worker runs. `BATCH_HELPER_ENABLED=true` must also disable legacy catalogue write paths in the application so they cannot bypass review. Real payment activation is a separate release gate.
+Installing this package alone creates no daemon, staff account, credential or remote database. The owning deployment has now configured the managed project, applied migrations, provisioned the named owner and enabled batch mode, with the bounded workflow evidence above. Legacy direct catalogue writes are retired unconditionally, regardless of `BATCH_HELPER_ENABLED`, so they cannot bypass review. Real payment activation remains a separate release gate.
 
 ## Recovery rules
 
@@ -70,11 +76,11 @@ npm test
 npm run test:db
 ```
 
-The database test imports the actual migrations into local WASM PostgreSQL and checks ownership, role denial, atomic creation, idempotency, stale leases, invalid approvals, revocation, SKU collision, retry and duplicate publication. This is not proof that a remote Supabase project, storage policies, auth configuration or credentials have been activated; those require deployment smoke tests.
+The database test imports the actual migrations into local WASM PostgreSQL and checks ownership, role denial, atomic creation, idempotency, stale leases, invalid approvals, revocation, SKU collision, retry and duplicate publication. These local tests do not establish remote behavior. The dated managed one-item proof above is separate evidence; remaining scoped access, scale and recovery checks still require deployment tests.
 
 ## Limits and next additions
 
-V1 deliberately requires explicit product metadata and one image per product. Multi-image product grouping, variants, CSV joins, per-image crop selection, virus scanning, duplicate-product detection, resumable TUS uploads for large individual files, and remote worker scheduling remain separate additions. Image normalization preserves composition but a human must verify color and product claims after lossy compression. Public rights, food labels, tax, shipping and refund policies remain merchant responsibilities.
+V1 deliberately requires explicit product metadata and one image per product. Multi-image product grouping, variants, CSV joins, per-image crop selection, virus scanning, duplicate-product detection, resumable TUS uploads for large individual files, and unattended restart/recovery verification remain separate additions. Image normalization preserves composition but a human must verify color and product claims after lossy compression. Public rights, food labels, tax, shipping and refund policies remain merchant responsibilities.
 
 ## Capacity and scheduled execution
 
@@ -84,6 +90,6 @@ Every original upload slot reserves the full 24 MiB bucket limit before its uplo
 
 The service-only `batch_capacity` RPC reports reserved capacity, not measured disk usage. `batch_configure_capacity` requires a current super admin and audits changes. Explicit pauses stop new allocation; existing exact idempotent requests remain recoverable. Ordinary staff cannot expand their allowance or delete reservation rows. No automatic cleanup or quota release is implemented.
 
-[Deployment runbook](deploy/RUNBOOK.md) prepares one named scheduled runner, bounded status/health reporting, crash-lock recovery and configuration examples. It does not install or enable a scheduler. A genuine multi-connection PostgreSQL race test remains an activation check; local transaction tests run in single-connection PGlite and do not pretend to prove independent connection concurrency.
+The deployed named scheduler follows the [deployment runbook](deploy/RUNBOOK.md), with bounded status/health reporting and crash-lock recovery instructions. Installing this package alone does not activate a service; the dated activation above was a separate authorized deployment action. Local native PostgreSQL concurrency checks are recorded in commerce readiness; they do not establish managed-project concurrency. PGlite workflow tests run in a single connection.
 
-Inventory reservation expiry can share the same scheduled worker through the disabled-by-default `COMMERCE_MAINTENANCE_ENABLED=true` flag. It runs once before image jobs, has a 10-second request limit and records a separate confirmed/unknown maintenance result. Maintenance-only runs are supported. No live scheduler or managed database statement/lock timeout enforcement has been verified. A failed or timed-out sweep records `UNKNOWN` with a null count and fails the run; a client deadline is not proof of database cancellation. Checkout admission is separately disabled by default and the hard commerce release gate remains closed. See [commerce readiness](../docs/COMMERCE-READINESS.md) for the implemented Turnstile and atomic quota controls, and the [deployment runbook](deploy/RUNBOOK.md) for activation checks and the distinction between a client deadline and actual database cancellation.
+Inventory reservation expiry can share the same scheduled worker through the disabled-by-default `COMMERCE_MAINTENANCE_ENABLED=true` flag. It runs once before image jobs, has a 10-second request limit and records a separate confirmed/unknown maintenance result. Maintenance-only runs are supported. No enabled inventory-expiry schedule or managed database statement/lock timeout enforcement has been verified. A failed or timed-out sweep records `UNKNOWN` with a null count and fails the run; a client deadline is not proof of database cancellation. Checkout admission is separately disabled by default and the hard commerce release gate remains closed. See [commerce readiness](../docs/COMMERCE-READINESS.md) for the implemented Turnstile and atomic quota controls, and the [deployment runbook](deploy/RUNBOOK.md) for activation checks and the distinction between a client deadline and actual database cancellation.

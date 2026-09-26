@@ -10,7 +10,7 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 - YouTube player example; explicit provider-aware Facebook/Instagram viewing boundaries.
 - Persistent bag across rooms with per-line attribution and in-room review that keeps the player mounted.
 - Reservation-backed checkout with frozen order snapshots, stable retry IDs, server-verified Turnstile, trusted edge-IP HMAC scope and atomic client/store quotas; real checkout remains disabled pending acceptance.
-- Optional inventory-expiry maintenance in the existing worker, disabled by default; no live schedule is established.
+- Optional inventory-expiry maintenance in the existing worker, disabled by default; no inventory-expiry schedule is enabled.
 - Approved product catalog, private merchandise batches, and versioned host/session administration.
 - Six named staff roles, privileged MFA, immediate membership checks and session revocation.
 - Assigned support/fulfillment queues, payment-separated shipping, refund review and scoped aggregate reports.
@@ -22,7 +22,7 @@ Explore `/styles` for six independent design directions. The live storefront rem
 
 `/batch-helper` is a labeled workflow preview. The separate [batch helper](batch_helper/README.md) contains an executable image processor, resumable worker and migration-backed approval workflow. Each batch accepts up to 1,000 images, one image per new product. Images are normalized without cropping or changing product details. English and Traditional Chinese merchandise copy is required before approval.
 
-Named-user team access, private storage, revision-bound super-admin approval and publication exist in source but **online batch mode remains disabled**. Durable aggregate intake limits are implemented. Provisioning, storage-policy checks and an authenticated end-to-end test are required before activation. No staff accounts or database project are assumed by this release. Shared-password access is retired; legacy product/import/upload write routes are permanently closed.
+**Online batch mode is enabled as of 26 September 2026.** The managed database and named owner account are connected, owner sign-in and TOTP MFA are confirmed, and one explicit demo item completed authenticated upload, review and approval, with normalization/publication performed by bounded manual worker passes. Its original/processed images denied unsigned public access; the published derivative matched the approved hash. The catalogue now contains 97 demo products, including this zero-stock workflow fixture, and no orders were created. This bounded proof does not establish thousand-image throughput or ordinary authenticated-user storage isolation. The named image worker is now scheduled every minute; two automatic idle cycles passed with no data changes. This verifies idle scheduling, not a nonempty scheduled workload or restart recovery. Inventory-expiry maintenance remains disabled and checkout stays closed. Shared-password access is retired; legacy direct product/import/upload writes are permanently closed.
 
 See the [backend plan and role recommendations](docs/BACKEND-PLAN.md) for customer/admin flows, data model, provider boundaries and the controlled pilot plan.
 
@@ -57,14 +57,14 @@ Do not point this at a production database or enable payment processing without 
 ## Before real commerce
 
 1. Approve the merchant catalog, actual inventory, host identities and authorized stream URLs.
-2. Provision a dedicated database, apply and verify migrations, and provision individual operator access appropriate to the launch scope.
+2. Maintain the verified database/migration configuration and owner access; provision and test additional named operator scopes appropriate to the launch.
 3. Verify the implemented stock reservation, expiration/release and idempotent fulfillment paths on the actual managed PostgreSQL deployment, including overlapping transactions from independent connections. The included PGlite checks execute actual migrations. The 25 September checks record 170 application tests, 36 admission SQL checks, and 15 native PostgreSQL 17.11 assertions across nine contention scenarios with eight connections each; none proves managed production behavior. Activate and verify the implemented Turnstile, trusted edge-IP HMAC and owner-approved atomic admission limits before exposing inventory holds publicly. Verify the opt-in expiry worker schedule and actual database statement/lock timeouts.
 4. Verify hosted checkout, exact amount/currency binding, signed webhook replay, cancellation, refunds and retry behavior using the provider's test environment.
 5. Provide actual shipping, refund, privacy and contact policies; verify regional payment and fulfillment settings.
 6. Run desktop/mobile and deployed-origin player checks. Facebook/Instagram capability depends on supported provider behavior and authorized accounts; embedding, comment ordering and simulcasting are separate integrations.
 7. Review and intentionally remove the code-level payment hold only after the evidence above passes.
 
-The named KOL workflow supports own-room drafts, requests, approved product pins and own aggregate results in source. Its production account and provider tests remain pending. Payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this release. Refund approval records a decision; it does not execute a payment or restock inventory. Settings retain read-only connection readiness and now let the named MFA-verified owner edit audited checkout admission limits. Admission defaults to disabled; saving or enabling it never removes the hard checkout gate. No merchant policies are invented or published. Real Turnstile/widget, Supabase and payment activation remain unverified; see [commerce readiness](docs/COMMERCE-READINESS.md).
+The named KOL workflow supports own-room drafts, requests, approved product pins and own aggregate results in source. The owner account is verified; separate KOL account/scoping and actual provider playback tests remain pending. Payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this release. Refund approval records a decision; it does not execute a payment or restock inventory. Settings retain read-only connection readiness and now let the named MFA-verified owner edit audited checkout admission limits. Admission defaults to disabled; saving or enabling it never removes the hard checkout gate. No merchant policies are invented or published. Managed Supabase connectivity, migrations, owner MFA and the one-item batch workflow are verified; remaining scoped-access/recovery tests, real Turnstile/widget and payment activation remain unverified; see [commerce readiness](docs/COMMERCE-READINESS.md).
 
 ## Source boundaries
 
