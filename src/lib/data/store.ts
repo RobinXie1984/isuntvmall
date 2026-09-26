@@ -119,10 +119,16 @@ export async function getLiveSessions(options: { includeAll?: boolean } = {}) {
     .from("live_sessions")
     .select("*, kols(*), live_products(position, products(*, product_images(*)))")
     .order("starts_at", { ascending: true });
-  if (!options.includeAll) query = query.eq("is_public",true).in("status", ["live", "scheduled", "ended"]);
+  const publicStatuses = ["live", "scheduled", "ended", "preview"];
+  if (!options.includeAll) query = query.eq("is_public", true).in("status", publicStatuses);
   const { data, error } = await query;
   if (error) throw new Error(`Unable to load livestreams: ${error.message}`);
-  return (data as RecordValue[]).filter(row => options.includeAll || unwrapRelatedProduct(row.kols)?.status === "active").map(row => mapLiveSession(row, Boolean(options.includeAll)));
+  // Explicit showroom previews are public, but are never a substitute for the
+  // source-checked publication workflow required by actual broadcasts.
+  return (data as RecordValue[]).filter(row => options.includeAll || (
+    row.is_public === true && publicStatuses.includes(String(row.status)) &&
+    unwrapRelatedProduct(row.kols)?.status === "active"
+  )).map(row => mapLiveSession(row, Boolean(options.includeAll)));
 }
 
 export async function getLiveSessionBySlug(slug: string) {
