@@ -21,7 +21,7 @@ export function ProductCard({ product, source }: { product: Product; source?: Ca
         <span className="product-category">{localize(product.category)}</span>
         <Link className="product-title" href={productUrl}>{productTitle(product, locale, localize)}</Link>
         <div className="product-card-bottom">
-          <div><strong>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</strong><small>{product.isDemo ? t("Sample product", "示範商品") : product.stockQty > 0 ? t(`${product.stockQty} in stock`, `${product.stockQty} 件現貨`) : t("Sold out", "售罄")}</small></div>
+          <div><strong>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</strong><small>{product.isDemo ? t("Sample product", "示範商品") : product.stockQty > 0 ? t(`${product.stockQty} in stock`, `${product.stockQty} 件現貨`, `在庫${product.stockQty}点`) : t("Sold out", "售罄")}</small></div>
           <AddToCartButton productId={product.id} source={source} disabled={product.stockQty < 1} compact />
         </div>
       </div>

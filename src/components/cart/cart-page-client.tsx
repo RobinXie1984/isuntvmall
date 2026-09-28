@@ -106,7 +106,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
       <div className="cart-lines">
         <div className="section-heading compact-heading">
           <div><span className="eyebrow">{t("YOUR CART", "購物袋")}</span><Heading>{t("Your bag", "我的購物袋")}</Heading></div>
-          <span className="muted">{t(`${items.reduce((sum, item) => sum + item.quantity, 0)} items`, `${items.reduce((sum, item) => sum + item.quantity, 0)} 件`)}</span>
+          <span className="muted">{t(`${items.reduce((sum, item) => sum + item.quantity, 0)} items`, `${items.reduce((sum, item) => sum + item.quantity, 0)} 件`, `${items.reduce((sum, item) => sum + item.quantity, 0)}点`)}</span>
         </div>
         {rows.filter(row => !row.product).map(({item}) => <article className="notice warning" key={cartLineKey(item)}>
           <p>{t("Product unavailable", "商品已無法選購")}</p><button type="button" className="text-button" onClick={() => removeItem(cartLineKey(item))}>{t("Remove unavailable item", "移除商品")}</button>
@@ -118,8 +118,8 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
               <span className="product-category">{localize(product.category)}</span>
               {compact ? <strong>{productTitle(product, locale, localize)}</strong> : <Link href={`/product/${product.slug}`}>{productTitle(product, locale, localize)}</Link>}
               <span>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</span>
-              <small className="attribution">{item.source ? t(`From: ${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `來自：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`) : t("Direct selection", "直接選購")}</small>
-              <div className="quantity-control" aria-label={t(`${productTitle(product, locale, localize)} quantity`, `${productTitle(product, locale, localize)}數量`)}>
+              <small className="attribution">{item.source ? t(`From: ${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `來自：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `紹介元：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`) : t("Direct selection", "直接選購")}</small>
+              <div className="quantity-control" aria-label={t(`${productTitle(product, locale, localize)} quantity`, `${productTitle(product, locale, localize)}數量`, `${productTitle(product, locale, localize)}の数量`)}>
                 <button type="button" onClick={() => setQuantity(cartLineKey(item), item.quantity - 1)} aria-label={t("Decrease quantity", "減少數量")}>−</button>
                 <span>{item.quantity}</span>
                 <button type="button" onClick={() => setQuantity(cartLineKey(item), item.quantity + 1)} aria-label={t("Increase quantity", "增加數量")}>＋</button>

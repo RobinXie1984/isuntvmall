@@ -6,5 +6,5 @@ import { useCart } from "@/components/cart/cart-provider";
 export function CartCount() {
   const { itemCount } = useCart();
   const { t } = useLocale();
-  return <span className="cart-count" aria-label={t(`${itemCount} items in your bag`, `購物袋內有 ${itemCount} 件商品`)}>{itemCount}</span>;
+  return <span className="cart-count" aria-label={t(`${itemCount} items in your bag`, `購物袋內有 ${itemCount} 件商品`, `バッグ内の商品：${itemCount}点`)}>{itemCount}</span>;
 }

@@ -26,7 +26,7 @@ export function LivePlayer({ session }: { session: LiveSession }) {
 
   return (
     <div className="video-fallback" style={session.posterUrl ? { backgroundImage: `url(${session.posterUrl})` } : undefined}>
-      <div><span className="eyebrow">{t(`WATCH ON ${session.platform.toUpperCase()}`, "於官方平台觀看")}</span><h2>{roomTitle}</h2><p>{localize(embed.reason)}</p>
+      <div><span className="eyebrow">{t(`WATCH ON ${session.platform.toUpperCase()}`, "於官方平台觀看", `${session.platform.toUpperCase()}で視聴`)}</span><h2>{roomTitle}</h2><p>{localize(embed.reason)}</p>
         <a className="button" href={embed.href} target="_blank" rel="noopener noreferrer">{t("Watch on the official platform ↗", "前往官方平台觀看 ↗")}</a>
       </div>
     </div>

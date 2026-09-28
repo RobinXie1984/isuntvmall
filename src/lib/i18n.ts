@@ -1,11 +1,35 @@
 import { expandedTranslations } from "./data/expanded-catalogue";
 
 import { holidayTranslations } from "./data/holiday-catalogue";
+import jaCatalogue from "./locales/ja-catalogue.json";
+import jaUi from "./locales/ja-ui.json";
+import jaAdmin from "./locales/ja-admin.json";
+import jaExtra from "./locales/ja-extra.json";
+import simplified from "./locales/zh-Hans.json";
+import simplifiedCharacters from "./locales/zh-Hans-characters.json";
 
-export type Locale = "en" | "zh-Hant";
+export const LOCALES = ["en", "zh-Hant", "zh-Hans", "ja"] as const;
+export type Locale = typeof LOCALES[number];
+export const LOCALE_NAMES: Record<Locale, string> = { en: "English", "zh-Hant": "繁體中文", "zh-Hans": "简体中文", ja: "日本語" };
+export const INTL_LOCALES: Record<Locale, string> = { en: "en-HK", "zh-Hant": "zh-HK", "zh-Hans": "zh-CN", ja: "ja-JP" };
 export const LOCALE_COOKIE = "isuntvmall-locale";
 export function parseLocale(value: string | undefined | null): Locale {
-  return value === "zh-Hant" ? "zh-Hant" : "en";
+  return LOCALES.includes(value as Locale) ? value as Locale : "en";
+}
+
+const japanese: Record<string, string> = { ...jaCatalogue, ...jaUi, ...jaAdmin, ...jaExtra };
+const simplifiedCopy: Record<string, string> = simplified;
+const simplifiedMap: Record<string, string> = simplifiedCharacters;
+// Exact phrase conversions for authored copy; character fallback handles the
+// same copy with inserted quantities. Unknown merchant text is not translated.
+function simplifyCopy(value: string): string {
+  return simplifiedCopy[value] ?? [...value].map(char => simplifiedMap[char] ?? char).join("");
+}
+export function translate(en: string, zh: string, locale: Locale, ja?: string): string {
+  if (locale === "en") return en;
+  if (locale === "zh-Hant") return zh;
+  if (locale === "zh-Hans") return simplifyCopy(zh);
+  return ja ?? japanese[en] ?? en;
 }
 
 // Exact editorial translations for the sample catalogue. Never split or
@@ -55,9 +79,14 @@ const translations: Record<string, readonly [string, string]> = {
   "TikTok video": ["TikTok video", "影片播放器"],
 };
 
+const sampleTranslations: Record<string, readonly [string, string]> = Object.fromEntries(
+  Object.entries(translations).flatMap(([source, pair]) => [[source, pair], [pair[0], pair], [pair[1], pair]]),
+);
 export function localize(value: string, locale: Locale): string {
-  return translations[value]?.[locale === "en" ? 0 : 1] ?? value;
+  const pair = sampleTranslations[value];
+  if (pair) return translate(pair[0], pair[1], locale);
+  return locale === "ja" ? japanese[value] ?? value : value;
 }
 export function formatLocalizedMoney(amount: number, currency: string, locale: Locale): string {
-  return new Intl.NumberFormat(locale === "en" ? "en-HK" : "zh-HK", { style: "currency", currency: currency.toUpperCase(), maximumFractionDigits: 2 }).format(amount / 100);
+  return new Intl.NumberFormat(INTL_LOCALES[locale], { style: "currency", currency: currency.toUpperCase(), maximumFractionDigits: 2 }).format(amount / 100);
 }
