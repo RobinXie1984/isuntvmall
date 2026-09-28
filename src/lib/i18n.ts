@@ -1,3 +1,4 @@
+import { supplierDemoTranslations } from "./data/supplier-demo";
 import { expandedTranslations } from "./data/expanded-catalogue";
 
 import { holidayTranslations } from "./data/holiday-catalogue";
@@ -83,6 +84,7 @@ const sampleTranslations: Record<string, readonly [string, string]> = Object.fro
   Object.entries(translations).flatMap(([source, pair]) => [[source, pair], [pair[0], pair], [pair[1], pair]]),
 );
 export function localize(value: string, locale: Locale): string {
+  if (supplierDemoTranslations[value]) return supplierDemoTranslations[value][locale];
   const pair = sampleTranslations[value];
   if (pair) return translate(pair[0], pair[1], locale);
   return locale === "ja" ? japanese[value] ?? value : value;

@@ -5,6 +5,8 @@ import { hasSupabaseConfig } from "@/lib/env";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import type { Kol, LiveSession, Order, Product, ProductImage } from "@/types/commerce";
 
+import { supplierDemoProducts } from "./supplier-demo";
+
 type RecordValue = Record<string, unknown>;
 
 function mapImage(row: RecordValue): ProductImage {
@@ -41,7 +43,7 @@ function mapProduct(row: RecordValue): Product {
 
 export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   if (!hasSupabaseConfig()) {
-    return options.includeDrafts ? demoProducts : demoProducts.filter((product) => product.status === "published");
+    return options.includeDrafts ? demoProducts : [...supplierDemoProducts, ...demoProducts.filter((product) => product.status === "published")];
   }
 
   const rows: RecordValue[] = [];
@@ -56,7 +58,9 @@ export async function getProducts(options: { includeDrafts?: boolean } = {}) {
     rows.push(...data as RecordValue[]);
     if (data.length < 500) break;
   }
-  return rows.map(mapProduct);
+  const products = rows.map(mapProduct);
+  // Demo overlays are storefront-only; keep operational admin records untouched.
+  return options.includeDrafts ? products : [...supplierDemoProducts, ...products.filter(p => !supplierDemoProducts.some(sample => sample.id === p.id || sample.slug === p.slug))];
 }
 
 export async function getProductsByIds(ids: string[]) {
@@ -71,6 +75,8 @@ export async function getProductsByIds(ids: string[]) {
 }
 
 export async function getProductBySlug(slug: string) {
+  const sample = supplierDemoProducts.find(product => product.slug === slug);
+  if (sample) return sample;
   if (!hasSupabaseConfig()) return demoProducts.find(product => product.slug === slug && product.status === "published") ?? null;
   const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*)").eq("slug", slug).eq("status", "published").maybeSingle();
   if (error) throw new Error("Unable to load product.");

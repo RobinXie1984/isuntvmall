@@ -457,3 +457,7 @@ button,a,input,select,textarea{outline-offset:4px}button:focus-visible,a:focus-v
 /* Keep four language choices compact beside the shared wordmark. */
 .language-picker{display:flex;align-items:center;gap:5px}.language-picker>span{font-size:15px}.language-picker select{max-width:110px;font-family:inherit;min-height:40px}.language-picker select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(max-width:420px){.language-picker{gap:2px}.language-picker select{max-width:76px}.header-tools{gap:10px}}
+
+/* Read-only references accompanying the supplier demonstration collection. */
+.supplier-reference-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px 32px;padding:0;list-style:none;color:var(--muted,#70716a)}
+.supplier-reference-list li{padding:12px 0;border-bottom:1px solid #e3e3de}
