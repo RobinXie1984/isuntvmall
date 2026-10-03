@@ -8,7 +8,7 @@ Keep the current **muji** storefront. Build one merchant's commerce backend arou
 
 “Mirror” means displaying an authorized provider player. It does not mean capturing, proxying or retransmitting another platform's video. Instagram Live playback inside our site is **UNKNOWN**, so its initial experience opens Instagram while preserving the shopping bag. A supported original feed supplied by the KOL could later support our own player; that is a separate authorized integration, not extraction from Instagram.
 
-The source now includes six named staff roles, privileged-role MFA, fresh session/membership revocation checks, invitation and password-setup flows, private live revisions, verified publication and product pins, scoped order operations, reports and durable batch capacity. These are implemented foundations, not activated merchant services. Production identity, migrations, storage, worker installation, provider playback and payment proof remain **UNKNOWN/HOLD**. Real checkout remains disabled.
+The source now includes seven named staff roles, privileged-role MFA, fresh session/membership revocation checks, invitation and password-setup flows, private live revisions, verified publication and product pins, scoped order operations, reports and durable batch capacity. These are implemented foundations, not activated merchant services. Production identity, migrations, storage, worker installation, provider playback and payment proof remain **UNKNOWN/HOLD**. Real checkout remains disabled.
 
 ## Existing evidence and work still required
 
@@ -17,9 +17,9 @@ The source now includes six named staff roles, privileged-role MFA, fresh sessio
 | SHOPLINE reference | The 23 September audit observed product/variant forms, bulk actions, design controls, source-specific live setup, order filters, checkout settings and affiliate commission options. | Reuse the workflow ideas; build our independent implementation. |
 | SHOPLINE verification limit | Test store had zero products; import and payment selectors were disabled. No stream, order, payment or affiliate campaign was completed. Instagram professional account was not connected. | Batch persistence, simultaneous KOL capacity, partner permissions, payment lifecycle and independent embedding remain **UNKNOWN**. Visible menus are not proof. |
 | Current storefront | Source contains 96 demo products, 17 holiday collections, language switching, room pages and a persistent attributed bag. | Replace demo products only with approved merchandise and verified commercial facts. |
-| Current admin | Named Supabase authentication uses six roles. Super admin, operator and order operator require verified `aal2` MFA. Every request checks current identity, session existence/revocation and active membership. Team APIs support role/KOL assignment and invitations; invite acceptance sets a password and then requires a fresh sign-in. | Provision actual staff identities and first owner safely; verify MFA, invitation delivery/redirect and revocation against the real project. No invitation was sent as proof of this implementation. Legacy shared-password tokens do not authorize the new backend. |
-| Current media path | Private original/processed buckets, scoped previews, image normalization, leased jobs, revision-bound super-admin approval and transactional new-product publication exist. Legacy direct product/import/upload endpoints return 410 unconditionally. Capacity admission reserves original and derivative budgets. | Apply and verify remote migrations/policies, inventory retained objects, provision staff, set approved budgets, install the single scheduled worker and run storage/approval/publication smoke tests. `BATCH_HELPER_ENABLED` remains a separate activation gate. |
-| Current live operations | Separate private draft revisions, own-KOL edit/request scopes, operator/super-admin source verification and atomic room/rail publication, live product pins and five-second public polling exist. Public queries require `is_public` and an active host. | Verify actual authorized broadcasts on the production domain. A producer's recorded check is required and bound to a revision; it is not automatic platform certification. |
+| Current admin | Named Supabase authentication uses seven roles. Super admin, admin, operator and CSR require verified `aal2` MFA. Every request checks current identity, session existence/revocation and active membership. Team APIs support role/KOL assignment and invitations; invite acceptance sets a password and then requires a fresh sign-in. | Provision actual staff identities and first owner safely; verify MFA, invitation delivery/redirect and revocation against the real project. No invitation was sent as proof of this implementation. Legacy shared-password tokens do not authorize the new backend. |
+| Current media path | Private original/processed buckets, scoped previews, image normalization, leased jobs, revision-bound admin/super-admin approval and transactional new-product publication exist. Legacy direct product/import/upload endpoints return 410 unconditionally. Capacity admission reserves original and derivative budgets. | Apply and verify remote migrations/policies, inventory retained objects, provision staff, set approved budgets, install the single scheduled worker and run storage/approval/publication smoke tests. `BATCH_HELPER_ENABLED` remains a separate activation gate. |
+| Current live operations | Separate private draft revisions, own-KOL edit/request scopes, operator/admin/super-admin source verification and atomic room/rail publication, live product pins and five-second public polling exist. Public queries require `is_public` and an active host. | Verify actual authorized broadcasts on the production domain. A producer's recorded check is required and bound to a revision; it is not automatic platform certification. |
 | Current orders and reporting | Role-scoped, paginated order reads; separate support/fulfillment assignments; paid-order packing/shipping/delivery; refund request and super-admin review; revision/idempotency guards and audit records. Overview exposes aggregate or own-KOL results without buyer records to analysts/KOLs. | Rehearse with real provider test events and fulfillment staff. Refund approval does not transfer funds, change payment state or restock inventory; financial refund execution remains separate. |
 | Current settings | Named MFA-verified super admin can edit audited checkout admission limits; admission defaults to disabled. Connection readiness remains read-only and never reveals credentials. | Verify actual Turnstile configuration and edge trust; approve quotas, shipping rates/destinations, tax handling and refund/contact policies. Saving admission limits never opens the hard checkout gate. |
 | Current checkout source | Stripe code and SQL include reservations, server prices, attribution, event deduplication, expiry and payment review. Turnstile verification, trusted edge-IP HMAC and atomic client/store quotas are implemented; optional expiry maintenance shares the existing worker. | Run migrations and lifecycle tests in an authorized database/payment environment. Current `checkoutReleaseReady()` returns `false`; real checkout stays closed. |
@@ -34,6 +34,7 @@ Use named accounts and permissions rather than a long hierarchy of increasingly 
 | Job function | Appropriate responsibility | Boundary |
 |---|---|---|
 | Owner / super admin | Team access, store settings, final product/image approval, payment settings, refunds and emergency withdrawal | Keep this small; require MFA and recent authentication for sensitive changes. |
+| Admin | All Operator rights, cross-batch merchandise review, approval and publication, operational oversight | No staff invitations, role changes, deactivation or removal; no owner-only settings or refund review. |
 | Operations manager | Day-to-day catalog coordination, schedule, exception queues and approved campaigns | Cannot grant roles or approve their own uploaded merchandise. |
 | Catalog editor | Product text, variants, prices, draft imports and submission | Cannot publish or change payment settings. |
 | Media operator | Upload, select style, review images and resolve processing errors | Cannot approve images or change commercial facts. |
@@ -44,28 +45,28 @@ Use named accounts and permissions rather than a long hierarchy of increasingly 
 | Finance | Reconciliation, refund review and eventual commission reports | Refund execution requires an explicit grant; no automated creator payouts in V1. |
 | Analyst | Aggregated product, room and sales reporting | Read-only; no buyer identity by default. |
 
-### Six implemented permission presets
+### Seven implemented permission presets
 
-All six presets now exist in the authorization code and schema: `super_admin`, `operator`, `catalog_editor`, `kol`, `order_operator`, `analyst`. Media staff use catalog editor; producers use operator; support and fulfillment share order operator with separate per-order task assignments. The owner handles finance review initially. These roles still need actual account provisioning; specialized roles can be split later.
+All seven presets now exist in the authorization code and schema: `super_admin`, `admin`, `operator`, `catalog_editor`, `kol`, `order_operator`, `analyst`. Media staff use catalog editor; producers use operator; support and fulfillment share CSR with separate per-order task assignments. Admin inherits all Operator permissions and can review, approve and publish merchandise across batches, but cannot invite, change, deactivate or remove any staff member, including a Super Admin. CSR retains the internal `order_operator` key, so existing accounts and order assignments need no migration. The owner handles finance review initially. These roles still need actual account provisioning; specialized roles can be split later.
 
-| Permission | Super admin | Operator | Catalog editor | KOL | Order operator | Analyst |
-|---|---|---|---|---|---|---|
-| Invite, change membership, revoke access | Yes | No | No | No | No | No |
-| View readiness / edit checkout admission limits | Yes, with MFA | No | No | No | No | No |
-| Upload/process/edit merchandise drafts | All batches | Own batches | Own batches | Own batches | No | No |
-| Approve and publish merchandise | Yes | No | No | No | No | No |
-| Prepare rooms and approved SKU rails | Yes | Store | No | Own rooms | No | No |
-| Publish room / change source | Yes | Store | No | Request only | No | No |
-| Pin SKU during a published room | Yes | Store | No | Own approved rail | No | No |
-| Read customer/order details | Yes | Masked exceptions | No | No | Assigned task scope | No |
-| Dispatch / tracking | Yes | No | No | No | Fulfillment scope | No |
-| Review refund requests | Yes | No | No | No | Support scope requests | No |
-| Execute financial refund / edit payment settings | Not implemented | No | No | No | No | No |
-| Aggregate reports | Store | Store | Catalog and own batch counts | Own KOL | Assigned queue | Store |
+| Permission | Super admin | Admin | Operator | Catalog editor | KOL | CSR | Analyst |
+|---|---| --- |---|---|---|---|---|
+| Invite, change membership, revoke access | Yes | No | No | No | No | No | No |
+| View readiness / edit checkout admission limits | Yes, with MFA | No | No | No | No | No | No |
+| Upload/process/edit merchandise drafts | All batches | All batches | Own batches | Own batches | Own batches | No | No |
+| Approve and publish merchandise | Yes | Yes | No | No | No | No | No |
+| Prepare rooms and approved SKU rails | Yes | Store | Store | No | Own rooms | No | No |
+| Publish room / change source | Yes | Store | Store | No | Request only | No | No |
+| Pin SKU during a published room | Yes | Store | Store | No | Own approved rail | No | No |
+| Read customer/order details | Yes | Masked exceptions | Masked exceptions | No | No | Assigned task scope | No |
+| Dispatch / tracking | Yes | No | No | No | No | Fulfillment scope | No |
+| Review refund requests | Yes | No | No | No | No | Support scope requests | No |
+| Execute financial refund / edit payment settings | Not implemented | No | No | No | No | No | No |
+| Aggregate reports | Store | Store | Store | Catalog and own batch counts | Own KOL | Assigned queue | Store |
 
 Implemented routes validate named staff and call deny-by-default permission checks; SQL operations independently recheck active roles and KOL/order scope. Caller-supplied role or approval flags have no authority. Current isolation is one merchant/store with KOL, batch-owner and order-assignment scopes; a multi-store `store_id` tenancy model remains a later generalization.
 
-Super admin, operator and order operator require MFA. Sign-out records the current session ID in the server revocation table before clearing cookies; membership/session validity is rechecked on later requests. This is current-session revocation, not a claim to sign every device out globally. Invitation delivery alone grants no access: a valid membership and accepted sign-in are required; pending/failed membership is recorded. Never return secrets or full buyer payloads in audit events. Existing signed media URLs remain usable only until their short expiry, even if membership is revoked; new URL requests are denied immediately.
+Super admin, admin, operator and CSR require MFA. Sign-out records the current session ID in the server revocation table before clearing cookies; membership/session validity is rechecked on later requests. This is current-session revocation, not a claim to sign every device out globally. Invitation delivery alone grants no access: a valid membership and accepted sign-in are required; pending/failed membership is recorded. Never return secrets or full buyer payloads in audit events. Existing signed media URLs remain usable only until their short expiry, even if membership is revoked; new URL requests are denied immediately.
 
 ## Backend navigation and working screens
 
@@ -73,7 +74,7 @@ Use the same restrained spacing, colors and language switch as the storefront. K
 
 1. **Overview / analytics:** implemented catalog/room/batch counts, masked operational exceptions, currency-separated paid-order aggregates and own-KOL attribution. No fake revenue, viewer counts or payment events.
 2. **Catalog / media studio:** implemented read views and the batch workflow, original/output comparison, six styles with muji default, explicit file-to-SKU metadata and bilingual merchandise copy. Multi-image variants and existing-product revision editing are deferred.
-3. **Approvals:** implemented super-admin item or bounded batch approval bound to reviewed versions, return notes and stale-revision rejection.
+3. **Approvals:** implemented admin/super-admin item or bounded batch approval bound to reviewed versions, return notes and stale-revision rejection.
 4. **Live studio:** implemented private room drafts, ordered approved merchandise, source preview/check, publication requests, operator publication and current product pin. A visual calendar and automated channel discovery remain later additions.
 5. **Orders:** implemented scoped search/queues, separate payment and fulfillment state, packing/tracking/delivery and refund requests/review. No automated carrier purchase or financial refund execution.
 6. **Team and hosts:** implemented super-admin team membership/invitation flow, role/KOL binding and host management. KOL self-service profile authoring remains a later addition.
@@ -90,7 +91,7 @@ flowchart LR
   C --> D[Normalize to selected style]
   D --> E[Quality check and product mapping]
   E --> F[Submit exact revision]
-  F --> G{Super admin decision}
+  F --> G{Admin or super admin decision}
   G -->|Return| E
   G -->|Approve| H[Immutable approved revision]
   H --> I[Publish approved assets and product snapshot]
@@ -100,9 +101,9 @@ flowchart LR
 - **Transformation:** rotate from orientation metadata, fit without cutting away the product, apply profile background/canvas, export a 1,600 px WebP and strip unnecessary metadata. Preserve the original. Style may change presentation, never the product's actual color, shape, label, quantity or material. There is no generative retouching or background removal in V1; any future such operation needs explicit provenance and review.
 - **Scale and capacity:** persisted jobs use immutable outputs, revision guards, ten-minute leases and at most three claims before manual recovery. Creation binds a stable request UUID to an exact payload. Admission defaults: 1,000 items / 512 MiB declared input per batch; 1,000 outstanding items per actor / 3,000 store-wide; 32 GiB retained reservation per actor / 50 GiB store-wide. Each original reserves the full 24 MiB upload ceiling, with exact derivative/public-copy reservations. Publishing frees queue capacity, never retained-storage allowance. These are conservative operating limits, not purchased capacity or measured disk use. Super-admin changes are audited; automatic deletion/quota release is absent.
 - **Worker runtime:** HTTP byte caps and deadlines, bounded executions, single-runner locking, crash recovery, bounded health snapshots and a deployment template/runbook exist. No scheduler is installed by those files. Reconcile pre-existing objects and approved budget, run a bounded staging batch, then activate one named Studio worker. Full remote throughput and genuine multi-connection database races still require verification.
-- **Approval:** implemented approval binds a named active super admin to the exact item revision, whose product metadata and source/output hashes are stored server-side; draft edits clear approval. The worker rechecks approver activity and output bytes before publication. A canonical aggregate manifest hash is an optional later audit enhancement. V1 does not edit published products; future product revisioning must leave the previous approved snapshot live while the next draft is reviewed. Operational stock changes remain separate audited transactions.
+- **Approval:** implemented approval binds a named active admin or super admin to the exact item revision, whose product metadata and source/output hashes are stored server-side; draft edits clear approval. The worker rechecks approver activity and output bytes before publication. A canonical aggregate manifest hash is an optional later audit enhancement. V1 does not edit published products; future product revisioning must leave the previous approved snapshot live while the next draft is reviewed. Operational stock changes remain separate audited transactions.
 - **Publication:** the worker copies an approved derivative to public delivery, verifies its bytes, then the SQL transaction rechecks approval/revision and inserts the new product plus image. It refuses existing SKUs. A failed/revoked publication can leave an unlisted approved-image copy; originals remain private and cleanup is separate. Legacy direct catalog writes are now retired with HTTP 410 regardless of the batch flag. Existing-product rollback and revision publication remain planned. Never include upload data in GitHub.
-- **Acceptance:** a 1,000-file test batch must survive interrupted upload, worker restart and duplicate delivery; every file has exactly one terminal result and every intended SKU mapping is accounted for. A regular admin's publish attempt fails. A changed image invalidates earlier approval. One damaged file does not erase the other results. Throughput/cost remain **UNKNOWN** until measured on the selected runtime; define the service target after that benchmark.
+- **Acceptance:** a 1,000-file test batch must survive interrupted upload, worker restart and duplicate delivery; every file has exactly one terminal result and every intended SKU mapping is accounted for. An Operator or other unapproved uploader's publish attempt fails. A changed image invalidates earlier approval. One damaged file does not erase the other results. Throughput/cost remain **UNKNOWN** until measured on the selected runtime; define the service target after that benchmark.
 
 ## Livestream capability policy
 

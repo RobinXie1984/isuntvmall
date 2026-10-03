@@ -33,7 +33,7 @@ const errors: Record<string, [string, string]> = {
 };
 
 export function AdminLiveWorkspace({ initialDrafts, initialCount, products, kols, role, kolId }: { initialDrafts: LiveDraft[]; initialCount?: number; products: Product[]; kols: Kol[]; role: StaffRole; kolId: string | null }) {
-  const { t, locale, localize } = useLocale(); const operator = role === "super_admin" || role === "operator"; const writable = operator || role === "kol";
+  const { t, locale, localize } = useLocale(); const operator = role === "super_admin" || role === "admin" || role === "operator"; const writable = operator || role === "kol";
   const [drafts, setDrafts] = useState(initialDrafts); const [detail, setDetail] = useState<Detail | null>(null);
   const [payload, setPayload] = useState(() => fresh(kolId, kols)); const [busy, setBusy] = useState(false); const [notice, setNotice] = useState("");
   const [mode, setMode] = useState<"embedded" | "external_link">("external_link"); const [rights, setRights] = useState(false); const [playback, setPlayback] = useState(false); const [deviceNote, setDeviceNote] = useState("");

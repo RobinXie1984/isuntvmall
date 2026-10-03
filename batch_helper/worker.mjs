@@ -64,7 +64,7 @@ for (let index = 0; batchEnabled && index < limit && !runController.signal.abort
       // Fresh approval check before public copy, then SQL checks it again when
       // publishing the product transaction. Public bytes alone are not listings.
       const approver = await db.from('staff_members').select('role,active').eq('user_id', item.approved_by).single();
-      if (approver.error || !approver.data.active || approver.data.role !== 'super_admin' || item.approved_revision !== item.revision) throw new Error('APPROVAL_REVOKED');
+      if (approver.error || approver.data?.active !== true || !['super_admin', 'admin'].includes(approver.data?.role) || item.approved_revision !== item.revision) throw new Error('APPROVAL_REVOKED');
       const bytes = await download('batch-processed', item.processed_path, 8 * 1024 * 1024);
       if (sha256(bytes) !== item.output_sha256) throw new Error('APPROVED_IMAGE_CHANGED');
       const path = `batch/${item.id}/r${item.revision}-${item.output_sha256}.webp`;

@@ -23,7 +23,6 @@
   "Catalogue access is unavailable for this account.": "このアカウントには商品カタログへのアクセス権限がありません。",
   "Approved catalogue": "承認済みカタログ",
   "Prepare merchandise": "商品を準備",
-  "New listings pass through image preparation and super-admin review. Published products are shown below.": "新しい商品は画像の準備と最高管理者による審査を経て公開されます。公開済みの商品を以下に表示します。",
   "SKU": "SKU",
   "Product": "商品",
   "Stock": "在庫",
@@ -255,7 +254,6 @@
   "Customer support": "カスタマーサポート",
   "Fulfillment": "出荷業務",
   "Save assignment": "割り当てを保存",
-  "Clearing both permissions removes access. Only active order operators may be assigned.": "両方の権限を解除すると、アクセス権限が削除されます。有効な注文担当者のみ割り当てることができます。",
   "Configuration present; checkout still gated": "設定情報あり・購入手続きは未解放",
   "Preview configuration": "プレビュー設定",
   "Site URL": "サイトURL",
@@ -319,7 +317,6 @@
   "Operator": "運営担当者",
   "Catalog editor": "カタログ編集者",
   "Host": "配信者",
-  "Order operator": "注文担当者",
   "Analyst": "アナリスト",
   "Invalid request origin.": "リクエスト元が無効です。当サイトからページを開き直して、もう一度お試しください。",
   "Admin sign-in required.": "管理画面にログインしてください。",
@@ -368,5 +365,10 @@
   "Returned": "差し戻し済み",
   "Approved": "承認済み",
   "Publishing": "公開処理中",
-  "Needs attention": "要対応"
+  "Needs attention": "要対応",
+  "Admin": "管理者",
+  "CSR": "カスタマーサポート",
+  "An admin or super administrator must approve merchandise.": "商品の承認には管理者または最高管理者の権限が必要です。",
+  "New listings pass through image preparation and review by an admin or super administrator. Published products are shown below.": "新しい商品は画像の準備と管理者または最高管理者による審査を経て公開されます。公開済みの商品を以下に表示します。",
+  "Clearing both permissions removes access. Only active CSR members may be assigned.": "両方の権限を解除すると、アクセス権限が削除されます。有効なカスタマーサポート担当者のみ割り当てることができます。"
 }

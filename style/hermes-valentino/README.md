@@ -16,7 +16,7 @@ Use the `tokens.json` colors and type stacks. Heading and body fonts use locally
 
 Ivory canvas and generous object margins. Do not recolor product materials, add boxes, ribbons or implied luxury-brand provenance.
 
-The deterministic batch profile fits the complete source inside a square canvas, applies the configured margin, normalizes orientation, exports WebP at up to 1600 pixels and quality 85, and preserves the original separately. Canvas color only fills unused space or transparency. It is not background removal, image relighting or AI restyling. Do not silently erase objects, change labels, manufacture product features or upscale small images without a quality flag. A super administrator must review original and output before publication.
+The deterministic batch profile fits the complete source inside a square canvas, applies the configured margin, normalizes orientation, exports WebP at up to 1600 pixels and quality 85, and preserves the original separately. Canvas color only fills unused space or transparency. It is not background removal, image relighting or AI restyling. Do not silently erase objects, change labels, manufacture product features or upscale small images without a quality flag. An active Admin or Super Admin must review original and output before publication.
 
 ## Interface application
 

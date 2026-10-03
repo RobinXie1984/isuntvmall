@@ -104,7 +104,6 @@
   "Back to rooms": "配信ルーム一覧へ戻る",
   "MERCHANDISE STUDIO": "商品スタジオ",
   "Team sign-in": "チームログイン",
-  "Prepare merchandise with your own account. Final approval belongs to a super admin.": "ご自身のアカウントで商品を準備できます。最終承認は特権管理者が行います。",
   "The private team workspace is awaiting account and storage setup. You can explore the workflow preview now.": "非公開のチームワークスペースは、アカウントとストレージの設定待ちです。現在は作業フローのプレビューをご覧いただけます。",
   "Email": "メールアドレス",
   "Password": "パスワード",
@@ -128,7 +127,6 @@
   "Every CSV filename must match a selected image.": "CSV内のすべてのファイル名は、選択した画像のファイル名と一致する必要があります。",
   "Your session ended. Sign in again, then resume this batch.": "セッションが終了しました。再度ログインして、このバッチを再開してください。",
   "This item changed. Refresh and review its latest version.": "この商品は変更されています。再読み込みして、最新の版をご確認ください。",
-  "Only a super admin can approve merchandise.": "商品を承認できるのは特権管理者のみです。",
   "The operation could not finish. Refresh the batch and check its status before retrying. Nothing is published without approval.": "操作を完了できませんでした。バッチを再読み込みし、状態を確認してから再度お試しください。承認なしに商品が公開されることはありません。",
   "Many pieces.\nOne considered collection.": "たくさんの品に、\nひとつの心配りを。",
   "Prepare a whole collection, keep the originals and give every product a deliberate final review.": "コレクションをまとめて準備し、元の画像を保存。すべての商品を、最後に丁寧に確認します。",
@@ -139,7 +137,6 @@
   "Upload privately": "非公開でアップロード",
   "Prepare images": "画像を整える",
   "Review merchandise": "商品を確認",
-  "Super-admin approval": "特権管理者による承認",
   "Publish": "公開",
   "This is a sample workspace. The private upload and approval service requires provisioned team accounts, storage and a processing worker. No files are uploaded or products published here.": "これはサンプルのワークスペースです。非公開アップロードと承認サービスの利用には、チームアカウント、ストレージ、処理ワーカーの設定が必要です。この画面ではファイルのアップロードや商品の公開は行われません。",
   "Start a batch": "バッチを作成",
@@ -206,7 +203,6 @@
   "Review note": "確認メモ",
   "Approve for listing": "公開を承認",
   "Return with note": "メモを添えて差し戻す",
-  "Super-admin approval required": "特権管理者の承認が必要です",
   "Retry for review": "再処理してレビューへ",
   "Added ✓": "追加しました ✓",
   "Bag limit reached": "バッグの上限に達しました",
@@ -361,5 +357,8 @@
   "currency": "通貨",
   "category": "カテゴリー",
   "status": "状態",
-  "featured": "おすすめ"
+  "featured": "おすすめ",
+  "Admin approval": "管理者による承認",
+  "Admin approval required": "管理者の承認が必要です",
+  "Prepare merchandise with your own account. An admin or super administrator gives final approval.": "ご自身のアカウントで商品を準備できます。最終承認は管理者または最高管理者が行います。"
 }

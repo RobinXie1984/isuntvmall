@@ -15,7 +15,7 @@ This is one-item evidence, not a scale benchmark or an ordinary authenticated-us
 - Rejects animations, corrupt files, false MIME declarations, SVG and other formats, inputs over 24 MiB and images over 40 million pixels. Processing concurrency defaults to two locally, at most four; the online worker processes one item at a time.
 - Records source/output SHA-256, preset fingerprint and output revision. Local runs resume exact verified outputs. Different bytes, settings or processor versions create another output revision.
 - Draft merchandise needs SKU, separate English and Traditional Chinese titles and descriptions, category, price in HKD minor units, and stock before approval. Human review must confirm image fidelity and merchandising accuracy.
-- Only a currently active super admin can approve. Approval binds the reviewed revision. Only approved images and product data can become public catalogue entries.
+- Only a currently active Super Admin or Admin can approve. Approval binds the reviewed revision. Only approved images and product data can become public catalogue entries.
 
 This is deterministic presentation normalization, not an AI restyling service. It cannot remove an existing photographic background or turn an ordinary photo into a studio shoot. The full original composition remains inside the padded frame, so some originals will still need manual reshooting.
 
@@ -33,12 +33,12 @@ A `.batch-lock` prevents concurrent commands sharing one output folder. A killed
 
 ## Online staff workflow
 
-The application authenticates Supabase users, then reads active roles from `staff_members` on every operation. Role information supplied by a browser is ignored. Editors can work only on their own batches; super admins can review all. Supabase tables and RPC functions deny anonymous and ordinary authenticated direct access. Original and processed storage buckets are private; the server issues short-lived URLs for authorized operations. All elevated credentials stay server-side.
+The application authenticates Supabase users, then reads active roles from `staff_members` on every operation. Role information supplied by a browser is ignored. Editors can work only on their own batches; Super Admins and Admins can review all. Supabase tables and RPC functions deny anonymous and ordinary authenticated direct access. Original and processed storage buckets are private; the server issues short-lived URLs for authorized operations. All elevated credentials stay server-side.
 
 1. Authenticated editor creates metadata (one stable request UUID makes retries idempotent).
 2. Browser uploads each original to its unique private path; the server verifies storage metadata before queuing it.
 3. A bounded worker claims a lease, decodes and normalizes the actual bytes, stores an immutable output, and submits its hashes.
-4. Editor completes product fields and compares original/output. Super admin approves or rejects.
+4. Editor completes product fields and compares original/output. Super Admin or Admin approves or rejects.
 5. Worker verifies the approved hash and active approver again, copies the immutable approved output into `product-images`, verifies uploaded bytes, then publishes product + image in a single SQL transaction.
 
 ```sh
@@ -62,7 +62,7 @@ Installing this package alone creates no daemon, staff account, credential or re
 | Old worker finishes late | Lease token, expiry and revision checks reject it. |
 | Crash after immutable upload | Next worker accepts existing bytes only when the SHA-256 matches. No overwrite. |
 | Editor changes approved metadata | New revision; approval cleared; returns to review. |
-| Super admin revoked | Claim or publish stops. It cannot publish using the old approval. |
+| Approver revoked or changed to a role without approval rights | Claim or publish stops. It cannot publish using the old approval. |
 | SKU already exists | Publication transaction fails; existing product is never overwritten. |
 | Failed/rejected item explicitly retried | New revision, approval cleared. With an existing output it returns to review; otherwise it queues processing. |
 | Duplicate publish completion | Returns the already published product for the same revision/hash without duplicating it. |
@@ -76,7 +76,7 @@ npm test
 npm run test:db
 ```
 
-The database test imports the actual migrations into local WASM PostgreSQL and checks ownership, role denial, atomic creation, idempotency, stale leases, invalid approvals, revocation, SKU collision, retry and duplicate publication. These local tests do not establish remote behavior. The dated managed one-item proof above is separate evidence; remaining scoped access, scale and recovery checks still require deployment tests.
+The real-SDK worker harness checks that active Admin and Super Admin approval can reach publication, while Operator, revoked, missing and stale-revision approvals cannot copy public images or publish. The database test imports the actual migrations into local WASM PostgreSQL and checks ownership, role denial, atomic creation, idempotency, stale leases, invalid approvals, revocation, SKU collision, retry and duplicate publication. These local tests do not establish remote behavior. The dated managed one-item proof above is separate evidence; remaining scoped access, scale and recovery checks still require deployment tests.
 
 ## Limits and next additions
 

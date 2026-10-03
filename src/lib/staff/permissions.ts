@@ -1,16 +1,17 @@
-export const STAFF_ROLES = ["super_admin", "operator", "catalog_editor", "kol", "order_operator", "analyst"] as const;
+export const STAFF_ROLES = ["super_admin", "admin", "operator", "catalog_editor", "kol", "order_operator", "analyst"] as const;
 export type StaffRole = typeof STAFF_ROLES[number];
 export type Staff = { id: string; email: string; role: StaffRole; kolId: string | null; aal: "aal1" | "aal2"; sessionId: string };
 export const STAFF_ACTIONS = ["catalog.read", "catalog.write", "catalog.draft", "catalog.publish", "live.read", "live.draft", "live.request", "live.publish", "live.pin", "orders.read", "orders.write", "analytics.read", "team.manage", "batch.submit", "batch.approve"] as const;
 export type StaffAction = typeof STAFF_ACTIONS[number];
 export class StaffError extends Error { constructor(public code: string, public status = 403) { super(code); } }
-export function privilegedRole(role: StaffRole) { return role === "super_admin" || role === "operator" || role === "order_operator"; }
+export function privilegedRole(role: StaffRole) { return role === "super_admin" || role === "admin" || role === "operator" || role === "order_operator"; }
 export function permissionAllowed(staff: Staff, action: StaffAction, scope: { kolId?: string | null } = {}) {
   if (!STAFF_ROLES.includes(staff.role) || (privilegedRole(staff.role) && staff.aal !== "aal2")) return false;
-  const operations = staff.role === "super_admin" || staff.role === "operator";
+  const operations = staff.role === "super_admin" || staff.role === "admin" || staff.role === "operator";
   const ownKol = staff.role === "kol" && Boolean(staff.kolId) && scope.kolId === staff.kolId;
   switch (action) {
-    case "team.manage": case "batch.approve": case "catalog.publish": return staff.role === "super_admin";
+    case "team.manage": return staff.role === "super_admin";
+    case "batch.approve": case "catalog.publish": return staff.role === "super_admin" || staff.role === "admin";
     case "batch.submit": return operations || staff.role === "catalog_editor" || (staff.role === "kol" && Boolean(staff.kolId));
     case "catalog.read": case "live.read": return true;
     case "catalog.write": return operations || staff.role === "catalog_editor";

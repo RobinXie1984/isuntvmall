@@ -1,6 +1,7 @@
 import { requireBatchOrigin, requireBatchStaff } from "@/lib/batch/auth";
 import { BatchError, batchActionSchema, readBatchJson } from "@/lib/batch/contracts";
 import { batchFailure, batchResponse, itemForStaff } from "@/lib/batch/server";
+import { permissionAllowed } from "@/lib/staff/permissions";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -28,7 +29,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       if (result.error) throw result.error;
       return batchResponse({ ok: true });
     }
-    if ((input.action === "approve" || input.action === "reject") && staff.role !== "super_admin") throw new BatchError("SUPER_ADMIN_REQUIRED", 403);
+    if ((input.action === "approve" || input.action === "reject") && !permissionAllowed(staff, "batch.approve")) throw new BatchError("APPROVER_REQUIRED", 403);
     const common = { p_actor: staff.id, p_item_id: item.id, p_revision: input.revision };
     const result = input.action === "edit" ? await db.rpc("batch_edit", { ...common, p_product_data: input.productData })
       : input.action === "retry" ? await db.rpc("batch_retry", common)
