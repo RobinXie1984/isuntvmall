@@ -2,7 +2,9 @@
 
 A livestream commerce showroom with independent host rooms, per-room product selections, and a shared shopping bag that retains each line's host and stream context.
 
-**Current release: preview.** Hosts, catalog and stock are illustrative. This version accepts no orders or payments. A server-side release gate prevents payment-session creation even if payment credentials are supplied.
+**Current release: white-label V1 demonstration (3 October 2026).** Hosts, catalog and stock are illustrative. This version accepts no orders or payments. A server-side release gate prevents payment-session creation even if payment credentials are supplied.
+
+The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
 
 ## Experience
 
@@ -12,9 +14,9 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 - Reservation-backed checkout with frozen order snapshots, stable retry IDs, server-verified Turnstile, trusted edge-IP HMAC scope and atomic client/store quotas; real checkout remains disabled pending acceptance.
 - Optional inventory-expiry maintenance in the existing worker, disabled by default; no inventory-expiry schedule is enabled.
 - Approved product catalog, private merchandise batches, and versioned host/session administration.
-- Six named staff roles, privileged MFA, immediate membership checks and session revocation.
+- Seven named staff roles (including Admin and CSR), privileged MFA, immediate membership checks and session revocation.
 - Assigned support/fulfillment queues, payment-separated shipping, refund review and scoped aggregate reports.
-- Bilingual English/Chinese interface and responsive customer pages.
+- Four-language English, Traditional Chinese, Simplified Chinese and Japanese interface and responsive customer pages.
 
 ## Styles and merchandise preparation
 
@@ -50,7 +52,7 @@ The original Next development path remains `npm run dev`. Worker preview is `npm
 
 ## Configuration
 
-See `.env.example`. Server-only database/admin/payment secrets must remain in a secret store or local untracked environment. Missing configuration disables protected operations. The preview release gate is deliberately implemented in code, not an environment toggle.
+See `.env.example`. Server-only database/admin/payment secrets must remain in a secret store or local untracked environment. Missing configuration disables protected operations. The server-side release gate requires a merchant profile, complete supplied policies, matching origin/account/mode, abuse protection and explicit release approval. The default demo stays closed even if credentials are present. Refund execution has its own disabled-by-default gate; settlement of existing orders is independent of new-sales admission.
 
 Do not point this at a production database or enable payment processing without completing the release gates below.
 
@@ -62,9 +64,9 @@ Do not point this at a production database or enable payment processing without 
 4. Verify hosted checkout, exact amount/currency binding, signed webhook replay, cancellation, refunds and retry behavior using the provider's test environment.
 5. Provide actual shipping, refund, privacy and contact policies; verify regional payment and fulfillment settings.
 6. Run desktop/mobile and deployed-origin player checks. Facebook/Instagram capability depends on supported provider behavior and authorized accounts; embedding, comment ordering and simulcasting are separate integrations.
-7. Review and intentionally remove the code-level payment hold only after the evidence above passes.
+7. Enable the reviewed merchant-specific release configuration only after the evidence above passes; no application-source edit is required to select a new brand or enable an accepted merchant deployment.
 
-The named KOL workflow supports own-room drafts, requests, approved product pins and own aggregate results in source. The owner account is verified; separate KOL account/scoping and actual provider playback tests remain pending. Payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this release. Refund approval records a decision; it does not execute a payment or restock inventory. Settings retain read-only connection readiness and now let the named MFA-verified owner edit audited checkout admission limits. Admission defaults to disabled; saving or enabling it never removes the hard checkout gate. No merchant policies are invented or published. Managed Supabase connectivity, migrations, owner MFA and the one-item batch workflow are verified; remaining scoped-access/recovery tests, real Turnstile/widget and payment activation remain unverified; see [commerce readiness](docs/COMMERCE-READINESS.md).
+The named KOL workflow supports own-room drafts, requests, approved product pins and own aggregate results in source. The owner account is verified; separate KOL account/scoping and actual provider playback tests remain pending. Payouts, multi-merchant settlement, automatic comment ordering and native media broadcasting are outside this release. Refund approval records a decision; separate Super Admin execution uses a durable command, verified provider reconciliation and an explicit confirmation. Its adapter and SQL are tested with isolated fixtures, but actual provider operations remain untested and disabled. Refunds never automatically restock inventory. Settings retain read-only connection readiness and now let the named MFA-verified owner edit audited checkout admission limits. Admission defaults to disabled; saving or enabling it alone never releases checkout. No merchant policies are invented or published. Managed Supabase connectivity, migrations, owner MFA and the one-item batch workflow are verified; remaining scoped-access/recovery tests, real Turnstile/widget and payment activation remain unverified; see [commerce readiness](docs/COMMERCE-READINESS.md).
 
 ## Source boundaries
 
