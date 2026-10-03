@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "purpose": "configuration-template-only",
+  "activation": "disabled",
+  "storeId": "replace-with-store-id",
+  "revision": 1,
+  "changeAuthority": "super_admin",
+  "merchantOwnershipAttested": false,
+  "ownershipEvidenceReference": null,
+  "invoiceBinding": "not_implemented",
+  "chains": [
+    {
+      "chain": "ethereum-mainnet",
+      "asset": "USDT",
+      "capability": "controlled_collection_pilot",
+      "merchantReceivingAddress": "",
+      "networkFeePolicy": "not_agreed",
+      "finalityPolicy": "not_approved",
+      "refundPolicy": "not_approved"
+    },
+    {
+      "chain": "tron-mainnet",
+      "asset": "USDT",
+      "capability": "observation_only",
+      "merchantReceivingAddress": "",
+      "networkFeePolicy": "not_agreed",
+      "finalityPolicy": "not_approved",
+      "refundPolicy": "not_approved"
+    },
+    {
+      "chain": "base-mainnet",
+      "asset": "USDT",
+      "capability": "not_verified",
+      "merchantReceivingAddress": "",
+      "networkFeePolicy": "not_agreed",
+      "finalityPolicy": "not_approved",
+      "refundPolicy": "not_approved"
+    }
+  ]
+}

@@ -7,7 +7,8 @@ let stripe: Stripe | undefined;
 
 export function getStripe() {
   stripe ??= new Stripe(getStripeSecretKey(), {
-    appInfo: { name: "SunTV Mall", version: "0.1.0" },
+    appInfo: { name: "White-label commerce", version: "1.0.0" },
+    timeout: 15_000, maxNetworkRetries: 1,
   });
   return stripe;
 }

@@ -1,7 +1,7 @@
 import {getLocale} from "@/lib/locale-server";
 import { CartPageClient } from "@/components/cart/cart-page-client";
 import { getProducts, getLiveSessions } from "@/lib/data/store";
-import { checkoutReleaseReady } from "@/lib/cart";
+import { checkoutReleaseReady } from "@/lib/stripe/runtime";
 
 export const dynamic = "force-dynamic";
 export async function generateMetadata(){const {t}=await getLocale();return {title:t("Shopping bag","購物袋"),robots:{index:false,follow:false}};}

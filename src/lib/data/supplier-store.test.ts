@@ -6,7 +6,6 @@ vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => ({ from: mocks.
 import { getProducts, getProductBySlug, getProductsByIds } from "./store";
 import { supplierDemoProducts, supplierDisplayOnly } from "./supplier-demo";
 import { localize, LOCALES } from "@/lib/i18n";
-import { checkoutReleaseReady } from "@/lib/cart";
 const merchant = { id: "merchant", sku: "MERCHANT", slug: "merchant", title: "Merchant", price_amount: 100, currency: "hkd", stock_qty: 1, status: "published", product_images: [] };
 beforeEach(() => {
   mocks.configured.mockReturnValue(true);
@@ -29,7 +28,6 @@ describe("supplier demo integration", () => {
   });
   it("does not turn storefront-only demonstrations into checkout products", async () => {
     expect(await getProductsByIds(supplierDemoProducts.map(p => p.id))).toEqual([]);
-    expect(checkoutReleaseReady()).toBe(false);
     mocks.configured.mockReturnValue(false);
     expect(await getProductsByIds(supplierDemoProducts.map(p => p.id))).toEqual([]);
   });

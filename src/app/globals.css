@@ -461,3 +461,5 @@ button,a,input,select,textarea{outline-offset:4px}button:focus-visible,a:focus-v
 /* Read-only references accompanying the supplier demonstration collection. */
 .supplier-reference-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px 32px;padding:0;list-style:none;color:var(--muted,#70716a)}
 .supplier-reference-list li{padding:12px 0;border-bottom:1px solid #e3e3de}
+
+.store-information{max-width:720px;line-height:1.9;color:var(--muted);overflow-wrap:anywhere}.store-information p{white-space:pre-line}.store-information h2{font-size:22px;font-weight:400;color:var(--ink,#252522)}.store-information section{margin-bottom:32px}.store-information-links{display:flex;flex-wrap:wrap;gap:16px 24px;border-top:1px solid var(--line);padding-top:28px;margin-top:40px;font-size:13px}.store-information-links a{text-decoration:underline;text-underline-offset:4px}

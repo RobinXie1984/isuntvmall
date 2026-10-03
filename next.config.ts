@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
+import { loadStoreProfile } from "./config/store-profile-loader.mjs";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  env: { NEXT_PUBLIC_STORE_PROFILE: JSON.stringify(loadStoreProfile()) },
   experimental: {
     typedEnv: true,
   },

@@ -8,14 +8,15 @@ const one = async (sql, args = []) => (await q(sql, args)).rows[0];
 const check = (name, value) => { assert.ok(value, name); console.log(`PASS ${++passed}: ${name}`); };
 const fails = async (fn, code) => { try { await fn(); return false; } catch (error) { return String(error).includes(code); } };
 await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
-let before;
+let before; let afterAdmin;
 const acl = async () => (await q("select p.oid::regprocedure::text signature,p.proacl::text acl,p.prosecdef,p.proconfig from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','private') order by signature")).rows;
 for (const file of readdirSync('supabase/migrations').filter(f => f.endsWith('.sql')).sort()) {
   if (file.endsWith('_admin_merchandise_role.sql')) before = await acl();
   await db.exec(readFileSync(`supabase/migrations/${file}`, 'utf8'));
+  if (file.endsWith('_admin_merchandise_role.sql')) afterAdmin = await acl();
 }
 check('all migrations execute including the admin role', Boolean(before));
-check('migration preserves all function ACLs, security modes and search paths', JSON.stringify(before) === JSON.stringify(await acl()));
+check('migration preserves all function ACLs, security modes and search paths', JSON.stringify(before) === JSON.stringify(afterAdmin));
 const users = {};
 for (const role of ['super_admin','admin','operator','catalog_editor','order_operator','analyst']) {
   users[role] = randomUUID(); await q('insert into auth.users(id) values($1)', [users[role]]);

@@ -1,8 +1,10 @@
 import "server-only";
 import { createHash } from "node:crypto";
 import type Stripe from "stripe";
-import { CHECKOUT_HOLD_REASON, checkoutInputSchema, checkoutReleaseReady } from "@/lib/cart";
+import { CHECKOUT_HOLD_REASON, checkoutInputSchema } from "@/lib/cart";
 import { getSiteUrl, hasSupabaseConfig } from "@/lib/env";
+import { checkoutReleaseReady, verifyPaymentIdentity, frozenPaymentIdentity, assertProviderMode, type PaymentIdentity } from "./runtime";
+import { getStoreProfile } from "@/lib/store-profile";
 import { getStripe } from "@/lib/stripe/client";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
@@ -13,17 +15,17 @@ function checkoutGate() {
   if (!checkoutReleaseReady()) throw new CheckoutError("CHECKOUT_HOLD", CHECKOUT_HOLD_REASON, 503);
   if (!hasSupabaseConfig()) throw new CheckoutError("CHECKOUT_HOLD", "Ordering is not configured.", 503);
 }
-interface Policy { siteUrl: string; shippingRate: string | null; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
+interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; shippingRate: string | null; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
 interface ReservedOrder {
  id: string; status: string; currency: string; subtotal_amount: number; reservation_expires_at: string;
  stripe_checkout_session_id: string | null; checkout_policy: Policy;
  order_items: Array<{ id:string;product_id:string;sku:string;title:string;unit_amount:number;quantity:number }>;
 }
-function policy(requestOrigin: string): Policy {
+function policy(requestOrigin: string, payment: PaymentIdentity): Policy {
  const supported = new Set(["HK","SG","MY","US","GB","AU","CA","CN","TW","JP","KR","NZ","TH","PH","VN","ID","DE","FR","IT","ES","NL"]);
  const countries = (process.env.STRIPE_ALLOWED_SHIPPING_COUNTRIES || "HK").split(",").map(s=>s.trim().toUpperCase()).filter(s=>supported.has(s)) as Policy["countries"];
  if(!countries.length) throw new CheckoutError("CHECKOUT_HOLD","Shipping destinations are not configured.",503);
- return {siteUrl:getSiteUrl(requestOrigin),shippingRate:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
+ return {payment,storeId:getStoreProfile().id,siteUrl:getSiteUrl(requestOrigin),shippingRate:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
 }
 function retryError(): CheckoutError { return new CheckoutError("CHECKOUT_RETRY","Checkout could not be confirmed. Please retry the same attempt shortly.",503); }
 async function release(orderId:string,reason:string) {
@@ -47,17 +49,21 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  const parsed=checkoutInputSchema.parse(input);
  const normalized=parsed.items.map(i=>({product_id:i.productId,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
  const fingerprint=createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
+ const identity=await verifyPaymentIdentity();
  const supabase=getSupabaseAdmin();
- const {data:orderId,error:reserveError}=await supabase.rpc("reserve_checkout",{p_attempt:parsed.checkoutAttemptId,p_fingerprint:fingerprint,p_lines:normalized,p_policy:policy(requestOrigin),p_client_hash:clientHash});
+ const {data:orderId,error:reserveError}=await supabase.rpc("reserve_checkout",{p_attempt:parsed.checkoutAttemptId,p_fingerprint:fingerprint,p_lines:normalized,p_policy:policy(requestOrigin,identity),p_client_hash:clientHash});
  if(reserveError || !orderId)throw rpcError(reserveError?.message ?? "Reservation failed");
  const {data,error}=await supabase.from("orders").select("id,status,currency,subtotal_amount,reservation_expires_at,stripe_checkout_session_id,checkout_policy,order_items(id,product_id,sku,title,unit_amount,quantity)").eq("id",orderId).single();
  if(error || !data)throw retryError();
  const order=data as ReservedOrder;
+ const frozen=frozenPaymentIdentity(order.checkout_policy);
+ if(frozen.accountId!==identity.accountId || frozen.livemode!==identity.livemode || order.checkout_policy.storeId!==getStoreProfile().id)throw retryError();
  const expiresAt=Math.floor(new Date(order.reservation_expires_at).getTime()/1000);
  const stripe=getStripe();
  if(order.stripe_checkout_session_id){
   let session:Stripe.Checkout.Session;
   try{session=await stripe.checkout.sessions.retrieve(order.stripe_checkout_session_id);}catch{throw retryError();}
+  assertProviderMode(identity,session);
   if(session.client_reference_id !== order.id)throw retryError();
   if(session.status === "expired") {await release(order.id,"provider_expired");throw new CheckoutError("CHECKOUT_ATTEMPT_EXPIRED","Checkout expired. Start a new attempt.");}
   if(session.status !== "open" || session.payment_status !== "unpaid")throw new CheckoutError("CHECKOUT_PAYMENT_PENDING","Payment is being confirmed. Do not pay again; check your order status.");
@@ -88,6 +94,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
   if(e.type === "StripeInvalidRequestError" && e.statusCode === 400){await release(order.id,"creation_failed");throw new CheckoutError("CHECKOUT_ATTEMPT_CLOSED","Checkout setup was rejected. Start a new attempt after the configuration is corrected.");}
   throw retryError();
  }
+ assertProviderMode(identity,session);
  const attached=await supabase.rpc("attach_reserved_session",{p_order_id:order.id,p_session_id:session.id});
  if(attached.error){
   try{const expired=await stripe.checkout.sessions.expire(session.id);if(expired.status === "expired")await release(order.id,"provider_expired");}catch{/* Keep hold on uncertain provider state. Signed webhook or expiry reconciles it. */}
@@ -97,15 +104,19 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
 }
 
 export async function cancelCheckoutAttempt(attemptId:string){
- checkoutGate();
+ const identity=await verifyPaymentIdentity();
  const supabase=getSupabaseAdmin();
- const {data:order,error}=await supabase.from("orders").select("id,status,stripe_checkout_session_id,reservation_expires_at").eq("checkout_attempt_id",attemptId).maybeSingle();
+ const {data:order,error}=await supabase.from("orders").select("id,status,stripe_checkout_session_id,reservation_expires_at,checkout_policy").eq("checkout_attempt_id",attemptId).maybeSingle();
  if(error)throw retryError();
  if(!order)return {code:"CHECKOUT_PAYMENT_PENDING",status:"unknown",sessionId:null};
+ const frozen=frozenPaymentIdentity(order.checkout_policy);
+ if(frozen.accountId!==identity.accountId || frozen.livemode!==identity.livemode)throw retryError();
  if(order.status!=="pending")return {code:["cancelled","failed"].includes(order.status)?"CHECKOUT_ATTEMPT_CLOSED":"CHECKOUT_PAYMENT_PENDING",status:order.status as string,sessionId:order.stripe_checkout_session_id as string | null};
  if(!order.stripe_checkout_session_id)throw retryError(); // create outcome may be uncertain
  try{
   const session=await getStripe().checkout.sessions.retrieve(order.stripe_checkout_session_id);
+  assertProviderMode(identity,session);
+  if(session.client_reference_id!==order.id)throw retryError();
   const expired=session.status === "expired" ? session : session.status === "open" ? await getStripe().checkout.sessions.expire(session.id) : null;
   if(!expired || expired.status!=="expired")throw retryError();
  }catch{throw retryError();}

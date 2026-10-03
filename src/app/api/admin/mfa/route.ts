@@ -1,3 +1,4 @@
+import { getStoreProfile } from "@/lib/store-profile";
 import { z } from "zod";
 import { STAFF_COOKIE, STAFF_PENDING_COOKIE, STAFF_PENDING_REFRESH_COOKIE, cookieToken, requireStaffOrigin, resolveStaffFromToken, staffAuthClient, staffCookieOptions, staffFromToken, staffLanding, StaffError } from "@/lib/staff/auth";
 import { readStaffJson, staffResponse, staffFailure } from "@/lib/staff/http";
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
       // Clear only this signed-in user's unverified TOTP setup attempts. No
       // verified factor is removed, and no account-wide recovery is performed.
       for (const factor of factors.data.all.filter(f => f.factor_type === "totp" && f.status === "unverified")) await client.auth.mfa.unenroll({ factorId: factor.id });
-      const enrollment = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: "iSunTVMall staff", issuer: "iSunTVMall" });
+      const enrollment = await client.auth.mfa.enroll({ factorType: "totp", friendlyName: `${getStoreProfile().name} staff`, issuer: getStoreProfile().name });
       if (enrollment.error || enrollment.data.type !== "totp") throw new StaffError("MFA_UNAVAILABLE", 503);
       // The TOTP secret is shown only to the authenticated member through this
       // private no-store response. It is never persisted or included in logs.

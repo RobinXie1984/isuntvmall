@@ -2,7 +2,7 @@ import {beforeEach,describe,expect,it,vi} from "vitest";
 vi.mock("server-only",()=>({}));
 const mocks=vi.hoisted(()=>({origin:vi.fn(),gate:vi.fn(),verify:vi.fn(),create:vi.fn()}));
 vi.mock("@/lib/admin-auth",()=>({isSameOriginRequest:mocks.origin}));
-vi.mock("@/lib/cart",async original=>({...await original<object>(),checkoutReleaseReady:mocks.gate}));
+vi.mock("@/lib/stripe/runtime",()=>({checkoutReleaseReady:mocks.gate}));
 vi.mock("@/lib/checkout/verification",async original=>({...await original<object>(),verifyCheckoutRequest:mocks.verify}));
 vi.mock("@/lib/stripe/checkout",()=>({createCheckoutSession:mocks.create,CheckoutError:class extends Error{constructor(public code:string,message:string,public httpStatus=409){super(message);}}}));
 import {POST} from "@/app/api/checkout/route";

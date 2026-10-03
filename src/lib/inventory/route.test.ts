@@ -1,0 +1,24 @@
+import {beforeEach,describe,expect,it,vi} from "vitest";
+vi.mock("server-only",()=>({}));
+const mocks=vi.hoisted(()=>({staff:vi.fn(),origin:vi.fn(),rpc:vi.fn()}));
+vi.mock("@/lib/staff/auth",async()=>({...await import("@/lib/staff/permissions"),requireStaff:mocks.staff}));
+vi.mock("@/lib/batch/auth",()=>({requireBatchOrigin:mocks.origin}));
+vi.mock("@/lib/supabase/admin",()=>({getSupabaseAdmin:()=>({rpc:mocks.rpc})}));
+import {GET,POST} from "@/app/api/admin/inventory/route";
+import {StaffError,type StaffRole} from "@/lib/staff/permissions";
+import {BatchError} from "@/lib/batch/contracts";
+const actor="11111111-1111-4111-8111-111111111111",productId="22222222-2222-4222-8222-222222222222",requestId="33333333-3333-4333-8333-333333333333";
+const input={productId,revision:4,requestId,stockQty:9,reason:"Counted warehouse shelf"};
+const req=(body:unknown=input)=>new Request("https://shop.example/api/admin/inventory",{method:"POST",headers:{"content-type":"application/json",origin:"https://shop.example"},body:JSON.stringify(body)});
+const member=(role:StaffRole="operator",aal="aal2")=>({id:actor,email:"fixture@example.invalid",role,aal,kolId:null,sessionId:"fixture"});
+beforeEach(()=>{vi.resetAllMocks();mocks.staff.mockResolvedValue(member());mocks.rpc.mockResolvedValue({data:{revision:5},error:null});});
+describe("stock API permission, concurrency and retry boundary",()=>{
+ it.each(["catalog_editor","kol","order_operator","analyst"] as StaffRole[])("denies %s before any database operation",async role=>{mocks.staff.mockResolvedValue(member(role));expect((await POST(req())).status).toBe(403);expect((await GET(new Request("https://shop.example/api/admin/inventory"))).status).toBe(403);expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("denies non-MFA operator even with a valid membership",async()=>{mocks.staff.mockResolvedValue(member("operator","aal1"));expect((await POST(req())).status).toBe(403);expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("denies a revoked session and a foreign origin",async()=>{mocks.staff.mockRejectedValue(new StaffError("SIGN_IN_REQUIRED",401));expect((await POST(req())).status).toBe(401);mocks.origin.mockImplementation(()=>{throw new BatchError("INVALID_ORIGIN",403);});expect((await POST(req())).status).toBe(403);expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("forwards the authenticated actor and unchanged revision/request for safe retry",async()=>{await POST(req());await POST(req());for(const call of mocks.rpc.mock.calls)expect(call).toEqual(["stock_adjust",{p_actor:actor,p_product:productId,p_revision:4,p_request:requestId,p_stock_qty:9,p_reason:input.reason}]);});
+ it("returns a conflict on a concurrent stock update rather than overwriting it",async()=>{mocks.rpc.mockResolvedValue({data:null,error:{message:"STALE_STOCK_REVISION"}});const r=await POST(req());expect(r.status).toBe(409);expect(await r.json()).toEqual({ok:false,code:"STALE_STOCK_REVISION"});});
+ it("rejects actor injection, negative stock and missing adjustment reason",async()=>{for(const body of [{...input,p_actor:productId},{...input,stockQty:-1},{...input,reason:"  "}])expect((await POST(req(body))).status).toBe(422);expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("does not disclose database error details",async()=>{mocks.rpc.mockResolvedValue({data:null,error:{message:"secret DB internals"}});const r=await POST(req());expect(JSON.stringify(await r.json())).not.toContain("secret");expect(r.headers.get("cache-control")).toContain("no-store");});
+ it("validates pagination before querying and scopes reads by actor",async()=>{expect((await GET(new Request("https://shop.example/api/admin/inventory?page=-1"))).status).toBe(422);expect(mocks.rpc).not.toHaveBeenCalled();await GET(new Request("https://shop.example/api/admin/inventory?page=2&search=TEA"));expect(mocks.rpc).toHaveBeenCalledWith("stock_list",{p_actor:actor,p_page:2,p_search:"TEA"});});
+});

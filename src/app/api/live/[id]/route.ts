@@ -1,3 +1,4 @@
+import { visiblePublicLiveRoom } from "@/lib/live/store-visibility";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { hasSupabaseConfig } from "@/lib/env";
@@ -10,7 +11,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   try {
     const { data, error } = await getSupabaseAdmin().rpc("live_room_public", { p_room_id: parsed.data });
     if (error) throw error;
-    if (!data) return NextResponse.json({ ok: false, code: "LIVE_NOT_FOUND" }, { status: 404, headers });
-    return NextResponse.json({ ok: true, room: data }, { headers });
+    const room = visiblePublicLiveRoom(data);
+    if (!room) return NextResponse.json({ ok: false, code: "LIVE_NOT_FOUND" }, { status: 404, headers });
+    return NextResponse.json({ ok: true, room }, { headers });
   } catch { return NextResponse.json({ ok: false, code: "LIVE_UNAVAILABLE" }, { status: 503, headers }); }
 }

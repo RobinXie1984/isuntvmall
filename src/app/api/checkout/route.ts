@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import {z} from "zod";
 import { isSameOriginRequest } from "@/lib/admin-auth";
-import {checkoutInputSchema,checkoutReleaseReady} from "@/lib/cart";
+import {checkoutInputSchema} from "@/lib/cart";
+import {checkoutReleaseReady} from "@/lib/stripe/runtime";
 import {readBatchJson} from "@/lib/batch/contracts";
 import {CheckoutVerificationError,verifyCheckoutRequest} from "@/lib/checkout/verification";
 import { CheckoutError, createCheckoutSession } from "@/lib/stripe/checkout";

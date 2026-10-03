@@ -29,8 +29,4 @@ export function validateAttribution(lines: CartLine[], sessions: LiveSession[]):
   return {...line,source:{liveSessionId:session.id,kolId:session.kol.id}};
  });
 }
-// Deliberately a code gate, not an environment switch. Remove only after a
-// reservation-backed transaction and payment/webhook acceptance test exist.
-export function checkoutReleaseReady(): boolean { return false; }
-export const CHECKOUT_HOLD_REASON = "Preview only. Orders and payments are not open yet. 仅供预览，暂未开放下单与付款。";
-export function assertCheckoutReleased() { if(!checkoutReleaseReady()) throw new Error(CHECKOUT_HOLD_REASON); }
+export const CHECKOUT_HOLD_REASON = "Preview only. Orders and payments are not open yet.";

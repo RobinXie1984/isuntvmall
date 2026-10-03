@@ -1,16 +1,24 @@
 import "server-only";
 import type Stripe from "stripe";
-import { checkoutReleaseReady } from "@/lib/cart";
+import { verifyPaymentIdentity, frozenPaymentIdentity, assertProviderMode } from "./runtime";
+import { getStripe } from "./client";
+import { refundFacts } from "@/lib/finance/stripe";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 const idOf = (value: string | {id:string} | null | undefined) => typeof value === "string" ? value : value?.id ?? null;
 export async function handleStripeEvent(event: Stripe.Event) {
- if(!checkoutReleaseReady())throw new Error("Checkout is on hold.");
+ const identity=await verifyPaymentIdentity();
+ assertProviderMode(identity,event);
  const supabase=getSupabaseAdmin();
  if(["checkout.session.completed","checkout.session.expired","checkout.session.async_payment_succeeded","checkout.session.async_payment_failed"].includes(event.type)){
   const session=event.data.object as Stripe.Checkout.Session;
   const orderId=session.metadata?.order_id;
   if(!orderId || !/^[0-9a-f-]{36}$/i.test(orderId) || session.client_reference_id!==orderId || session.mode!=="payment")throw new Error("Invalid checkout reference.");
+  assertProviderMode(identity,session);
+  const {data:order,error:orderError}=await supabase.from("orders").select("checkout_policy").eq("id",orderId).single();
+  if(orderError || !order)throw new Error("Unknown order.");
+  const frozen=frozenPaymentIdentity(order.checkout_policy);
+  if(frozen.accountId!==identity.accountId || frozen.livemode!==identity.livemode)throw new Error("Payment identity mismatch.");
   const shipping=session.collected_information?.shipping_details;
   const {data,error}=await supabase.rpc("process_checkout_event",{
    p_event_id:event.id,p_type:event.type,p_order_id:orderId,p_session_id:session.id,
@@ -18,6 +26,15 @@ export async function handleStripeEvent(event: Stripe.Event) {
   });
   if(error || data==='unknown_order')throw new Error("Checkout event could not be recorded.");
   return data;
+ }
+ if(["refund.created","refund.updated","refund.failed"].includes(event.type)){
+  const refund=await getStripe().refunds.retrieve((event.data.object as Stripe.Refund).id);
+  const command=refund.metadata?.commerce_command_id;
+  if(command && /^[0-9a-f-]{36}$/i.test(command)){
+   const {error}=await supabase.rpc("finance_refund_event",{p_event_id:event.id,p_event_type:event.type,p_account_id:identity.accountId,p_livemode:identity.livemode,p_command:command,p_facts:refundFacts(refund,identity)});
+   if(error)throw new Error("Refund event could not be recorded.");
+   return "refund_recorded";
+  }
  }
  if(["charge.refunded","charge.dispute.created","refund.created","refund.updated","refund.failed"].includes(event.type)){
   const object=event.data.object as {payment_intent?:string|{id:string}|null};

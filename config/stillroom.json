@@ -1,0 +1,103 @@
+{
+  "id": "stillroom",
+  "name": "Stillroom",
+  "origin": "https://stillroom.example",
+  "currency": "hkd",
+  "catalogueMode": "demo",
+  "locales": {
+    "supported": [
+      "en",
+      "zh-Hant",
+      "zh-Hans",
+      "ja"
+    ],
+    "default": "en"
+  },
+  "brand": {
+    "logo": "/brand/stillroom/mark.svg",
+    "secondaryName": null,
+    "icons": {
+      "favicon": "/brand/stillroom/mark.svg",
+      "icon192": "/brand/stillroom/mark.svg",
+      "icon512": "/brand/stillroom/mark.svg",
+      "apple": "/brand/stillroom/mark.svg"
+    }
+  },
+  "copy": {
+    "title": {
+      "en": "Stillroom — A sample shop",
+      "zh-Hant": "Stillroom — 示範商店",
+      "zh-Hans": "Stillroom — 示范商店",
+      "ja": "Stillroom — サンプルショップ"
+    },
+    "description": {
+      "en": "A sample shop for considered everyday objects. No orders or payments.",
+      "zh-Hant": "用心日常選物的示範商店，不接受訂單或付款。",
+      "zh-Hans": "用心日常选物的示范商店，不接受订单或付款。",
+      "ja": "日々の品を丁寧に選ぶサンプルショップ。注文・決済は受け付けていません。"
+    },
+    "homeLabel": {
+      "en": "Stillroom home",
+      "zh-Hant": "Stillroom 首頁",
+      "zh-Hans": "Stillroom 首页",
+      "ja": "Stillroom ホーム"
+    },
+    "tagline": {
+      "en": "A little space for everyday things.",
+      "zh-Hant": "為日常好物，留一點空間。",
+      "zh-Hans": "为日常好物，留一点空间。",
+      "ja": "日々の品に、少しの余白を。"
+    },
+    "market": null
+  },
+  "hero": {
+    "image": "/editorial/expanded/stoneware-mug.jpg",
+    "alt": {
+      "en": "A simple stoneware mug",
+      "zh-Hant": "簡約炻器馬克杯",
+      "zh-Hans": "简约炻器马克杯",
+      "ja": "シンプルな陶器のマグカップ"
+    },
+    "eyebrow": {
+      "en": "SAMPLE STORE · EVERYDAY OBJECTS",
+      "zh-Hant": "示範商店 · 日常選物",
+      "zh-Hans": "示范商店 · 日常选物",
+      "ja": "サンプルショップ · 日々の品"
+    },
+    "title": {
+      "en": "Make room\nfor the everyday.",
+      "zh-Hant": "留一點空間，\n給日常。",
+      "zh-Hans": "留一点空间，\n给日常。",
+      "ja": "日々の暮らしに、\n余白を。"
+    },
+    "body": {
+      "en": "Useful pieces, familiar textures, a quieter way to explore. This is a sample collection.",
+      "zh-Hant": "實用物件、熟悉質感，以從容步調探索。此為示範系列。",
+      "zh-Hans": "实用物件、熟悉质感，以从容步调探索。此为示范系列。",
+      "ja": "使いやすい品、なじみのある質感。ゆっくりと眺めるサンプルコレクションです。"
+    },
+    "href": "/shop",
+    "cta": {
+      "en": "Explore the collection",
+      "zh-Hant": "探索選物",
+      "zh-Hans": "探索选物",
+      "ja": "コレクションを見る"
+    }
+  },
+  "demoSet": "neutral",
+  "collections": {
+    "supplierDemo": false,
+    "holidays": false
+  },
+  "excludedProductIds": [],
+  "policies": {
+    "merchantName": null,
+    "contactEmail": null,
+    "contactAddress": null,
+    "shipping": null,
+    "returns": null,
+    "privacy": null,
+    "terms": null
+  },
+  "indexing": "noindex"
+}

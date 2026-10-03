@@ -6,6 +6,22 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import type { Kol, LiveSession, Order, Product, ProductImage } from "@/types/commerce";
 
 import { supplierDemoProducts } from "./supplier-demo";
+import { expandedProducts } from "./expanded-catalogue";
+import { getStoreProfile, supplierCollectionEnabled } from "@/lib/store-profile";
+
+function publicProduct(product: Product) { const profile = getStoreProfile(); return !profile.excludedProductIds.includes(product.id) && (profile.catalogueMode !== "merchant" || !product.isDemo); }
+function sampleProducts() {
+ const profile = getStoreProfile();
+ if (profile.catalogueMode !== "demo") return [];
+ const base = profile.demoSet === "isun" ? demoProducts : expandedProducts.filter(p => ["stoneware-mug", "linen-overshirt", "weekend-duffel", "cotton-bath-towel", "glass-water-bottle", "canvas-tote"].includes(p.slug));
+ return base.map(p => profile.demoSet === "neutral" ? { ...p, sku: `SAMPLE-${p.slug.toUpperCase()}` } : p).filter(publicProduct);
+}
+function sampleRooms() {
+ if (getStoreProfile().catalogueMode !== "demo") return [];
+ if (getStoreProfile().demoSet === "isun") return getDemoLiveSessions();
+ const room = getDemoLiveSessions()[1];
+ return [{ ...room, products: sampleProducts().slice(0, 6) }];
+}
 
 type RecordValue = Record<string, unknown>;
 
@@ -43,7 +59,7 @@ function mapProduct(row: RecordValue): Product {
 
 export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   if (!hasSupabaseConfig()) {
-    return options.includeDrafts ? demoProducts : [...supplierDemoProducts, ...demoProducts.filter((product) => product.status === "published")];
+    return options.includeDrafts ? sampleProducts() : [...(supplierCollectionEnabled() ? supplierDemoProducts : []), ...sampleProducts().filter((product) => product.status === "published")];
   }
 
   const rows: RecordValue[] = [];
@@ -60,27 +76,29 @@ export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   }
   const products = rows.map(mapProduct);
   // Demo overlays are storefront-only; keep operational admin records untouched.
-  return options.includeDrafts ? products : [...supplierDemoProducts, ...products.filter(p => !supplierDemoProducts.some(sample => sample.id === p.id || sample.slug === p.slug))];
+  const overlay = supplierCollectionEnabled() ? supplierDemoProducts : [];
+  return options.includeDrafts ? products : [...overlay, ...products.filter(publicProduct).filter(p => !overlay.some(sample => sample.id === p.id || sample.slug === p.slug))];
 }
 
 export async function getProductsByIds(ids: string[]) {
-  if (!hasSupabaseConfig()) return demoProducts.filter((product) => ids.includes(product.id));
+  if (!hasSupabaseConfig()) return sampleProducts().filter((product) => ids.includes(product.id));
   const { data, error } = await getSupabaseAdmin()
     .from("products")
     .select("*, product_images(*)")
     .in("id", ids)
     .eq("status", "published");
   if (error) throw new Error(`Unable to load checkout products: ${error.message}`);
-  return (data as RecordValue[]).map(mapProduct);
+  return (data as RecordValue[]).map(mapProduct).filter(publicProduct);
 }
 
 export async function getProductBySlug(slug: string) {
-  const sample = supplierDemoProducts.find(product => product.slug === slug);
+  const sample = supplierCollectionEnabled() ? supplierDemoProducts.find(product => product.slug === slug) : undefined;
   if (sample) return sample;
-  if (!hasSupabaseConfig()) return demoProducts.find(product => product.slug === slug && product.status === "published") ?? null;
+  if (!hasSupabaseConfig()) return sampleProducts().find(product => product.slug === slug && product.status === "published") ?? null;
   const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*)").eq("slug", slug).eq("status", "published").maybeSingle();
   if (error) throw new Error("Unable to load product.");
-  return data ? mapProduct(data as RecordValue) : null;
+  const product = data ? mapProduct(data as RecordValue) : null;
+  return product && publicProduct(product) ? product : null;
 }
 
 function unwrapRelatedProduct(value: unknown) {
@@ -95,14 +113,14 @@ function mapLiveSession(row: RecordValue, includeDrafts = false): LiveSession {
     .sort((a, b) => Number(a.position) - Number(b.position))
     .map((link) => unwrapRelatedProduct(link.products))
     .filter((product): product is RecordValue => Boolean(product) && (includeDrafts || product?.status === "published"))
-    .map(mapProduct);
+    .map(mapProduct).filter(product => includeDrafts || publicProduct(product));
 
   return {
     id: String(row.id),
     slug: String(row.slug),
     title: String(row.title),
     description: String(row.description ?? ""),
-    hostName: String(row.host_name ?? "SunTV"),
+    hostName: String(row.host_name ?? getStoreProfile().name),
     titleZh: row.title_zh ? String(row.title_zh) : undefined,
     descriptionZh: row.description_zh ? String(row.description_zh) : undefined,
     playbackMode: row.playback_mode as LiveSession["playbackMode"],
@@ -119,13 +137,13 @@ function mapLiveSession(row: RecordValue, includeDrafts = false): LiveSession {
 }
 
 export async function getLiveSessions(options: { includeAll?: boolean } = {}) {
-  if (!hasSupabaseConfig()) return getDemoLiveSessions();
+  if (!hasSupabaseConfig()) return sampleRooms();
 
   let query = getSupabaseAdmin()
     .from("live_sessions")
     .select("*, kols(*), live_products(position, products(*, product_images(*)))")
     .order("starts_at", { ascending: true });
-  const publicStatuses = ["live", "scheduled", "ended", "preview"];
+  const publicStatuses = getStoreProfile().catalogueMode === "merchant" ? ["live", "scheduled", "ended"] : ["live", "scheduled", "ended", "preview"];
   if (!options.includeAll) query = query.eq("is_public", true).in("status", publicStatuses);
   const { data, error } = await query;
   if (error) throw new Error(`Unable to load livestreams: ${error.message}`);
@@ -181,7 +199,7 @@ function mapKol(row: RecordValue): Kol {
  return { id: String(row.id), slug: String(row.slug), displayName: String(row.display_name), bio: String(row.bio ?? ""), status: row.status as Kol["status"] };
 }
 export async function getKols(): Promise<Kol[]> {
- if (!hasSupabaseConfig()) return demoKols;
+ if (!hasSupabaseConfig()) return getStoreProfile().catalogueMode === "merchant" ? [] : getStoreProfile().demoSet === "isun" ? demoKols : [demoKols[1]];
  const {data,error} = await getSupabaseAdmin().from("kols").select("*").order("display_name");
  if(error) throw new Error(`Unable to load hosts: ${error.message}`);
  return (data as RecordValue[]).map(mapKol);

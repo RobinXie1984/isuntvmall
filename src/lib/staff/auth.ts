@@ -1,3 +1,4 @@
+import { storeStorageKeys } from "@/lib/store-profile";
 import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
@@ -6,9 +7,9 @@ import { hasSupabaseConfig, getSupabaseConfig, getSiteUrl } from "@/lib/env";
 import { STAFF_ROLES, StaffError, privilegedRole, type Staff } from "./permissions";
 export { requirePermission, permissionAllowed, staffLanding, StaffError, STAFF_ROLES, privilegedRole } from "./permissions";
 export type { Staff, StaffRole, StaffAction } from "./permissions";
-export const STAFF_COOKIE = "isun_staff";
-export const STAFF_PENDING_COOKIE = "isun_staff_pending";
-export const STAFF_PENDING_REFRESH_COOKIE = "isun_staff_pending_refresh";
+export const STAFF_COOKIE = storeStorageKeys().staff;
+export const STAFF_PENDING_COOKIE = `${STAFF_COOKIE}_pending`;
+export const STAFF_PENDING_REFRESH_COOKIE = `${STAFF_COOKIE}_pending_refresh`;
 export function staffConfigured() { return hasSupabaseConfig() && Boolean(process.env.SUPABASE_PUBLISHABLE_KEY?.trim()); }
 export function staffAuthClient() {
   if (!staffConfigured()) throw new StaffError("STAFF_NOT_CONFIGURED", 503);

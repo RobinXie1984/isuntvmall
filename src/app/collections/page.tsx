@@ -1,3 +1,5 @@
+import { holidayCollectionsEnabled } from "@/lib/store-profile";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getLocale } from "@/lib/locale-server";
 import { holidayCollections, holidayCollectionImage } from "@/lib/data/holiday-collections";
@@ -11,6 +13,7 @@ export async function generateMetadata() {
 }
 
 export default async function CollectionsPage({ searchParams }: { searchParams: Promise<{ region?: string }> }) {
+  if (!holidayCollectionsEnabled()) notFound();
   const [{ locale, t }, params] = await Promise.all([getLocale(), searchParams]);
   const region = holidayRegion(params.region);
   const occasions = holidayCalendar.filter(day => !region || day.region === region);

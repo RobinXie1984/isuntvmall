@@ -1,5 +1,5 @@
 import {describe,it,expect} from "vitest";
-import {cartLineKey,parseStoredCart,validateAttribution,checkoutInputSchema,checkoutReleaseReady,assertCheckoutReleased} from "./cart";
+import {cartLineKey,parseStoredCart,validateAttribution,checkoutInputSchema} from "./cart";
 import {getDemoLiveSessions} from "./data/demo";
 const sessions=getDemoLiveSessions();
 const s=sessions[0];
@@ -27,6 +27,5 @@ describe("multi-room cart and release boundaries",()=>{
   expect(()=>validateAttribution([line],sessions)).toThrow();
  });
  it("allows direct catalog selections without invented host credit",()=>expect(validateAttribution([{productId:line.productId,quantity:1}],[])).toEqual([{productId:line.productId,quantity:1}]));
- it("cannot unlock checkout by providing credentials",()=>{expect(checkoutReleaseReady()).toBe(false);expect(()=>assertCheckoutReleased()).toThrow(/Orders and payments/);});
  it("never manufactures live demo broadcasts",()=>{expect(sessions.every(s=>s.status==="preview")).toBe(true);expect(new Set(sessions.map(s=>s.kol?.id)).size).toBe(3);expect(sessions.map(s=>s.products.map(p=>p.id))).not.toEqual([[],[],[]]);});
 });

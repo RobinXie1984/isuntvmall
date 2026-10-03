@@ -4,7 +4,7 @@ import {notFound} from "next/navigation";
 import {LiveBadge} from "@/components/live/live-badge";
 import {LivePlayer} from "@/components/live/live-player";
 import {WatchShop} from "@/components/live/watch-shop";
-import {checkoutReleaseReady} from "@/lib/cart";
+import {checkoutReleaseReady} from "@/lib/stripe/runtime";
 import {LiveRoomSelection} from "@/components/live/live-room-selection";
 import {getLiveSessionBySlug,getLiveSessions,getProducts} from "@/lib/data/store";
 import {getLocale} from "@/lib/locale-server";

@@ -1,3 +1,4 @@
+import { getStoreProfile, storeStorageKeys } from "./store-profile";
 import { supplierDemoTranslations } from "./data/supplier-demo";
 import { expandedTranslations } from "./data/expanded-catalogue";
 
@@ -13,9 +14,10 @@ export const LOCALES = ["en", "zh-Hant", "zh-Hans", "ja"] as const;
 export type Locale = typeof LOCALES[number];
 export const LOCALE_NAMES: Record<Locale, string> = { en: "English", "zh-Hant": "繁體中文", "zh-Hans": "简体中文", ja: "日本語" };
 export const INTL_LOCALES: Record<Locale, string> = { en: "en-HK", "zh-Hant": "zh-HK", "zh-Hans": "zh-CN", ja: "ja-JP" };
-export const LOCALE_COOKIE = "isuntvmall-locale";
+export const LOCALE_COOKIE = storeStorageKeys().locale;
 export function parseLocale(value: string | undefined | null): Locale {
-  return LOCALES.includes(value as Locale) ? value as Locale : "en";
+  const profile = getStoreProfile();
+  return profile.locales.supported.includes(value as Locale) ? value as Locale : profile.locales.default;
 }
 
 const japanese: Record<string, string> = { ...jaCatalogue, ...jaUi, ...jaAdmin, ...jaExtra };

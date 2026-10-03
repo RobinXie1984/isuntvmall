@@ -1,7 +1,8 @@
+import { storeStorageKeys } from "./store-profile";
 import { cartLineKey } from "@/lib/cart";
 import type { CartLine } from "@/types/commerce";
 
-export const CHECKOUT_ATTEMPT_STORAGE = "suntv-checkout-attempt-v1";
+export const CHECKOUT_ATTEMPT_STORAGE = storeStorageKeys().attempt;
 export const CHECKOUT_ATTEMPT_TTL = 40 * 60 * 1000;
 export interface CheckoutAttempt { id: string; fingerprint: string; expiresAt: number }
 

@@ -1,3 +1,4 @@
+import { supplierCollectionEnabled, holidayCollectionsEnabled } from "@/lib/store-profile";
 import { supplierDemoProducts, supplierDisplayOnly } from "@/lib/data/supplier-demo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,7 +13,7 @@ type Query = { category?: string; q?: string; sort?: string; collection?: string
 type Props = { searchParams: Promise<Query> };
 export async function generateMetadata({ searchParams }: Props) {
   const [{ t }, params] = await Promise.all([getLocale(), searchParams]);
-  const collection = getHolidayCollection(params.collection);
+  const collection = holidayCollectionsEnabled() ? getHolidayCollection(params.collection) : undefined;
   return { title: params.collection === "supplier-demo" ? t("New discoveries", "新選好物", "新しい出会い") : collection ? t(...collection.title) : t("All products", "全部商品") };
 }
 export default async function ShopPage({ searchParams }: Props) {
@@ -21,8 +22,8 @@ export default async function ShopPage({ searchParams }: Props) {
   const q = typeof params.q === "string" ? params.q : "";
   const sort = typeof params.sort === "string" ? params.sort : "featured";
   const collectionId = typeof params.collection === "string" ? params.collection : undefined;
-  const collection = getHolidayCollection(collectionId);
-  const supplierCollection = collectionId === "supplier-demo";
+  const collection = holidayCollectionsEnabled() ? getHolidayCollection(collectionId) : undefined;
+  const supplierCollection = supplierCollectionEnabled() && collectionId === "supplier-demo";
   if (collectionId && !collection && !supplierCollection) notFound();
   const selection = supplierCollection ? supplierDemoProducts : collection ? productsForHoliday(products, collection.id) : products;
   const categories = [...new Set(selection.map(p => p.category))];
@@ -60,7 +61,7 @@ export default async function ShopPage({ searchParams }: Props) {
     <div className="catalogue-layout"><aside className="catalogue-sidebar"><h2>{t("Categories", "商品分類")}</h2><nav aria-label={t("Product categories", "商品分類")}>
       <Link className={!category ? "active" : ""} href={categoryUrl()}>{collection ? t("All in collection", "系列全部商品") : t("All products", "全部商品")}</Link>
       {categories.map(c => <Link className={category === c ? "active" : ""} key={c} href={categoryUrl(c)}>{localize(c)}</Link>)}
-      <Link href="/shop?collection=supplier-demo">{t("New discoveries", "新選好物", "新しい出会い")}</Link><Link href="/collections">{t("Holiday collections", "節日系列")}</Link>{collection && <Link href="/shop">{t("Entire catalogue", "完整商品目錄")}</Link>}
+      {supplierCollectionEnabled()&&<Link href="/shop?collection=supplier-demo">{t("New discoveries", "新選好物", "新しい出会い")}</Link>}{holidayCollectionsEnabled()&&<Link href="/collections">{t("Holiday collections", "節日系列")}</Link>}{collection && <Link href="/shop">{t("Entire catalogue", "完整商品目錄")}</Link>}
     </nav></aside><div>
       <form className="catalogue-toolbar" action="/shop"><span>{t(`${visible.length} items`, `${visible.length} 件商品`, `${visible.length}点`)}</span>
         {category && <input type="hidden" name="category" value={category} />}{q && <input type="hidden" name="q" value={q} />}{collectionId && <input type="hidden" name="collection" value={collectionId} />}

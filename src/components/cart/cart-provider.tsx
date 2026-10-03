@@ -1,11 +1,12 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { storeStorageKeys } from "@/lib/store-profile";
 import { cartLineKey, parseStoredCart } from "@/lib/cart";
 import { checkoutAttempt, CHECKOUT_ATTEMPT_STORAGE, type CheckoutAttempt } from "@/lib/checkout-attempt";
 import type { CartLine, CartSource } from "@/types/commerce";
 
-const STORAGE_KEY = "suntv-mall-cart-v2";
+const STORAGE_KEY = storeStorageKeys().cart;
 
 export type AddItemResult = "added" | "bag-limit" | "quantity-limit" | "invalid";
 
