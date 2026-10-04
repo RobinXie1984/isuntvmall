@@ -36,7 +36,7 @@ Private release evidence includes source/build manifests, migration readback, te
 ## Explicitly not complete
 
 1. **Stripe:** account/plan, test-account end-to-end charge/refund/webhook acceptance, settlement/payout verification and live activation. Robin will arrange the account later. Code presence and mocked tests do not replace these steps.
-2. **USDT:** the newer rail has 10,000 EVM address records and controlled Ethereum USDC/USDT collection code plus historical local receipts. This audit did not independently reverify historical transfers on chain. TRON observation is present; production collection and commerce invoice binding are not verified. Base USDT production collection is not verified. The schema accepts only disabled activation.
+2. **USDT:** no commerce payment adapter is activated. Merchant ownership, supported network/token, invoice binding and real settlement/refund acceptance require separate verification. The schema accepts only disabled activation. Private infrastructure audit details are retained outside this public repository.
 3. **Merchant custody:** existing external receiving addresses are configured, but ownership is unverified; external destination configuration does not establish merchant ownership of intermediate deposit wallets. No existing treasury or signer was changed.
 4. **Second client:** no new database, domain or merchant account is provisioned. Confirmed-client data/credential isolation must be tested on independent resources when that client exists.
 5. **Actual sales information:** legal merchant/contact, policies, trustworthy SKU/specifications/stock/shipping/tax and named staff remain supplied inputs, not invented defaults.

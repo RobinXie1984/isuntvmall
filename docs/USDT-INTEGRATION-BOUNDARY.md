@@ -2,16 +2,6 @@
 
 USDT is **not activated**. The storefront must not show an available USDT payment method until the merchant-specific integration and acceptance tests below pass.
 
-An initial audit of preserved MerchantOS source verified historical TRON and Ethereum token address creation, signed transfer callbacks, internal wallet accounting and central collection. This is evidence of source capabilities, not a verified current payment service. The legacy runtime, dependencies, secrets, wallet accounts and background jobs are not part of this delivery.
-
-## Newer collection rail verified
-
-A separate newer wallet rail was subsequently located and inspected. Its public-address registry contains 10,000 EVM entries. Its controlled live executor supports Ethereum mainnet USDC and USDT; local historical receipts include USDT collection. Base mainnet has a USDC planning/read-only profile, not a verified Base USDT production executor. TRON USDT observation exists, but production TRON collection was not verified.
-
-The receiver is configurable by chain and must match an explicit treasury allowlist. Source and gas-tanker signing remain local to the wallet rail. An external merchant receiver alone therefore does not establish merchant ownership of intermediate deposit wallets. Reuse the guardrails and adapter behavior; do not reuse an existing operator address pool or signing credentials for client shops.
-
-Current inspected daemon status is shadow monitoring with movement disabled and historical execution windows closed. Explicit approved windows can override shadow, so integration must independently enforce its activation gate. No wallet service or funds were changed in this audit. No commerce adapter is activated.
-
 ## Direct merchant settlement
 
 Each shop must use its own merchant-owned provider account or receiving wallet arrangement. The platform must not collect all merchants' funds into a shared central wallet. Do not request or store seed phrases or private signing keys in storefront configuration. Provider secrets and webhook verification secrets remain only in the individual shop's server runtime.
@@ -36,18 +26,14 @@ Missing provider access or settlement ownership evidence is `UNKNOWN` and keeps 
 
 ## Merchant handoff inputs
 
-1. Current MerchantOS/service endpoint and supported API documentation, if a newer service exists.
+1. Merchant-selected payment provider and current supported API documentation.
 2. Merchant-owned provider account, scoped sandbox/runtime credentials through the private deployment channel, and webhook setup access.
 3. Supported chain/token, destination ownership, settlement asset/conversion and fee policy.
 4. Underpayment, overpayment, late-payment and refund decisions plus an authorized small acceptance-test budget when ready.
 
 ## 中文说明
 
-USDT 尚未启用。旧 MerchantOS 源码证明曾有 TRON／Ethereum 地址、回调、钱包记账及中央归集逻辑，但不能证明现行服务可用，也不能证明款项直达商家自己的账户。本交付不启用旧运行时、钱包、密钥或定时任务。
-
-每个商城必须独立配置客户自有商户账户及服务端凭据。启用前需核实链、代币合约、收款归属、确认规则、费用、异常付款、订单退款和对账，并通过沙盒与另行授权的小额实付／退款验收。未知项保持关闭，不能用二维码、模拟支付或接口成功代替结算证据。
-
-更新：另已核实较新的钱包服务，含一万条 EVM 地址记录及 Ethereum USDC／USDT 受控归集代码和历史记录。Base USDT 上线能力未获证明。外部收款地址已有配置／白名单机制，但中间充值地址与加油签名权仍须由客户独立控制。此模板不启用现有钱包资金操作，也不复用其他商家的地址池。
+USDT 尚未启用。每个商城必须独立配置商家自有账户及服务端凭据。启用前需核实链、代币合约、收款归属、确认规则、费用、异常付款、订单退款和对账，并通过沙盒与另行授权的小额实付／退款验收。未知项保持关闭，不能用二维码、模拟支付或接口成功代替结算证据。私有运行环境、钱包账户、签名与运营记录不属于本公开模板。
 
 ## Receiver configuration template and controlled change procedure
 
@@ -61,7 +47,7 @@ To prepare a receiving-address change:
 2. Record merchant ownership evidence by reference, not wallet recovery material. A valid-looking address is not proof of ownership. The template does not automate an ownership proof.
 3. Run the schema validation and preserve the prior private file plus revision for rollback. Keep both outside the public repository and public assets. The example is the only receiving configuration intended for source control.
 4. The authorized deployer copies only that shop's reviewed file through the private deployment channel, records file digest, actor, reason, store, revision, deployment version and time, and confirms activation remains disabled. The helper returns an audit summary but does not persist a durable audit record itself; the deployer must retain it with the release evidence.
-5. Do not rewrite TokenTrail/wallet_gen treasury configuration or any existing order/invoice destination. Future activation must create a new immutable receiver version and invalidate old unsigned plans/approvals. Existing issued invoices retain their original destination and remain independently reconciled.
+5. Do not rewrite any existing wallet-service configuration or issued order/invoice destination. Future activation must create a new immutable receiver version and invalidate old unsigned plans/approvals. Existing issued invoices retain their original destination and remain independently reconciled.
 6. Roll back by restoring the previous private version and deployment, then record the rollback. A configuration rollback cannot reverse a transfer; this template performs no transfers.
 
 There is currently no receiver-edit web API, no live gateway behind this configuration and no automatic wallet-service integration. Exposing such an API or enabling transfers requires the additional authenticated change-audit implementation and payment acceptance work above.
