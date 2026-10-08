@@ -1,5 +1,5 @@
 import { supplierCollectionEnabled, holidayCollectionsEnabled } from "@/lib/store-profile";
-import { supplierDemoProducts, supplierDisplayOnly } from "@/lib/data/supplier-demo";
+import { supplierDemoProducts } from "@/lib/data/supplier-demo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { productTitle, productDescription } from "@/lib/product-copy";
@@ -25,7 +25,7 @@ export default async function ShopPage({ searchParams }: Props) {
   const collection = holidayCollectionsEnabled() ? getHolidayCollection(collectionId) : undefined;
   const supplierCollection = supplierCollectionEnabled() && collectionId === "supplier-demo";
   if (collectionId && !collection && !supplierCollection) notFound();
-  const selection = supplierCollection ? supplierDemoProducts : collection ? productsForHoliday(products, collection.id) : products;
+  const selection = supplierCollection ? products.filter(product => supplierDemoProducts.some(sample => sample.id === product.id)) : collection ? productsForHoliday(products, collection.id) : products;
   const categories = [...new Set(selection.map(p => p.category))];
   const visible = selection.filter(p => (!category || p.category === category) && (!q || [p.title, p.titleZh ?? "", p.description, p.descriptionZh ?? "", p.sku, productTitle(p, locale, localize), productDescription(p, locale, localize)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b) => sort === "price-asc" ? a.priceAmount-b.priceAmount : sort === "price-desc" ? b.priceAmount-a.priceAmount : Number(b.featured)-Number(a.featured));
   const totalPages = Math.max(1, Math.ceil(visible.length / 48));
@@ -75,6 +75,5 @@ export default async function ShopPage({ searchParams }: Props) {
       </nav>}
       {!visible.length && <div className="empty-state"><h2>{t("No products found", "未找到商品")}</h2><p>{t("Try another search or browse the collection.", "請嘗試其他關鍵字，或瀏覽全部商品。")}</p><Link className="button" href={categoryUrl()}>{t("View all products", "查看全部商品")}</Link></div>}
     </div></div>
-    {supplierCollection && !category && !q && page === 1 && <section className="section"><div className="section-heading"><div><span className="eyebrow">{t("DISPLAY ONLY", "僅供展示", "参考展示のみ")}</span><h2>{t("Additional catalogue references", "其他目錄參考", "その他のカタログ資料")}</h2><p className="section-description">{t("These 11 health and alcohol references are identification records only, with no sales or purchase controls.", "以下 11 項健康產品及酒類僅供辨識參考，不提供銷售或購買操作。", "以下の健康関連商品・酒類11件は識別用の参考資料です。販売・購入機能はありません。")}</p></div></div><ul className="supplier-reference-list">{supplierDisplayOnly.map(item => <li key={item.id}>{item.titles[locale]}</li>)}</ul></section>}
   </div>;
 }

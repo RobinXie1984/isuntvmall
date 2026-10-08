@@ -5,6 +5,7 @@ vi.mock("@/lib/env", () => ({ hasSupabaseConfig: mocks.configured }));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => ({ from: mocks.query }) }));
 import { getProducts, getProductBySlug, getProductsByIds } from "./store";
 import { supplierDemoProducts, supplierDisplayOnly } from "./supplier-demo";
+import { hasProductImage } from "@/lib/product-image";
 import { localize, LOCALES } from "@/lib/i18n";
 const merchant = { id: "merchant", sku: "MERCHANT", slug: "merchant", title: "Merchant", price_amount: 100, currency: "hkd", stock_qty: 1, status: "published", product_images: [] };
 beforeEach(() => {
@@ -19,12 +20,18 @@ beforeEach(() => {
 });
 describe("supplier demo integration", () => {
   it("adds demo products to public browsing but leaves admin records untouched", async () => {
-    expect(await getProducts()).toHaveLength(103);
+    expect(await getProducts()).toHaveLength(26);
     expect((await getProducts({ includeDrafts: true })).map(p => p.id)).toEqual(["merchant"]);
   });
   it("resolves demo detail without querying operational tables", async () => {
-    expect(await getProductBySlug(supplierDemoProducts[0].slug)).toEqual(supplierDemoProducts[0]);
+    expect(await getProductBySlug(supplierDemoProducts.find(hasProductImage)!.slug)).toEqual(supplierDemoProducts.find(hasProductImage));
     expect(mocks.query).not.toHaveBeenCalled();
+  });
+  it("hides every pictureless supplier detail while retaining its source record", async () => {
+    const hidden = supplierDemoProducts.filter(p => !hasProductImage(p));
+    expect(hidden).toHaveLength(76);
+    for (const product of hidden) expect(await getProductBySlug(product.slug)).toBeNull();
+    expect(supplierDemoProducts).toHaveLength(102);
   });
   it("does not turn storefront-only demonstrations into checkout products", async () => {
     expect(await getProductsByIds(supplierDemoProducts.map(p => p.id))).toEqual([]);
@@ -34,7 +41,8 @@ describe("supplier demo integration", () => {
   it("keeps the same sample selection offline and excludes display-only references", async () => {
     mocks.configured.mockReturnValue(false);
     const publicProducts = await getProducts();
-    expect(supplierDemoProducts.every(p => publicProducts.some(item => item.id === p.id))).toBe(true);
+    expect(publicProducts.filter(p => supplierDemoProducts.some(s => s.id === p.id))).toHaveLength(26);
+    expect(publicProducts.every(hasProductImage)).toBe(true);
     expect(supplierDemoProducts).toHaveLength(102);
     expect(supplierDisplayOnly).toHaveLength(11);
     expect(new Set(supplierDemoProducts.map(p => p.id)).size).toBe(102);

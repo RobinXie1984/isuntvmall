@@ -1,4 +1,5 @@
 import "server-only";
+import { hasProductImage } from "@/lib/product-image";
 
 import { demoKols, demoProducts, getDemoLiveSessions } from "@/lib/data/demo";
 import { hasSupabaseConfig } from "@/lib/env";
@@ -9,7 +10,7 @@ import { supplierDemoProducts } from "./supplier-demo";
 import { expandedProducts } from "./expanded-catalogue";
 import { getStoreProfile, supplierCollectionEnabled } from "@/lib/store-profile";
 
-function publicProduct(product: Product) { const profile = getStoreProfile(); return !profile.excludedProductIds.includes(product.id) && (profile.catalogueMode !== "merchant" || !product.isDemo); }
+function publicProduct(product: Product) { const profile = getStoreProfile(); return hasProductImage(product) && !profile.excludedProductIds.includes(product.id) && (profile.catalogueMode !== "merchant" || !product.isDemo); }
 function sampleProducts() {
  const profile = getStoreProfile();
  if (profile.catalogueMode !== "demo") return [];
@@ -18,7 +19,7 @@ function sampleProducts() {
 }
 function sampleRooms() {
  if (getStoreProfile().catalogueMode !== "demo") return [];
- if (getStoreProfile().demoSet === "isun") return getDemoLiveSessions();
+ if (getStoreProfile().demoSet === "isun") return getDemoLiveSessions().map(room => ({ ...room, products: room.products.filter(publicProduct) }));
  const room = getDemoLiveSessions()[1];
  return [{ ...room, products: sampleProducts().slice(0, 6) }];
 }
@@ -28,7 +29,7 @@ type RecordValue = Record<string, unknown>;
 function mapImage(row: RecordValue): ProductImage {
   return {
     id: String(row.id),
-    sourceUrl: String(row.source_url),
+    sourceUrl: String(row.source_url ?? ""),
     storagePath: row.storage_path ? String(row.storage_path) : null,
     altText: String(row.alt_text ?? ""),
     position: Number(row.position ?? 0),
@@ -59,7 +60,7 @@ function mapProduct(row: RecordValue): Product {
 
 export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   if (!hasSupabaseConfig()) {
-    return options.includeDrafts ? sampleProducts() : [...(supplierCollectionEnabled() ? supplierDemoProducts : []), ...sampleProducts().filter((product) => product.status === "published")];
+    return options.includeDrafts ? sampleProducts() : [...(supplierCollectionEnabled() ? supplierDemoProducts : []), ...sampleProducts().filter((product) => product.status === "published")].filter(publicProduct);
   }
 
   const rows: RecordValue[] = [];
@@ -77,7 +78,7 @@ export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   const products = rows.map(mapProduct);
   // Demo overlays are storefront-only; keep operational admin records untouched.
   const overlay = supplierCollectionEnabled() ? supplierDemoProducts : [];
-  return options.includeDrafts ? products : [...overlay, ...products.filter(publicProduct).filter(p => !overlay.some(sample => sample.id === p.id || sample.slug === p.slug))];
+  return options.includeDrafts ? products : [...overlay, ...products.filter(publicProduct).filter(p => !overlay.some(sample => sample.id === p.id || sample.slug === p.slug))].filter(publicProduct);
 }
 
 export async function getProductsByIds(ids: string[]) {
@@ -93,7 +94,7 @@ export async function getProductsByIds(ids: string[]) {
 
 export async function getProductBySlug(slug: string) {
   const sample = supplierCollectionEnabled() ? supplierDemoProducts.find(product => product.slug === slug) : undefined;
-  if (sample) return sample;
+  if (sample) return publicProduct(sample) ? sample : null;
   if (!hasSupabaseConfig()) return sampleProducts().find(product => product.slug === slug && product.status === "published") ?? null;
   const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*)").eq("slug", slug).eq("status", "published").maybeSingle();
   if (error) throw new Error("Unable to load product.");

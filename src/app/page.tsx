@@ -16,7 +16,7 @@ export default async function HomePage(){
  const profile=getStoreProfile();const hero=profile.hero;
  const introduction=broadcasts.find(b=>b.kind==="introduction");
  const watchBroadcasts=broadcasts.filter(b=>b.kind==="broadcast");
- const approvedSupplierProducts = supplierCollectionEnabled() ? supplierDemoProducts.filter(product => productImage(product) !== SUPPLIER_IMAGE_PLACEHOLDER) : [];
+ const approvedSupplierProducts = supplierCollectionEnabled() ? products.filter(product => supplierDemoProducts.some(sample => sample.id === product.id)) : [];
  const categorySelection = ["Tableware", "Footwear", "Beauty & personal care", "Tea & coffee"].map(category => approvedSupplierProducts.find(product => product.category === category)).filter(product => product !== undefined);
  const newSelection = [...categorySelection, ...approvedSupplierProducts.filter(product => !categorySelection.some(item => item.id === product.id))].slice(0,4);
  const homeSelection = homepageSelection(products.filter(product => productImage(product) !== SUPPLIER_IMAGE_PLACEHOLDER && !newSelection.some(item => item.id === product.id)));
