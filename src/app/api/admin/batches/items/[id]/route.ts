@@ -33,6 +33,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const common = { p_actor: staff.id, p_item_id: item.id, p_revision: input.revision };
     const result = input.action === "edit" ? await db.rpc("batch_edit", { ...common, p_product_data: input.productData })
       : input.action === "retry" ? await db.rpc("batch_retry", common)
+      : input.action === "approve" ? await db.rpc("batch_review_visual", { ...common, p_decision: input.action, p_reason: input.reason, p_visual_review: input.visualReview })
       : await db.rpc("batch_review", { ...common, p_decision: input.action, p_reason: input.reason });
     if (result.error) throw result.error;
     return batchResponse({ ok: true });

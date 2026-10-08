@@ -27,12 +27,20 @@ export const createBatchSchema = z.object({
     product_data: draftProductSchema.optional(),
   }).strict()).min(1).max(MAX_BATCH_FILES).refine(items => new Set(items.map(item => item.filename)).size === items.length, "Filenames must be unique within a batch."),
 }).strict();
+export const visualReviewSchema = z.object({
+  version: z.literal("muji-v1"),
+  calmBackground: z.literal(true),
+  cleanComposition: z.literal(true),
+  faithfulAppearance: z.literal(true),
+  noPromotionalText: z.literal(true),
+}).strict();
 export const batchActionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("upload"), revision: z.number().int().positive() }).strict(),
   z.object({ action: z.literal("finalize"), revision: z.number().int().positive() }).strict(),
   z.object({ action: z.literal("retry"), revision: z.number().int().positive() }).strict(),
   z.object({ action: z.literal("edit"), revision: z.number().int().positive(), productData: draftProductSchema }).strict(),
-  z.object({ action: z.enum(["approve", "reject"]), revision: z.number().int().positive(), reason: z.string().max(1000).default("") }).strict(),
+  z.object({ action: z.literal("approve"), revision: z.number().int().positive(), reason: z.string().max(1000).default(""), visualReview: visualReviewSchema }).strict(),
+  z.object({ action: z.literal("reject"), revision: z.number().int().positive(), reason: z.string().max(1000).default("") }).strict(),
 ]);
 export type DraftProduct = z.infer<typeof draftProductSchema>;
 export type BatchRole = "super_admin" | "admin" | "operator" | "catalog_editor" | "kol";

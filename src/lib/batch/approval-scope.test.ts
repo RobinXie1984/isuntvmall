@@ -6,6 +6,7 @@ vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => ({ from: () => 
 import { batchForStaff } from "./server";
 import { POST } from "@/app/api/admin/batches/items/[id]/route";
 import type { BatchStaff } from "./auth";
+const visualReview = { version: "muji-v1", calmBackground: true, cleanComposition: true, faithfulAppearance: true, noPromotionalText: true };
 const batchId = "11111111-1111-4111-8111-111111111111";
 const itemId = "22222222-2222-4222-8222-222222222222";
 const staff = (role: BatchStaff["role"], aal: BatchStaff["aal"] = "aal2"): BatchStaff => ({ id: "reviewer", email: "reviewer@example.test", role, aal, kolId: null, sessionId: "session" });
@@ -26,14 +27,14 @@ describe("merchandise reviewer scope", () => {
  it.each(["approve", "reject"])("admin can %s a current review from another uploader", async action => {
   mocks.member.mockResolvedValue(staff("admin"));
   mocks.lookup.mockResolvedValueOnce({ data: { id: itemId, batch_id: batchId, revision: 2 }, error: null }).mockResolvedValueOnce({ data: { id: batchId, created_by: "other-uploader" }, error: null });
-  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, revision: 2, reason: "Reviewed" }) }), { params: Promise.resolve({ id: itemId }) });
+  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, revision: 2, reason: "Reviewed", ...(action === "approve" ? {visualReview} : {}) }) }), { params: Promise.resolve({ id: itemId }) });
   expect(response.status).toBe(200);
-  expect(mocks.rpc).toHaveBeenCalledWith("batch_review", { p_actor: "reviewer", p_item_id: itemId, p_revision: 2, p_decision: action, p_reason: "Reviewed" });
+  expect(mocks.rpc).toHaveBeenCalledWith(action === "approve" ? "batch_review_visual" : "batch_review", { p_actor: "reviewer", p_item_id: itemId, p_revision: 2, p_decision: action, p_reason: "Reviewed", ...(action === "approve" ? {p_visual_review: visualReview} : {}) });
  });
  it.each(["operator", "catalog_editor", "kol"] as const)("%s cannot approve even their own batch", async role => {
   mocks.member.mockResolvedValue(staff(role));
   mocks.lookup.mockResolvedValueOnce({ data: { id: itemId, batch_id: batchId, revision: 2 }, error: null }).mockResolvedValueOnce({ data: { id: batchId, created_by: "reviewer" }, error: null });
-  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve", revision: 2 }) }), { params: Promise.resolve({ id: itemId }) });
+  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve", revision: 2, visualReview }) }), { params: Promise.resolve({ id: itemId }) });
   expect(response.status).toBe(403);
   expect(await response.json()).toMatchObject({ code: "APPROVER_REQUIRED" });
   expect(mocks.rpc).not.toHaveBeenCalled();
@@ -41,7 +42,7 @@ describe("merchandise reviewer scope", () => {
  it("admin approval still rejects a stale revision before mutation", async () => {
   mocks.member.mockResolvedValue(staff("admin"));
   mocks.lookup.mockResolvedValueOnce({ data: { id: itemId, batch_id: batchId, revision: 3 }, error: null }).mockResolvedValueOnce({ data: { id: batchId, created_by: "other-uploader" }, error: null });
-  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve", revision: 2 }) }), { params: Promise.resolve({ id: itemId }) });
+  const response = await POST(new Request("https://www.isuntvmall.com/api/admin/batches/items/" + itemId, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "approve", revision: 2, visualReview }) }), { params: Promise.resolve({ id: itemId }) });
   expect(response.status).toBe(409);
   expect(await response.json()).toMatchObject({ code: "STALE_REVISION" });
   expect(mocks.rpc).not.toHaveBeenCalled();

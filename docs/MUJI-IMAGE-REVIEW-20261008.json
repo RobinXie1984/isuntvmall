@@ -1,0 +1,610 @@
+{
+  "date": "2026-10-08",
+  "inspected": 97,
+  "approved": 26,
+  "placeholder": 71,
+  "method": "All 97 images inspected using five contact sheets; 17 crop outputs individually inspected and decoded crop pixels verified equal to originals. No resampling, recolouring or invented details. Unsuitable originals remain byte-identical and excluded from public image selection.",
+  "images": [
+    {
+      "file": "cer-f001.webp",
+      "sha256": "e7e5b2d78e6d088343420cf74b84915285651d159f393b95f9ae42b4e359665a",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/cer-f001.webp"
+    },
+    {
+      "file": "cer-f003.webp",
+      "sha256": "7fc5d6d950b8a36e9d8ce797d37c5aa553650be32de085c3cb91e4ebd033b22e",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f004.webp",
+      "sha256": "384867891687d6771272a2ed68760823607901ca686c14b6a94435d476ae7c07",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f005.webp",
+      "sha256": "d9221c6e80035220b8c1da3c3cb0e2785e3704212a5be9f6145c72bf9d2d0ef1",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f006.webp",
+      "sha256": "091b9426af8ddfa51fc9782eae226f7bf5d6975347268b81d670ba49ad272558",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f007.webp",
+      "sha256": "2042b43d2aece6b902b1fc34e309d9a3331543dd921a26ca1452fad6afe0c1e8",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f008.webp",
+      "sha256": "fdf2c6e12cb00c2ce8e495d1e88da1b0867aa6e655a6ac356900fd2d69ca6e26",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f009.webp",
+      "sha256": "582a22d05342a88f30eca611abfc6ee461293075dc2ac8c352e8e55f8397d860",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f010.webp",
+      "sha256": "834669df87c458e07902e92a2b33b94feb1813b5ef09f82fdded4d604f2cc8d3",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f011.webp",
+      "sha256": "e54f26a7ddfc1c526f813f9bc841624983fba730fa80fe8537cf76225fdbfe8e",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f012.webp",
+      "sha256": "af8354437e3ed83f9057c835e102b0a40c6d15c09ab60b36e1e3307af953724c",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f013.webp",
+      "sha256": "4e2652cd73a9feccdfe5c205bc995f44534dada5462d306ef4413eebd018f8fa",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f014.webp",
+      "sha256": "4cd237a40065060cc8f22f222563e73bf43510a5e9d85175a2e756c440ae0e5d",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f015.webp",
+      "sha256": "89fc53947c11e7c88f43925387928749c86418d6f1ea331c02f4c9bc15e79554",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f017.webp",
+      "sha256": "e3b2e4aefb5500fffa46dc7b0f115eb753a8265eeb87bb8a59f9d13bc69e4c84",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f018.webp",
+      "sha256": "83747065115c9731498d1ca2cedeeb84d96d6517fbf51bff6bbbe925e03bb897",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f019.webp",
+      "sha256": "ed351a6e0434d23033db09333b92f04ea38bdfb44779e08fad67504494b8fca0",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f020.webp",
+      "sha256": "66af23d06a6df8aa59148c55e67da48cdb1e6dcd1a2e3be825e628754c8a2b63",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f024.webp",
+      "sha256": "9a58d86af551cb37e59b521bace53ff73dccbb5a5bded3f113f0cd6ac2d9643e",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f025.webp",
+      "sha256": "13a923c7648ea5c7fd5d6d7a802de49a4fd22d8d912b52790a1521c03e2dfb75",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f026.webp",
+      "sha256": "7245aca6bdd1973aadd6dbf1883c404d3e0e7255caad2af6bc85910dbd9d0999",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f027.webp",
+      "sha256": "840edc7a64fc857298f6725fdc97c3810a4b9a6d3de637125ae1172de35fba40",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f028.webp",
+      "sha256": "8496bff09dcc9f0f1ebe9e3b83a3d0304c0d377d868eef81233c7c921fa4331d",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f029.webp",
+      "sha256": "c2ff0de9350f5e3a9c879eef148f1ee535e60bd28a2b3b36c600730bb163b21b",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f030.webp",
+      "sha256": "be289bc26873876b1f7623e68a6c0ac740064fe8241e62d787df3fc83bc96df7",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f033.webp",
+      "sha256": "392ad84a4b051ca67f26f3a05caf7d3721c94ff15cbad6996d83e4b29a93334e",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f036.webp",
+      "sha256": "b3ca148aaf9a646917ba13d11b1931399c31e5bad8960d4ac9293f571d514a4a",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f037.webp",
+      "sha256": "a9cbdbf06dd9a3212c1c93dbe73b59b88df7bec05e102916b03b5d0f4e6bf36d",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f038.webp",
+      "sha256": "a8691d289d9268d31365ffa80b94579c9e8efa404730ae1c2b4ded4e92f42e1f",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f039.webp",
+      "sha256": "bb869d1984f31ff3bfdd6eae23ae535ba149f40dd5ff471d5811f09aa7a6836a",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "cer-f040.webp",
+      "sha256": "6863f109a05e62ec5bfed1661bad1aa48bbed7853b55b7f4a8b199c73fba8a05",
+      "decision": "placeholder",
+      "reason": "Promotional borders and clutter overlap usable product composition; a clean source photo or further manual review is required."
+    },
+    {
+      "file": "footwear-2020a1-6.webp",
+      "sha256": "9b953a411dc88e7a00b06ed5b0aaaa163caf7ec45e21eddd930ffd855e3a4b1b",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-2020a1-7.webp",
+      "sha256": "e264b2d8d05013a867fe291a77cc278d8fc7fdac43ef18f91c1e62c927283726",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-2020a1-8.webp",
+      "sha256": "4cbff824b385b680256844dace31d660833aa56c5050b64c761bfbff41968330",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-20p18-1.webp",
+      "sha256": "376a321f11de54db8a7deb40edb9eadeefd6d27f018bed9aac7f360aa4394ac6",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-20p18-1.webp"
+    },
+    {
+      "file": "footwear-20p18-2.webp",
+      "sha256": "3e0c52be0f631af4e5a7740852ae05cda36d1d9bbdf5a26a6492f53b9d9933a6",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-20p18-3.webp",
+      "sha256": "c62157dcb140cd1ea79d8825d24c592c768300de6545a56822512e2382446e41",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-20p18-5.webp",
+      "sha256": "dde20899f70977d67970a828d78cffccc56e00790723bd0d6982eb171db833ee",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-20p18-6.webp",
+      "sha256": "d75f0faeaab235c385cd6aef9430c7f8df072325c212ce234fa05467908d94b8",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-21a23h-3.webp",
+      "sha256": "b4a83da348b3980c0974b8d144784089b459426e439b016124fdebb6b5524a92",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-21a28-5.webp",
+      "sha256": "e3168eae7cd06fe0cbc99b1bbd9890b2bc2da0ea98fc6f223c8308d9eb89205f",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-21a28-5.webp"
+    },
+    {
+      "file": "footwear-21d30-1.webp",
+      "sha256": "1f3e8dc17656cd9526176212e9f0ff48b0f6e887afd03b3f9709670864fe2233",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-21d30-1.webp"
+    },
+    {
+      "file": "footwear-22d58a-1.webp",
+      "sha256": "6a71ea81d01d16b1b59c9ddd046513daf5988b454f4789286fb5342a1fd57685",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-22d58a-2.webp",
+      "sha256": "68178f53d3805ab8f3d50fdb6cb109cbe878597d30962628f04412479cba70c9",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-22d58a-2.webp"
+    },
+    {
+      "file": "footwear-22d58a-3.webp",
+      "sha256": "39b880933a83077822f90f970dbb408fc56f888fab86dfffb62c649ab0aba3dc",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-22d58a-3.webp"
+    },
+    {
+      "file": "footwear-22d58c-2.webp",
+      "sha256": "9cc45fb2b8b3f8fa6a1b77b21a1d59c4601a286c3051831a7e925f517d100372",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-22d58c-3.webp",
+      "sha256": "e32ea4aa9d5b73e402c27a0badf22ebe7cf45c06cbf16ece96aca4a6c341fe6e",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-22d60-6.webp",
+      "sha256": "af394ed202f330309a3de58573144d1d3510972f12a70ade2685fea00ebc1da7",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23a12-1.webp",
+      "sha256": "ae1b25881f862e5573147acc542cd5ccd2d2d822c1a8dff95014421b432b14aa",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-23a15h-1.webp",
+      "sha256": "876570b4337df440baa4362214c56f1b6aa8dc9d55b5a0921be53575aca20310",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23a15h-2.webp",
+      "sha256": "4604d359c68dad5f5ddbad1295aab5ce3142191a5c13e0e63cd0fc7352eead7d",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23a35-1.webp",
+      "sha256": "9f22842999d85095149c121a5d1444f9af078b8da988eb6ae7ae2ddc7b13824a",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23a38-1.webp",
+      "sha256": "c78d2c3451e84f173459d2d74a37cf9b8d4d21004390e44b7b25cfcae11e6c9b",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23a38a-2.webp",
+      "sha256": "447d71c13f0540cb4619650fc2d3f131be359f0ffaecb9f2c1701786163b7c9f",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23d12-1.webp",
+      "sha256": "4a0692ef25339ab605298ba25009c352b98264fb218213a9ed4effae791d2845",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-23p20-2.webp",
+      "sha256": "e46cae7b5922722a87add04d07751043f0988c6d896b763063a5d7706e2b74cd",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-24d09-1.webp",
+      "sha256": "f7224b19badb2c328b35f1d2a409ef2a4cf87e4084b8738ef89924e77cea2e7a",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-24d09-5.webp",
+      "sha256": "f85eafed11b338be36215546fb70cec33295b44110ddefff86ca87b2bfda7e52",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-24p20-6.webp",
+      "sha256": "67862cc226b7015440b3da33e601afd5de809d705deab4c2bde01a9da7085074",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-24p25-1.webp",
+      "sha256": "a2f26b9303b6a83dce804869562d887747e417f081c18769e424d64bc2e48f25",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-25a06-1.webp",
+      "sha256": "42f2e5a3f07b876dc867054b19a3c5c5bea9f6e603d707b7d7472cec74a1c976",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25a09-1.webp",
+      "sha256": "0169e22fe17b179f77fcb87eecd32751e7e18c8d9c0b6ffe7259623ebab06a50",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25a18-1.webp",
+      "sha256": "06e0d819fffee0958342d0db95d7e92a32793d9d25bf4c66333fe7f82dc766de",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-25a21-1.webp",
+      "sha256": "3e0b67f58b0b25a112afdbee1f9ddc356bc74c46e4135eaad34f7bef346a9a5a",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25a22-1.webp",
+      "sha256": "33e109fda98e1e0c18fe9f3ae7a48e34c08d6c9eb8221c31c5d8026c92192339",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p01-2.webp",
+      "sha256": "5a78d933755d8c46ac34c73ac0a2fd33e5dd05febe3618f0c71e457be7cd4789",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-25p01-2.webp"
+    },
+    {
+      "file": "footwear-25p01-3.webp",
+      "sha256": "1f9424a82aa98edda98fa847e18668aa1a1882ecf69f503e4479b9788d66ecda",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-25p01-3.webp"
+    },
+    {
+      "file": "footwear-25p01-5.webp",
+      "sha256": "05d601968ccdbadeffdfac001f52f34483f0a2ba1eb0036da1f7c0991c742cea",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p02-2.webp",
+      "sha256": "ab12c0f8e02e4585aa9fa711527e7735765d6b923a4cf40384a9a21f03fc5e02",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p06-2.webp",
+      "sha256": "575ef93ca68e9a58abb8dfa0a025a8c4f92d63217f2fd6eeec96b7801d4936f1",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p08-1.webp",
+      "sha256": "5a774efb9b00f2655a9881077655b8e202f6fb7ba6521e96b44097c3e55e50bf",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p08-5.webp",
+      "sha256": "94aa181e262435b416d36842a2579c2069226c3e9b9dd95817d9febb238be93a",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-25p08-5.webp"
+    },
+    {
+      "file": "footwear-25p10-2.webp",
+      "sha256": "5faf105d2c3a12c14e50b5ac9d4923f45ce98bf3b3d1ffc2cda15457addddb57",
+      "decision": "placeholder",
+      "reason": "Multi-colour/multi-view sheet or lifestyle composition unsuitable for a consistent product hero; retained for review."
+    },
+    {
+      "file": "footwear-25p10-3.webp",
+      "sha256": "53e2399256226161d9e2cfa2eaa0f53fab0cf462cc4540ea078b0c21defc5763",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-25p10-3.webp"
+    },
+    {
+      "file": "footwear-25p20-2.webp",
+      "sha256": "afe2fc64b7efc6528f237a656581d8f28a7f8c9ec48adc1c8644867c084e77a7",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-25p20-2.webp"
+    },
+    {
+      "file": "footwear-26p02-1.webp",
+      "sha256": "8f34aa625bcd8b0adf328b357475dde9d63250e20ce9a504da416781fea54d05",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-26p02-1.webp"
+    },
+    {
+      "file": "footwear-26p02-2.webp",
+      "sha256": "fb6fa3ec85ee467efd0e1689aff36dbb1a223a0d3765177f74dfe6cfc8784736",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-26p02-2.webp"
+    },
+    {
+      "file": "footwear-26p02-5.webp",
+      "sha256": "93886d0ba95cab046e244a0b847481aeda5d9ec836e41869584cf86677f2c84a",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-26p02-5.webp"
+    },
+    {
+      "file": "footwear-26p09-2.webp",
+      "sha256": "f977cf50e263e3325c2ab39cdae70d0f763b5f8ac519b0c688d214d07b586c21",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/footwear-26p09-2.webp"
+    },
+    {
+      "file": "footwear-9a57-9.webp",
+      "sha256": "fc501ea133ed0183edb9c2b9d8ecbc9b34b925906bc1d10ec63c3d643dc624b2",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "footwear-9p65s-2.webp",
+      "sha256": "9b5f5cff39b63eef9754a6dc329a0c1f0097526132628288ae4f546bdf4b1cb4",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "mdxy-1.webp",
+      "sha256": "09c94a9fa95f82822e824080261498778e2bbd98ba1eeedd28e01389b6851a1b",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "mdxy-2.webp",
+      "sha256": "946221e4794dac1d890108381bc6f26cdda9d763c665a4f1a28af9e737e5c85a",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "mdxy-3.webp",
+      "sha256": "b14eb92fa32d2bb27cb2617a4470e19553284486de69c01bfe24364ecabff885",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "mdxy-4.webp",
+      "sha256": "7583b1a4a6977ebc9827cabf642cd5ad0d1f528d8784e26de2e65789172cbaf4",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/mdxy-4.webp"
+    },
+    {
+      "file": "mdxy-5.webp",
+      "sha256": "dd97cfed5139722147c5b74c040715f2325903a8e3d14da5881a7dce41e159a0",
+      "decision": "approved_crop",
+      "reason": "Visually inspected lossless hero crop removes external promotional copy or repeated montage views; whole shown product and packaging labels retained. No recolouring, resampling or generated detail.",
+      "publicImage": "/products/muji-reviewed/mdxy-5.webp"
+    },
+    {
+      "file": "mdxy-6.webp",
+      "sha256": "d55304410f7b3b618666ee99911154f4da8c2c4570ca426f9350ab8f66f58126",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "mdxy-7.webp",
+      "sha256": "a9e2766bed1a3e01a73f40fb6e44ff499435b44380996485dcaad5d60f1b2c80",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "mdxy-8.webp",
+      "sha256": "fccf0ba369399477a0cb620fceb205a1850996714763bbd33823e433fac64941",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "mdxy-9.webp",
+      "sha256": "ce1cbf33ec403443c83b228c5aa5b3bd0116e92992283441f4fafa6838229b27",
+      "decision": "placeholder",
+      "reason": "Promotional claims or cluttered composition; clean replacement needed."
+    },
+    {
+      "file": "sup-001.webp",
+      "sha256": "d372d7c00de016a18960d7a079dbb88b9d7539a948e5aa3c612d14ffbaa05b64",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    },
+    {
+      "file": "sup-002.webp",
+      "sha256": "9fa709a84bdfb660f144008f62ccc79d61ef59ffd52b83006f55923cc133655a",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    },
+    {
+      "file": "sup-006.webp",
+      "sha256": "84e6289acc7b0441fd71f37f5402fa41aa3a17a219557af9d46bcc6173d5ff7d",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    },
+    {
+      "file": "sup-007.webp",
+      "sha256": "ec5c184752270c3ebab9ef6eeeb8fbfe6b1567104bcd025964b603cb385370e7",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    },
+    {
+      "file": "sup-010.webp",
+      "sha256": "319f5d677076b484d52167eb7ca5c33780c89a6ced270d51d34b7d54c0b2162f",
+      "decision": "approved",
+      "reason": "Clean product composition; accurate original colours and packaging retained."
+    },
+    {
+      "file": "sup-011.webp",
+      "sha256": "8b4a01e65ec8e5b86afe7260b5267807f78226aff1264e27f68667b63e9b2c51",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    },
+    {
+      "file": "sup-013.webp",
+      "sha256": "0b5080c20903017cffa15d1e945e03267c3b925a01fbd5b35e1edb8eb5352089",
+      "decision": "placeholder",
+      "reason": "Insufficient product scale or cluttered supplier composition; clean replacement needed."
+    }
+  ],
+  "approvedOriginal": 9,
+  "approvedCrop": 17
+}

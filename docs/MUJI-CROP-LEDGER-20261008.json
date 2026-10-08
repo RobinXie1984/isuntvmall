@@ -1,0 +1,291 @@
+[
+  {
+    "source": "/products/supplier-demo/cer-f001.webp",
+    "sourceSha256": "e7e5b2d78e6d088343420cf74b84915285651d159f393b95f9ae42b4e359665a",
+    "crop": {
+      "left": 330,
+      "top": 460,
+      "width": 980,
+      "height": 640
+    },
+    "output": "/products/muji-reviewed/cer-f001.webp",
+    "outputSha256": "c8e6a374cb5432763feafddae818dbb6f66d68f2420508558f89c54fd88f787c",
+    "square": 1167,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-20p18-1.webp",
+    "sourceSha256": "376a321f11de54db8a7deb40edb9eadeefd6d27f018bed9aac7f360aa4394ac6",
+    "crop": {
+      "left": 460,
+      "top": 350,
+      "width": 675,
+      "height": 480
+    },
+    "output": "/products/muji-reviewed/footwear-20p18-1.webp",
+    "outputSha256": "6ab12e957cfa1173258269473afbfe7cfa352c0aa878e75ecf83d6732df40fdd",
+    "square": 804,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-22d58a-2.webp",
+    "sourceSha256": "68178f53d3805ab8f3d50fdb6cb109cbe878597d30962628f04412479cba70c9",
+    "crop": {
+      "left": 490,
+      "top": 340,
+      "width": 610,
+      "height": 410
+    },
+    "output": "/products/muji-reviewed/footwear-22d58a-2.webp",
+    "outputSha256": "845c56cb86583cdd629d426c875b28509915a1e02adfeb0b807be280831fef2e",
+    "square": 727,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-25p01-3.webp",
+    "sourceSha256": "1f9424a82aa98edda98fa847e18668aa1a1882ecf69f503e4479b9788d66ecda",
+    "crop": {
+      "left": 455,
+      "top": 285,
+      "width": 690,
+      "height": 430
+    },
+    "output": "/products/muji-reviewed/footwear-25p01-3.webp",
+    "outputSha256": "03bd3234fe37a4e5ff4dc41fa9e8a20ae67ce215fb3b0abdcf6eb21205286299",
+    "square": 822,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-25p08-5.webp",
+    "sourceSha256": "94aa181e262435b416d36842a2579c2069226c3e9b9dd95817d9febb238be93a",
+    "crop": {
+      "left": 600,
+      "top": 380,
+      "width": 400,
+      "height": 330
+    },
+    "output": "/products/muji-reviewed/footwear-25p08-5.webp",
+    "outputSha256": "eed90f3b5c4e63e01b00046c099940812ac84e6532d5b10358b14a8cc70b2999",
+    "square": 477,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-21a28-5.webp",
+    "sourceSha256": "e3168eae7cd06fe0cbc99b1bbd9890b2bc2da0ea98fc6f223c8308d9eb89205f",
+    "crop": {
+      "left": 530,
+      "top": 260,
+      "width": 530,
+      "height": 500
+    },
+    "output": "/products/muji-reviewed/footwear-21a28-5.webp",
+    "outputSha256": "3875145b8ca58cd751095007913b892bc1738641b09eef930522123443dd172f",
+    "square": 631,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-21d30-1.webp",
+    "sourceSha256": "1f3e8dc17656cd9526176212e9f0ff48b0f6e887afd03b3f9709670864fe2233",
+    "crop": {
+      "left": 480,
+      "top": 315,
+      "width": 670,
+      "height": 450
+    },
+    "output": "/products/muji-reviewed/footwear-21d30-1.webp",
+    "outputSha256": "3b2fd1ef2f986efa359c26f2ac30e0d8c76d596cf5861aa08bcd16b0499089d4",
+    "square": 798,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-22d58a-3.webp",
+    "sourceSha256": "39b880933a83077822f90f970dbb408fc56f888fab86dfffb62c649ab0aba3dc",
+    "crop": {
+      "left": 440,
+      "top": 290,
+      "width": 690,
+      "height": 490
+    },
+    "output": "/products/muji-reviewed/footwear-22d58a-3.webp",
+    "outputSha256": "46a55044d90727414a3b2c8d7ed0cf48f033bd1f8bd267877df680520e8dcb26",
+    "square": 822,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-25p01-2.webp",
+    "sourceSha256": "5a78d933755d8c46ac34c73ac0a2fd33e5dd05febe3618f0c71e457be7cd4789",
+    "crop": {
+      "left": 480,
+      "top": 305,
+      "width": 650,
+      "height": 450
+    },
+    "output": "/products/muji-reviewed/footwear-25p01-2.webp",
+    "outputSha256": "d9d2d34cba922b014748e8a161759f6745383a28a56be97eb1d8941a591845dd",
+    "square": 774,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-25p10-3.webp",
+    "sourceSha256": "53e2399256226161d9e2cfa2eaa0f53fab0cf462cc4540ea078b0c21defc5763",
+    "crop": {
+      "left": 580,
+      "top": 430,
+      "width": 430,
+      "height": 310
+    },
+    "output": "/products/muji-reviewed/footwear-25p10-3.webp",
+    "outputSha256": "c31b471218729f6a59cf83ee1836c33254a2723c39c946dd5a83d685c8458114",
+    "square": 512,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-25p20-2.webp",
+    "sourceSha256": "afe2fc64b7efc6528f237a656581d8f28a7f8c9ec48adc1c8644867c084e77a7",
+    "crop": {
+      "left": 590,
+      "top": 405,
+      "width": 420,
+      "height": 335
+    },
+    "output": "/products/muji-reviewed/footwear-25p20-2.webp",
+    "outputSha256": "1136d12e55be9abdaaec1930681267f0f5df7e4cf1ee6e6e8a3da0d23a47c0b0",
+    "square": 500,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-26p02-1.webp",
+    "sourceSha256": "8f34aa625bcd8b0adf328b357475dde9d63250e20ce9a504da416781fea54d05",
+    "crop": {
+      "left": 585,
+      "top": 390,
+      "width": 430,
+      "height": 320
+    },
+    "output": "/products/muji-reviewed/footwear-26p02-1.webp",
+    "outputSha256": "b35d72124df8cf17ddd0e58af3d5c0f60e4a08053a236dcfddca98610d2eb034",
+    "square": 512,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-26p02-2.webp",
+    "sourceSha256": "fb6fa3ec85ee467efd0e1689aff36dbb1a223a0d3765177f74dfe6cfc8784736",
+    "crop": {
+      "left": 595,
+      "top": 430,
+      "width": 420,
+      "height": 280
+    },
+    "output": "/products/muji-reviewed/footwear-26p02-2.webp",
+    "outputSha256": "ebe15e4fb494f0d3b852fe202fe8c88ae06e7df6c013c1e1d516a118fdfdddda",
+    "square": 500,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-26p02-5.webp",
+    "sourceSha256": "93886d0ba95cab046e244a0b847481aeda5d9ec836e41869584cf86677f2c84a",
+    "crop": {
+      "left": 610,
+      "top": 420,
+      "width": 410,
+      "height": 285
+    },
+    "output": "/products/muji-reviewed/footwear-26p02-5.webp",
+    "outputSha256": "b6bac6f8c5bdf199f919e0bb17c697ad3df09846facfa3d21df172bead9d0402",
+    "square": 489,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/footwear-26p09-2.webp",
+    "sourceSha256": "f977cf50e263e3325c2ab39cdae70d0f763b5f8ac519b0c688d214d07b586c21",
+    "crop": {
+      "left": 610,
+      "top": 420,
+      "width": 410,
+      "height": 280
+    },
+    "output": "/products/muji-reviewed/footwear-26p09-2.webp",
+    "outputSha256": "ef3a0fe83ff7b03be223f4c8ff8c4577d3cf6ec8e66efcf8bc9e12b1254b6d14",
+    "square": 489,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/mdxy-4.webp",
+    "sourceSha256": "7583b1a4a6977ebc9827cabf642cd5ad0d1f528d8784e26de2e65789172cbaf4",
+    "crop": {
+      "left": 510,
+      "top": 555,
+      "width": 610,
+      "height": 510
+    },
+    "output": "/products/muji-reviewed/mdxy-4.webp",
+    "outputSha256": "4a92c2a8a902ddfd84c7ee4ea554015eab999f44b2cc95ef21f60954a97d14e9",
+    "square": 727,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  },
+  {
+    "source": "/products/supplier-demo/mdxy-5.webp",
+    "sourceSha256": "dd97cfed5139722147c5b74c040715f2325903a8e3d14da5881a7dce41e159a0",
+    "crop": {
+      "left": 460,
+      "top": 555,
+      "width": 675,
+      "height": 590
+    },
+    "output": "/products/muji-reviewed/mdxy-5.webp",
+    "outputSha256": "0d2b423da22a9749f62248970687bbe47db5b435ab475f002a16ddb5575e0aaf",
+    "square": 804,
+    "encoding": "lossless WebP",
+    "resampling": false,
+    "visualDecision": "approved",
+    "decodedProductPixelsEqual": true
+  }
+]

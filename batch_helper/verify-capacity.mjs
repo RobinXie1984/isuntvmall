@@ -56,7 +56,7 @@ await scenario(async()=>{
  await configure({max_actor_retained_bytes:25165824+1000,max_store_retained_bytes:25165824+1000});await reserve();const usage=Number((await capacity()).actorRetainedBytes);await reserve();
  check('exact derivative retry does not double-charge',usage===25165824+100&&Number((await capacity()).actorRetainedBytes)===usage);
  check('changed derivative reservation cannot reuse path',await fail(()=>reserve(101),'OBJECT_RESERVATION_CHANGED'));
- await complete();await q("select batch_review($1,$2,1,'approve','')",[admin,i.id]);i=await one('select * from batch_claim(1)');
+ await complete();await q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[admin,i.id]);i=await one('select * from batch_claim(1)');
  const pub=`batch/${i.id}/r1-${hash}.webp`;await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[i.id,i.lease_token,'product-images',pub,hash]);
  await q('select batch_publish($1,1,$2,$3,$4,$5)',[i.id,i.lease_token,`https://example.supabase.co/storage/v1/object/public/product-images/${pub}`,pub,hash]);
  const after=await capacity();check('publication frees outstanding count but retains all original and derived bytes',Number(after.actorOutstanding)===0&&Number(after.actorRetainedBytes)===25165824+200);

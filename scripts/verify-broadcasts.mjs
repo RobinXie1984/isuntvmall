@@ -1,0 +1,34 @@
+import { PGlite } from '@electric-sql/pglite';
+import { readFileSync, readdirSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import assert from 'node:assert/strict';
+const db=new PGlite();let passed=0;
+const q=(s,a=[])=>db.query(s,a);const one=async(s,a=[])=>(await q(s,a)).rows[0];
+const check=(name,value)=>{assert.ok(value,name);console.log(`PASS ${++passed}: ${name}`);};
+const fails=async(fn,code)=>{try{await fn();return false;}catch(error){return String(error).includes(code);}};
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+for(const file of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${file}`,'utf8'));
+check('all migrations execute together',true);
+const users={};for(const role of ['super_admin','admin','operator','catalog_editor','order_operator','analyst']){users[role]=randomUUID();await q('insert into auth.users(id)values($1)',[users[role]]);await q('insert into staff_members(user_id,role)values($1,$2)',[users[role],role]);}
+const payload={kind:'broadcast',title:'Test',titleZh:'測試',titleHans:'测试',titleJa:'テスト',url:'https://youtu.be/7CL0PxKA5iE',thumbnailUrl:'',position:0,visible:true,status:'recorded',productIds:[]};
+const save=async(actor,id,revision,p=payload)=>one('select * from storefront_broadcast_save($1,$2,$3,$4::jsonb)',[actor,id,revision,JSON.stringify(p)]);
+for(const role of ['catalog_editor','order_operator','analyst']) check(`${role} cannot publish editorial content`,await fails(()=>save(users[role],randomUUID(),0),'STAFF_FORBIDDEN'));
+for(const role of ['super_admin','admin','operator'])check(`${role} can save a zero-product broadcast`,(await save(users[role],randomUUID(),0)).revision===1);
+const id=randomUUID(), first=await save(users.admin,id,0);
+check('first revision starts at one',first.revision===1);
+const shared=randomUUID();const update={...payload,title:'Updated title',productIds:[shared],position:12};
+const changed=await save(users.admin,id,1,update);
+check('title, ordering and product links update atomically',changed.revision===2&&changed.payload.title===update.title&&changed.payload.position===12&&changed.payload.productIds[0]===shared);
+check('same product can appear in another broadcast',(await save(users.operator,randomUUID(),0,update)).payload.productIds[0]===shared);
+check('stale editor cannot overwrite newer record',await fails(()=>save(users.admin,id,1),'STALE_BROADCAST'));
+await save(users.admin,id,2,{...update,visible:false});
+check('hide retains record and increments revision',(await one('select revision,payload from storefront_broadcasts where id=$1',[id])).payload.visible===false);
+check('all changes retain before/after and actor audit',(await one('select count(*)::int n from storefront_broadcast_audit where broadcast_id=$1 and actor_id=$2',[id,users.admin])).n===3);
+const intro=randomUUID();await save(users.super_admin,intro,0,{...payload,kind:'introduction'});
+check('only one introduction record allowed',await fails(()=>save(users.super_admin,randomUUID(),0,{...payload,kind:'introduction'}),'unique'));
+for(const patch of [{url:'javascript:alert(1)'},{title:''},{productIds:['invalid']},{visible:'true'},{position:-1}])check('invalid content rejected at database',await fails(()=>save(users.admin,randomUUID(),0,{...payload,...patch}),'INVALID_BROADCAST'));
+await q('update staff_members set active=false where user_id=$1',[users.admin]);
+check('revoked membership denied immediately',await fails(()=>save(users.admin,id,3),'STAFF_FORBIDDEN'));
+await db.exec('set role service_role');check('server role can execute bounded write',(await save(users.super_admin,randomUUID(),0)).revision===1);await db.exec('reset role');
+for(const role of ['anon','authenticated']){await db.exec(`set role ${role}`);check(`${role} cannot read hidden records`,await fails(()=>q('select * from storefront_broadcasts'),'permission denied'));check(`${role} cannot read audit`,await fails(()=>q('select * from storefront_broadcast_audit'),'permission denied'));check(`${role} cannot forge an actor in RPC`,await fails(()=>save(users.super_admin,randomUUID(),0),'permission denied'));await db.exec('reset role');}
+await db.close();console.log(JSON.stringify({passed}));

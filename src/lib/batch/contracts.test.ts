@@ -15,7 +15,7 @@ describe("batch intake boundaries", () => {
     for (const input of [{ ...body, items: [item, item] }, { ...body, items: [{ ...item, filename: "../cup.jpg" }] }, { ...body, styleId: "other" }, { ...body, role: "super_admin" }, { ...body, items: [{ ...item, byte_size: 25 * 1024 * 1024 }] }]) expect(createBatchSchema.safeParse(input).success).toBe(false);
   });
   it("requires a revision and rejects client approval/hash injection", () => {
-    expect(batchActionSchema.safeParse({ action: "approve", revision: 1 }).success).toBe(true);
+    expect(batchActionSchema.safeParse({ action: "approve", revision: 1, visualReview: { version: "muji-v1", calmBackground: true, cleanComposition: true, faithfulAppearance: true, noPromotionalText: true } }).success).toBe(true);
     for (const input of [{ action: "approve" }, { action: "approve", revision: 0 }, { action: "approve", revision: 1, approvedBy: id }, { action: "upload", revision: 1, path: "other-user/file.jpg" }]) expect(batchActionSchema.safeParse(input).success).toBe(false);
   });
   it("defaults to real merchandise and preserves only explicit boolean demo flags through intake and edits", () => {
