@@ -59,37 +59,37 @@
     }
   },
   "hero": {
-    "image": "/editorial/holiday/lotus-mooncake-box.jpg",
+    "image": "/editorial/everyday.jpg",
     "alt": {
-      "en": "Lotus mooncake gift box for a moonlit reunion",
-      "zh-Hant": "月下團圓的蓮蓉月餅禮盒",
-      "zh-Hans": "月下团圆的莲蓉月饼礼盒",
-      "ja": "月夜の集まりに、蓮の実あんの月餅ギフト"
+      "en": "Considered everyday essentials",
+      "zh-Hant": "用心挑選的日常好物",
+      "zh-Hans": "用心挑选的日常好物",
+      "ja": "丁寧に選んだ日々の品"
     },
     "eyebrow": {
-      "en": "MID-AUTUMN · 25 SEPTEMBER 2026",
-      "zh-Hant": "中秋 · 2026 年 9 月 25 日",
-      "zh-Hans": "中秋 · 2026 年 9 月 25 日",
-      "ja": "中秋節 · 2026年9月25日"
+      "en": "CONSIDERED EVERYDAY",
+      "zh-Hant": "用心過日常",
+      "zh-Hans": "用心过日常",
+      "ja": "日々を、丁寧に"
     },
     "title": {
-      "en": "A little sweetness.\nA little togetherness.",
-      "zh-Hant": "一點甜，\n一份團圓。",
-      "zh-Hans": "一点甜，\n一份团圆。",
-      "ja": "少しの甘さ。\n一緒に過ごすひととき。"
+      "en": "Good things.\nEvery day.",
+      "zh-Hant": "好物相伴，\n用心每一天。",
+      "zh-Hans": "好物相伴，\n用心每一天。",
+      "ja": "心地よい品を。\n毎日のそばに。"
     },
     "body": {
-      "en": "Mooncakes to share, tea to pour and little rituals for an evening beneath the same moon.",
-      "zh-Hant": "分享月餅、斟一杯茶，在同一輪月光下，留一晚給彼此。",
-      "zh-Hans": "分享月饼、斟一杯茶，在同一轮月光下，留一晚给彼此。",
-      "ja": "月餅を分け、お茶を注ぐ。同じ月の下で、穏やかな夜を一緒に。"
+      "en": "Thoughtful everyday finds, independent hosts, and a simpler way to shop.",
+      "zh-Hant": "用心挑選日常好物，與主播一起探索生活。",
+      "zh-Hans": "用心挑选日常好物，与主播一起探索生活。",
+      "ja": "日々の品との出会い、個性豊かな配信者、シンプルなお買い物。"
     },
-    "href": "/shop?collection=mid-autumn",
+    "href": "/shop",
     "cta": {
-      "en": "Explore moonlit reunion",
-      "zh-Hant": "探索月下團圓",
-      "zh-Hans": "探索月下团圆",
-      "ja": "月夜の集いを見る"
+      "en": "Explore the collection",
+      "zh-Hant": "探索選物",
+      "zh-Hans": "探索选物",
+      "ja": "コレクションを見る"
     }
   },
   "demoSet": "isun",

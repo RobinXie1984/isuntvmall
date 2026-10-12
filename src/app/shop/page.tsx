@@ -8,6 +8,8 @@ import { getProducts } from "@/lib/data/store";
 import { getLocale } from "@/lib/locale-server";
 import { getHolidayCollection, holidayCollectionImage, productsForHoliday } from "@/lib/data/holiday-collections";
 
+import { rankSeasonalProducts } from "@/lib/data/seasonal-order";
+
 export const dynamic = "force-dynamic";
 type Query = { category?: string; q?: string; sort?: string; collection?: string; page?: string };
 type Props = { searchParams: Promise<Query> };
@@ -27,7 +29,8 @@ export default async function ShopPage({ searchParams }: Props) {
   if (collectionId && !collection && !supplierCollection) notFound();
   const selection = supplierCollection ? products.filter(product => supplierDemoProducts.some(sample => sample.id === product.id)) : collection ? productsForHoliday(products, collection.id) : products;
   const categories = [...new Set(selection.map(p => p.category))];
-  const visible = selection.filter(p => (!category || p.category === category) && (!q || [p.title, p.titleZh ?? "", p.description, p.descriptionZh ?? "", p.sku, productTitle(p, locale, localize), productDescription(p, locale, localize)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b) => sort === "price-asc" ? a.priceAmount-b.priceAmount : sort === "price-desc" ? b.priceAmount-a.priceAmount : Number(b.featured)-Number(a.featured));
+  const ordered = holidayCollectionsEnabled() ? rankSeasonalProducts(selection) : [...selection].sort((a,b) => Number(b.featured)-Number(a.featured));
+  const visible = ordered.filter(p => (!category || p.category === category) && (!q || [p.title, p.titleZh ?? "", p.description, p.descriptionZh ?? "", p.sku, productTitle(p, locale, localize), productDescription(p, locale, localize)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b) => sort === "price-asc" ? a.priceAmount-b.priceAmount : sort === "price-desc" ? b.priceAmount-a.priceAmount : 0);
   const totalPages = Math.max(1, Math.ceil(visible.length / 48));
   const requestedPage = Number(params.page);
   const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? Math.min(requestedPage, totalPages) : 1;

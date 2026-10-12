@@ -13,8 +13,8 @@ export const holidayCollections: HolidayCollection[] = [
       "月餅、茶香與小小儀式，在秋月下分享一桌團圓。"
     ],
     "occasion": [
-      "25 September 2026",
-      "2026 年 9 月 25 日"
+      "Mid-Autumn Festival",
+      "中秋節"
     ]
   },
   {
