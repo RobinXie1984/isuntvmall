@@ -61,10 +61,10 @@ describe("automatic ordering without catalogue mutation", () => {
     expect(homepageSelection(products,at("2026-10-12")).some(p=>productSeason(p)==="mid-autumn")).toBe(false);
   });
   it("leads with evergreen products when no holiday is relevant", () => {
-    expect(activeShoppingOccasions(at("2027-08-14"))).toEqual([]);
-    expect(productSeason(rankSeasonalProducts(products,at("2027-08-14"))[0])).toBeUndefined();
-    expect(homepageSelection(products,at("2027-08-14")).every(p=>!productSeason(p))).toBe(true);
-    expect(featuredShoppingOccasion(products,at("2027-08-14"))).toBeUndefined();
+    expect(activeShoppingOccasions(at("2027-03-04"))).toEqual([]);
+    expect(productSeason(rankSeasonalProducts(products,at("2027-03-04"))[0])).toBeUndefined();
+    expect(homepageSelection(products,at("2027-03-04")).every(p=>!productSeason(p))).toBe(true);
+    expect(featuredShoppingOccasion(products,at("2027-03-04"))).toBeUndefined();
   });
   it("does not classify a real merchant product by a demo slug or promote an unavailable collection", () => {
     const real = {...holidayProducts[0],isDemo:false};
@@ -85,3 +85,61 @@ describe("automatic ordering without catalogue mutation", () => {
     expect(active(at("2028-10-04"),"mid-autumn")).toBe(false);
   });
 });
+
+
+describe("Taiwan shopping occasions", () => {
+  const tw = (year: number, name: string) => event(year, `tw-${name}`);
+  const taiwanActive = (iso: string, name: string) => activeShoppingOccasions(new Date(iso)).some(e => e.id === `tw-${name}-${iso.slice(0,4)}`);
+  it.each([
+    [2026, "2026-02-17", "2026-06-19", "2026-09-25", "2026-08-19"],
+    [2027, "2027-02-06", "2027-06-09", "2027-09-15", "2027-08-08"],
+    [2028, "2028-01-26", "2028-05-28", "2028-10-03", "2028-08-26"],
+  ])("computes ordinary lunar festival dates for %i", (year, newYear, dragon, moon, qixi) => {
+    expect(tw(year as number, "lunar-new-year").date).toBe(newYear);
+    expect(tw(year as number, "dragon-boat").date).toBe(dragon);
+    expect(tw(year as number, "mid-autumn").date).toBe(moon);
+    expect(tw(year as number, "qixi").date).toBe(qixi);
+  });
+  it("uses Taiwan's local dates rather than the U.S./Japan Father's and Children's Days", () => {
+    for (const year of [2026,2027,2028,2033,2040]) {
+      expect(tw(year,"fathers-day").date).toBe(`${year}-08-08`);
+      expect(tw(year,"children").date).toBe(`${year}-04-04`);
+      expect(tw(year,"teachers").date).toBe(`${year}-09-28`);
+      expect(tw(year,"national-day").date).toBe(`${year}-10-10`);
+      expect(tw(year,"retrocession").date).toBe(`${year}-10-25`);
+      expect(tw(year,"fathers-day").date).not.toBe(event(year,"us-fathers-day").date);
+      expect(tw(year,"grandparents").date).toBe(nthAugustSunday[year]);
+    }
+  });
+  it("applies the exact Taipei lead/start and expiry boundaries", () => {
+    expect(taiwanActive("2027-03-20T15:59:59Z","children")).toBe(false);
+    expect(taiwanActive("2027-03-20T16:00:00Z","children")).toBe(true);
+    expect(taiwanActive("2027-04-04T15:59:59Z","children")).toBe(true);
+    expect(taiwanActive("2027-04-04T16:00:00Z","children")).toBe(false);
+    expect(taiwanActive("2027-09-15T15:59:59Z","mid-autumn")).toBe(true);
+    expect(taiwanActive("2027-09-15T16:00:00Z","mid-autumn")).toBe(false);
+  });
+  it("rotates Taiwan products automatically and retains every product afterward", () => {
+    for (const [day, collection] of [["2027-04-04","children-play"],["2027-08-08","family-gratitude"],["2027-10-10","national-gatherings"]]) {
+      expect(featuredShoppingOccasion(products,at(day))?.collection).toBe(collection);
+      expect(productSeason(homepageSelection(products,at(day))[0])).toBe(collection);
+      expect(productSeason(rankSeasonalProducts(products,at(day))[0])).toBe(collection);
+      expect(rankSeasonalProducts(products,at(day)).map(p=>p.id).sort()).toEqual(products.map(p=>p.id).sort());
+    }
+    const before = rankSeasonalProducts(products,at("2027-04-04"));
+    const after = rankSeasonalProducts(products,at("2027-04-05"));
+    expect(after.findIndex(p=>productSeason(p)==="children-play")).toBeGreaterThan(after.findIndex(p=>!productSeason(p)));
+    expect(after.map(p=>p.id).sort()).toEqual(before.map(p=>p.id).sort());
+  });
+  it("deduplicates shared collections even when Qixi and Father's Day coincide", () => {
+    const events=activeShoppingOccasions(at("2027-08-08"));
+    expect(events.some(e=>e.id==="tw-qixi-2027")).toBe(true);
+    expect(events.some(e=>e.id==="tw-fathers-day-2027")).toBe(true);
+    const selected=homepageSelection(products,at("2027-08-08"));
+    expect(new Set(selected.map(p=>p.id)).size).toBe(selected.length);
+    expect(selected.filter(p=>productSeason(p))).toHaveLength(4);
+    expect(activeShoppingOccasions(at("2026-12-29")).some(e=>e.id==="tw-new-year-2027")).toBe(true);
+  });
+});
+// Independent fourth-Sunday fixtures, including leap and future years.
+const nthAugustSunday: Record<number,string> = {2026:"2026-08-23",2027:"2027-08-22",2028:"2028-08-27",2033:"2033-08-28",2040:"2040-08-26"};

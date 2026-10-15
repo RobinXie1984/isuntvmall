@@ -3,9 +3,9 @@ import { Seasons } from "astronomy-engine";
 import type { Product } from "@/types/commerce";
 import { collectionForProduct } from "./holiday-collections";
 
-type Region = "hk" | "us" | "jp";
+type Region = "hk" | "us" | "jp" | "tw";
 export type ShoppingOccasion = { id: string; region: Region; collection: string; date: string; endDate: string; leadDays: number };
-const zones = { hk: "Asia/Hong_Kong", us: "America/New_York", jp: "Asia/Tokyo" };
+const zones = { hk: "Asia/Hong_Kong", us: "America/New_York", jp: "Asia/Tokyo", tw: "Asia/Taipei" };
 const dayMs = 86_400_000;
 const calendarCache = new Map<number, readonly ShoppingOccasion[]>();
 function dateKey(date: Date, region: Region) {
@@ -33,11 +33,11 @@ export function shoppingOccasions(year: number): readonly ShoppingOccasion[] {
   const events: ShoppingOccasion[] = [];
   const fixed = (month: number, day: number) => new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10);
   const add = (id: string, region: Region, collection: string, date: string, leadDays = 14, endDate = date) => events.push({ id: `${region}-${id}-${year}`, region, collection, date, endDate, leadDays });
-  for (const region of ["hk", "us", "jp"] as const) {
+  for (const region of ["hk", "us", "jp", "tw"] as const) {
     add("new-year", region, "new-year", fixed(1, 1), 14);
     add("valentine", region, "family-gratitude", fixed(2, 14));
     add("mothers-day", region, "family-gratitude", nthWeekday(year, 5, 0, 2));
-    add("fathers-day", region, "family-gratitude", nthWeekday(year, 6, 0, 3));
+    add("fathers-day", region, "family-gratitude", region === "tw" ? fixed(8, 8) : nthWeekday(year, 6, 0, 3));
     add("halloween", region, "halloween", fixed(10, 31), 21);
     add("christmas", region, "winter-gifting", fixed(12, 25), 28, fixed(12, region === "hk" ? 26 : 25));
   }
@@ -48,6 +48,20 @@ export function shoppingOccasions(year: number): readonly ShoppingOccasion[] {
   add("lantern", "hk", "lantern-wishes", lunarDay("1/15"));
   add("dragon-boat", "hk", "dragon-boat", lunarDay("5/5"), 21);
   add("mid-autumn", "hk", "mid-autumn", lunarDay("8/15"), 28);
+  // Taiwan uses the same ordinary lunar dates, but its own civil timezone and
+  // local appreciation days. Substitute workdays do not extend campaigns.
+  add("lunar-new-year", "tw", "lunar-new-year", lunarDay("1/1"), 28, shift(lunarDay("1/1"), 2));
+  add("lantern", "tw", "lantern-wishes", lunarDay("1/15"));
+  add("dragon-boat", "tw", "dragon-boat", lunarDay("5/5"), 21);
+  add("mid-autumn", "tw", "mid-autumn", lunarDay("8/15"), 28);
+  add("qixi", "tw", "family-gratitude", lunarDay("7/7"));
+  add("double-ninth", "tw", "family-gratitude", lunarDay("9/9"), 7);
+  add("children", "tw", "children-play", fixed(4, 4));
+  add("labour", "tw", "family-gratitude", fixed(5, 1), 7);
+  add("grandparents", "tw", "family-gratitude", nthWeekday(year, 8, 0, 4), 7);
+  add("teachers", "tw", "family-gratitude", fixed(9, 28), 7);
+  add("national-day", "tw", "national-gatherings", fixed(10, 10), 7);
+  add("retrocession", "tw", "national-gatherings", fixed(10, 25), 7);
   add("easter", "hk", "easter", shift(easter(year), -2), 21, shift(easter(year), 1));
   add("easter", "us", "easter", easter(year), 21);
   add("labour", "hk", "family-gratitude", fixed(5, 1), 7);
@@ -75,6 +89,7 @@ export function shoppingOccasions(year: number): readonly ShoppingOccasion[] {
   add("vernal-equinox", "jp", "spring-picnic", dateKey(seasons.mar_equinox.date, "jp"));
   add("autumn-equinox", "jp", "autumn-craft", dateKey(seasons.sep_equinox.date, "jp"), 7);
   add("winter-solstice", "hk", "winter-solstice", dateKey(seasons.dec_solstice.date, "hk"));
+  add("winter-solstice", "tw", "winter-solstice", dateKey(seasons.dec_solstice.date, "tw"));
   const result = Object.freeze(events.map(event => Object.freeze(event)));
   // Only immutable year calculations are cached, never today's active selection.
   if (calendarCache.size >= 4) calendarCache.delete(calendarCache.keys().next().value!);

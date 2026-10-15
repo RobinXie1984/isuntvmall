@@ -4,7 +4,7 @@ Released 12 October 2026. Homepage editorial, homepage product selection and def
 
 ## Behaviour
 
-`src/lib/data/seasonal-order.ts` calculates occasions for the current and following year. Hong Kong uses Asia/Hong_Kong, Japan Asia/Tokyo, and the U.S. America/New_York. A campaign begins 7, 14, 21 or 28 calendar days before its occasion, according to the leadDays beside each rule. It stops at midnight after its last local calendar day. Mid-Autumn ends on the festival itself, not the following Hong Kong public holiday. Christmas runs through Boxing Day in Hong Kong. New Year look-ahead crosses the December boundary.
+`src/lib/data/seasonal-order.ts` calculates occasions for the current and following year. Hong Kong uses Asia/Hong_Kong, Taiwan Asia/Taipei, Japan Asia/Tokyo, and the U.S. America/New_York. A campaign begins 7, 14, 21 or 28 calendar days before its occasion, according to the leadDays beside each rule. It stops at midnight after its last local calendar day. Mid-Autumn ends on the festival itself, not the following Hong Kong public holiday. Christmas runs through Boxing Day in Hong Kong. New Year look-ahead crosses the December boundary.
 
 The nearest active occasion leads; overlapping occasions follow in date order. Multiple regions sharing a collection do not multiply its priority. Evergreen products follow, then out-of-season products. Existing featured flags and source order break ties. Explicit price sorting still takes precedence. Filtering and pagination operate on the full retained catalogue.
 
@@ -30,3 +30,14 @@ This is a shopping calendar, not an authoritative statutory holiday or substitut
 Run `npm ci`, `npm run test:run`, `npm run typecheck`, `npm run lint`, `npm run build:vinext` in the isolated Studio candidate. Date tests cover independently sourced 2026–2028 dates, leap lunar months, Hong Kong/Japan/U.S. midnight boundaries, December rollover, evergreen gaps, input/membership preservation, real/demo isolation, duplicate prevention and future requests in one process. The task evidence also includes an isolated Cloudflare workerd probe using the actual module, plus public four-language HTTP and desktop/mobile checks.
 
 Rollback the Worker to `cd05ce87-cc99-4072-b54b-f4d0c194814d` if a release regression appears. Restore only this release's changed source files from its preserved baseline or revert its Git commit; no database rollback is needed. Do not overwrite unrelated changes. Studio evidence is archived under `12_ventures/isuntvmall/evidence/holiday-rotation-20261012`.
+
+
+## Taiwan extension — 15 October 2026
+
+Taiwan now participates in the same annual request-time rotation, using the existing collections and dependencies. Included: New Year, Lunar New Year through the third lunar day, Lantern Festival, Valentine's Day, Children's Day (4 April), Labour Day, Mother's Day (second Sunday in May), Dragon Boat, Father's Day (8 August), Qixi (ordinary lunar 7/7), Grandparents' Day (fourth Sunday in August), Mid-Autumn, Teachers' Day (28 September), Double Ninth (ordinary lunar 9/9), National Day (10 October), Retrocession Day (25 October), Halloween, Christmas and winter solstice. The December 25 shopping selection is winter gifting; it is not a separate Constitution Day campaign.
+
+The same policy excludes solemn remembrance occasions (Peace Memorial Day, Qingming and Ghost Festival) from automatic commercial promotion. Their existing collection products remain available. This shopping calendar does not try to calculate government substitute holidays or business closure days. Actual festival days drive campaign expiry, so shared Hong Kong/Taiwan festivals never keep mooncakes leading after the festival.
+
+Taiwan dates/rules checked against the [official DGPA 2027 calendar and recurring holiday definitions](https://www.dgpa.gov.tw/information?pid=12982&uid=41); lunar fixtures use the HKO tables linked above. Tests cover 2026–2028 lunar dates, Taipei midnight, Father's Day's August date, Qixi/Father's Day overlap, evergreen gaps, unchanged membership and year rollover. No UI/CSS, product, price, inventory, admin or database changes. No new dependency or routine configuration.
+
+Taiwan release rollback: prior Worker `12d6373b-2889-40af-9bb9-03e8cea6fc32`, source `e19383d48ce1c127b08aa73f17edafc624e8fe3d`. Evidence: `12_ventures/isuntvmall/evidence/taiwan-rotation-20261015`.
