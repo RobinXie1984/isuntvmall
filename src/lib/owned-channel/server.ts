@@ -15,9 +15,10 @@ type Config = NonNullable<ReturnType<typeof channelConfig>>;
 async function readProvider(config: Config): Promise<ChannelSnapshot> {
   const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${config.account}/stream/live_inputs/${config.input}/videos`, {
     headers: { Authorization: `Bearer ${config.token}` },
-    cache: "no-store", redirect: "error", signal: AbortSignal.timeout(5000),
+    cache: "no-store", redirect: "manual", signal: AbortSignal.timeout(5000),
   });
-  if (!response.ok || Number(response.headers.get("content-length")) > 1_048_576) throw new Error("CHANNEL_PROVIDER_UNAVAILABLE");
+  if (!response.ok) { console.warn("OWNED_CHANNEL_HTTP", response.status); throw new Error("CHANNEL_PROVIDER_UNAVAILABLE"); }
+  if (Number(response.headers.get("content-length")) > 1_048_576) throw new Error("CHANNEL_RESPONSE_TOO_LARGE");
   const reader = response.body?.getReader();
   if (!reader) throw new Error("CHANNEL_PROVIDER_UNAVAILABLE");
   const chunks: Uint8Array[] = []; let length = 0;
@@ -46,7 +47,12 @@ export function createChannelReader(read = readProvider, clock = Date.now) {
     if (pending?.key === key) return pending.promise;
     const promise = (async () => {
       let value: ChannelSnapshot;
-      try { value = await read(config); } catch { value = emptyChannel("unavailable", clock()); }
+      try { value = await read(config); } catch (error) {
+        // Log only an allowlisted category; provider bodies and credentials stay private.
+        const name = error instanceof Error ? error.name : "Unknown";
+        console.warn("OWNED_CHANNEL_FAILURE", ["ZodError", "TimeoutError", "AbortError", "TypeError"].includes(name) ? name : "ProviderError");
+        value = emptyChannel("unavailable", clock());
+      }
       // Never serve an old LIVE snapshot after failed refresh.
       cached = { key, until: clock() + CHANNEL_TTL_MS, value };
       return value;

@@ -62,10 +62,10 @@ describe("one owned channel lifecycle", () => {
     const result = await createChannelReader()(env);
     expect(result.state).toBe("replay");
     expect(fetch.mock.calls[0][0]).toBe(`https://api.cloudflare.com/client/v4/accounts/${env.CF_STREAM_ACCOUNT_ID}/stream/live_inputs/${env.CF_STREAM_INPUT_ID}/videos`);
-    expect(fetch.mock.calls[0][1].redirect).toBe("error");
+    expect(fetch.mock.calls[0][1].redirect).toBe("manual");
     expect(JSON.stringify(result)).not.toContain(env.CF_STREAM_READ_TOKEN);
   });
-  it.each([401, 403, 429, 500])("handles provider HTTP %s without leaking errors", async status => {
+  it.each([301, 302, 307, 308, 401, 403, 429, 500])("handles provider HTTP %s without leaking errors", async status => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(new Response("private provider details", { status })));
     expect((await createChannelReader()(env)).state).toBe("unavailable");
   });

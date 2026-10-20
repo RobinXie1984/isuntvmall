@@ -29,7 +29,7 @@ export function OwnedChannel({ initial, locale, home = false }: { initial?: Chan
   const [value, setValue] = useState(initial ?? emptyChannel("disabled"));
   useEffect(() => pollChannel(setValue, {
     fetch: window.fetch.bind(window), visible: () => !document.hidden,
-    schedule: setTimeout, cancel: clearTimeout, now: Date.now,
+    schedule: setTimeout.bind(window), cancel: clearTimeout.bind(window), now: Date.now,
   }), []);
   return <ChannelView value={value} locale={locale} home={home} />;
 }
