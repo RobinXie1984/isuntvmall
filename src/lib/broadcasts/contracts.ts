@@ -39,3 +39,8 @@ export type Broadcast = BroadcastPayload & { id: string; revision: number };
 export function broadcastTitle(b: Broadcast, locale: Locale) {
   return ({ en: b.title, "zh-Hant": b.titleZh, "zh-Hans": b.titleHans, ja: b.titleJa })[locale];
 }
+
+// Public editorial wording; source records and playback URLs retain their platform identity.
+export function publicBroadcastTitle(b: Broadcast, locale: Locale) {
+  return broadcastTitle(b, locale).replace(/Facebook/g, "KOL");
+}

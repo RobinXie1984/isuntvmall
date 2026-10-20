@@ -21,14 +21,14 @@ describe("official broadcast player and fallback", () => {
   it("keeps a Facebook fallback even when an official video embed is present", () => {
     const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, url: "https://www.facebook.com/share/v/1HmZq19pUq/?mibextid=wwXIfr" }} locale="en" />);
     expect(html).toContain("www.facebook.com/plugins/video.php");
-    expect(html).toContain("Watch on Facebook");
+    expect(html).toContain("Watch KOL broadcast");
     expect(html).toContain('target="_blank"');
     expect(html).not.toContain("mibextid");
   });
   it.each(["https://www.facebook.com/share/p/1bFAWQmsx8/", "https://www.facebook.com/share/1F68N2tf7u/"])("does not treat unconfirmed post/share %s as a video", url => {
     const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, url }} locale="en" />);
     expect(html).not.toContain("<iframe");
-    expect(html).toContain("Watch on Facebook");
+    expect(html).toContain("Watch KOL broadcast");
     expect(html).toContain("This broadcast opens on its original platform.");
   });
   it.each([
