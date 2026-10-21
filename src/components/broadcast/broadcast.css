@@ -14,3 +14,6 @@
 @media(prefers-reduced-motion:reduce){.broadcast-card *{scroll-behavior:auto}}
 
 .product-broadcast-jump{display:block;width:fit-content;margin:18px 0 22px;padding:8px 0}.product-broadcasts{scroll-margin-top:160px}
+
+/* Original imagery, quietly framed; crop only source promotional strips. */
+.broadcast-curated{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:#eeeee8}.broadcast-curated-frame{display:block;height:100%;max-width:100%;overflow:hidden}.broadcast-curated-frame>img{display:block;width:100%;height:auto}
