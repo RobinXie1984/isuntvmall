@@ -16965,12 +16965,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550474995",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -16979,7 +16979,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17014,12 +17015,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550671603",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17028,7 +17029,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17063,12 +17065,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550737139",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17077,7 +17079,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17112,12 +17115,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550802675",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17126,7 +17129,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17161,12 +17165,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550868211",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17175,7 +17179,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17210,12 +17215,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134550999283",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17224,7 +17229,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17259,12 +17265,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134551032051",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17273,7 +17279,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17308,12 +17315,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134551097587",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17322,7 +17329,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17357,12 +17365,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134551228659",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17371,7 +17379,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [
@@ -17406,12 +17415,12 @@
       },
       "category": "Food & nutrition",
       "brand": "第四膳",
-      "priceAmount": 1999,
+      "priceAmount": 99999,
       "currency": "HKD",
       "variants": [
         {
           "id": "51134551294195",
-          "priceAmount": 1999,
+          "priceAmount": 99999,
           "available": true,
           "options": [
             {
@@ -17420,7 +17429,8 @@
               "zh-Hans": "Default Title",
               "ja": "標準"
             }
-          ]
+          ],
+          "priceIsPlaceholder": true
         }
       ],
       "options": [

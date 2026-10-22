@@ -20,9 +20,13 @@ describe('weekly source sync and photo gate', () => {
     expect(updated.products[0].variants[0]).toMatchObject({priceAmount:69800,priceIsPlaceholder:false});
     expect(validatePreparedCatalogue(prepared,updated,feed([fixed])).products).toBe(1);
   });
-  it('does not apply the footwear exception to another category', () => {
+  it.each(['Food & nutrition','Beauty & personal care','Bags & accessories'])('marks unverified 19.99 prices in %s as demo and preserves proper prices', category => {
     const next={...source,variants:[{...source.variants[0],price:'19.99'}]};
-    expect(weeklyPlan(feed([source]),feed([next]),catalogue,'2026-10-26').metadata.products[0].priceAmount).toBe(1999);
+    const prepared={...catalogue,products:[{...entry,category}]};
+    const result=weeklyPlan(feed([source]),feed([next]),prepared,'2026-10-26').metadata;
+    expect(result.products[0].variants[0]).toMatchObject({priceAmount:99999,priceIsPlaceholder:true});
+    expect(validatePreparedCatalogue(prepared,result,feed([next])).products).toBe(1);
+    expect(weeklyPlan(feed([source]),feed([source]),prepared,'2026-11-02').metadata.products[0].priceAmount).toBe(1000);
   });
   it('updates exact prices without changing approved media or mutating inputs', () => {
     const next = structuredClone(source); next.variants[0].price = '12.34'; next.images[0].src = 'https://cdn.shopify.com/new.jpg';

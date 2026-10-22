@@ -11,12 +11,12 @@ export function cents(value) {
   if (result <= 0 || result > 999999999) throw Error('INVALID_SOURCE_PRICE');
   return result;
 }
-/** Owner-approved exception: the supplier's HK$19.99 footwear price is unverified.
+/** Owner-approved exception: the supplier's generic HK$19.99 prices are unverified.
  * Keep this placeholder until the source supplies a different valid price.
  */
-export function sourceVariantPrice(category, value) {
+export function sourceVariantPrice(value) {
   const amount = cents(value);
-  return category === 'Footwear' && amount === 1999
+  return amount === 1999
     ? { priceAmount: 99999, priceIsPlaceholder: true }
     : { priceAmount: amount, priceIsPlaceholder: false };
 }
@@ -52,7 +52,7 @@ export function validatePreparedCatalogue(previous, next, feed) {
     if (new Set(p.variants.map(v=>v.id)).size!==p.variants.length) throw Error('DUPLICATE_PREPARED_VARIANT');
     for (const v of p.variants) {
       if (!variants.has(v.id)) throw Error('SOURCE_PRICE_MISMATCH');
-      const expected = sourceVariantPrice(p.category, variants.get(v.id).price);
+      const expected = sourceVariantPrice(variants.get(v.id).price);
       if (expected.priceAmount !== v.priceAmount || expected.priceIsPlaceholder !== Boolean(v.priceIsPlaceholder)) throw Error('SOURCE_PRICE_MISMATCH');
       for (const locale of ['en','zh-Hant','zh-Hans','ja']) if (!p.title[locale]?.trim() || !p.description[locale]?.trim() || v.options.some(o=>!o[locale]?.trim())) throw Error('MISSING_TRANSLATION');
     }
@@ -84,7 +84,7 @@ export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt) {
     for (const v of source.variants) {
       const previous = oldVariants.get(String(v.id)); const translation = translated.get(String(v.id));
       if (!previous || !translation || ['option1','option2','option3'].some(k => previous[k] !== v[k])) { needsCopy = true; continue; }
-      nextVariants.push({ ...translation, ...sourceVariantPrice(entry.category, v.price), available: Boolean(v.available) });
+      nextVariants.push({ ...translation, ...sourceVariantPrice(v.price), available: Boolean(v.available) });
     }
     if (!needsCopy && nextVariants.length === source.variants.length) {
       const next = metadata.products.find(p => p.sourceId === id);
