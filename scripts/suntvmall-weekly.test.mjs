@@ -6,6 +6,24 @@ const entry = { id: 'product', sku: 'SUNTV-1', sourceId: '1', sourceHandle: 'tes
 const catalogue = { snapshotAt: '2026-10-22', products: [entry] };
 const feed = products => ({ products });
 describe('weekly source sync and photo gate', () => {
+  it('keeps the authorized shoe placeholder across weekly runs and accepts a corrected source price', () => {
+    const shoe = {...source, variants:[{...source.variants[0],price:'19.99'}]};
+    const prepared = { ...catalogue, products:[{...entry,category:'Footwear',priceAmount:99999,variants:[{...entry.variants[0],priceAmount:99999,priceIsPlaceholder:true}]}] };
+    const result=weeklyPlan(feed([shoe]),feed([shoe]),prepared,'2026-10-26');
+    expect(result.metadata.products[0].priceAmount).toBe(99999);
+    expect(result.metadata.products[0].variants[0].priceIsPlaceholder).toBe(true);
+    expect(validatePreparedCatalogue(prepared,result.metadata,feed([shoe])).approvedMediaUnchanged).toBe(true);
+    const bypass=structuredClone(prepared); bypass.products[0].variants[0].priceAmount=1999; bypass.products[0].priceAmount=1999;
+    expect(()=>validatePreparedCatalogue(prepared,bypass,feed([shoe]))).toThrow('SOURCE_PRICE_MISMATCH');
+    const fixed={...shoe,variants:[{...shoe.variants[0],price:'698.00'}]};
+    const updated=weeklyPlan(feed([shoe]),feed([fixed]),prepared,'2026-11-02').metadata;
+    expect(updated.products[0].variants[0]).toMatchObject({priceAmount:69800,priceIsPlaceholder:false});
+    expect(validatePreparedCatalogue(prepared,updated,feed([fixed])).products).toBe(1);
+  });
+  it('does not apply the footwear exception to another category', () => {
+    const next={...source,variants:[{...source.variants[0],price:'19.99'}]};
+    expect(weeklyPlan(feed([source]),feed([next]),catalogue,'2026-10-26').metadata.products[0].priceAmount).toBe(1999);
+  });
   it('updates exact prices without changing approved media or mutating inputs', () => {
     const next = structuredClone(source); next.variants[0].price = '12.34'; next.images[0].src = 'https://cdn.shopify.com/new.jpg';
     const result = weeklyPlan(feed([source]), feed([next]), catalogue, '2026-10-26');

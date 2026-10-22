@@ -11,6 +11,15 @@ export function cents(value) {
   if (result <= 0 || result > 999999999) throw Error('INVALID_SOURCE_PRICE');
   return result;
 }
+/** Owner-approved exception: the supplier's HK$19.99 footwear price is unverified.
+ * Keep this placeholder until the source supplies a different valid price.
+ */
+export function sourceVariantPrice(category, value) {
+  const amount = cents(value);
+  return category === 'Footwear' && amount === 1999
+    ? { priceAmount: 99999, priceIsPlaceholder: true }
+    : { priceAmount: amount, priceIsPlaceholder: false };
+}
 function checkedFeed(feed) {
   if (!Array.isArray(feed?.products) || !feed.products.length) throw Error('EMPTY_OR_INVALID_FEED');
   const products = new Map(); const variants = new Set();
@@ -42,7 +51,9 @@ export function validatePreparedCatalogue(previous, next, feed) {
     const variants = new Map(current.variants.map(v=>[String(v.id),v]));
     if (new Set(p.variants.map(v=>v.id)).size!==p.variants.length) throw Error('DUPLICATE_PREPARED_VARIANT');
     for (const v of p.variants) {
-      if (!variants.has(v.id) || cents(variants.get(v.id).price)!==v.priceAmount) throw Error('SOURCE_PRICE_MISMATCH');
+      if (!variants.has(v.id)) throw Error('SOURCE_PRICE_MISMATCH');
+      const expected = sourceVariantPrice(p.category, variants.get(v.id).price);
+      if (expected.priceAmount !== v.priceAmount || expected.priceIsPlaceholder !== Boolean(v.priceIsPlaceholder)) throw Error('SOURCE_PRICE_MISMATCH');
       for (const locale of ['en','zh-Hant','zh-Hans','ja']) if (!p.title[locale]?.trim() || !p.description[locale]?.trim() || v.options.some(o=>!o[locale]?.trim())) throw Error('MISSING_TRANSLATION');
     }
     if (p.priceAmount!==Math.min(...p.variants.map(v=>v.priceAmount))) throw Error('MINIMUM_PRICE_MISMATCH');
@@ -73,7 +84,7 @@ export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt) {
     for (const v of source.variants) {
       const previous = oldVariants.get(String(v.id)); const translation = translated.get(String(v.id));
       if (!previous || !translation || ['option1','option2','option3'].some(k => previous[k] !== v[k])) { needsCopy = true; continue; }
-      nextVariants.push({ ...translation, priceAmount: cents(v.price), available: Boolean(v.available) });
+      nextVariants.push({ ...translation, ...sourceVariantPrice(entry.category, v.price), available: Boolean(v.available) });
     }
     if (!needsCopy && nextVariants.length === source.variants.length) {
       const next = metadata.products.find(p => p.sourceId === id);

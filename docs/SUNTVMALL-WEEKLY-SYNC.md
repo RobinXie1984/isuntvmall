@@ -28,3 +28,9 @@ The weekly job is authorized to refresh source product details, variants and pri
 Keep last known good catalogue/photos when the source is unavailable. Retry only bounded transient failures in that weekly run; do not create a daily retry schedule. Failed runs are reported with the exact blocker. Restore the recorded previous Worker and previous managed price payloads through audited operations if needed; do not delete products or media. No live inventory synchronization or completed payment transaction is claimed: source checkout remains authoritative.
 
 The weekly job uses existing Codex execution, Supabase and Cloudflare access; no new paid service or credential is provisioned. Administrative photo approval remains intentional, even though fetching and commercial-data refresh are automatic.
+
+## Footwear price safeguard — 2026-10-22
+
+Robin explicitly authorized HK$999.99 as the mockup placeholder for shoes whose proper selling price cannot be verified. Nine styles currently show HK$19.99 in both the source feed and source storefront; these are not treated as verified selling prices. `sourceVariantPrice` maps HK$19.99 in the Footwear category to HK$999.99 and marks each affected variant `priceIsPlaceholder`. Preserve this exception during every sync and when preparing new footwear. Other categories and other valid source prices are unchanged. If the source later supplies a different valid price, use it and clear the placeholder flag. Malformed or missing source prices remain held for review, never silently treated as confirmed.
+
+The prepared-catalogue validator enforces both amount and placeholder status; do not bypass it. Cards and variant selectors identify provisional prices in all four languages. Supplier checkout remains unchanged and the buyer must confirm the final price there. Approved image review rules are unchanged.

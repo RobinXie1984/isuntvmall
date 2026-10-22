@@ -22,7 +22,7 @@ export function ProductCard({ product, source }: { product: Product; source?: Ca
         <span className="product-category">{localize(product.category)}</span>
         <Link className="product-title" href={productUrl}>{productTitle(product, locale, localize)}</Link>
         <div className="product-card-bottom">
-          <div><strong>{product.sourceListing && new Set(product.sourceListing.variants.map(v=>v.priceAmount)).size > 1 && t("From ", "起價 ", "最低価格 ")}{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</strong><small>{product.sourceListing ? t("SunTVMall collection", "SunTVMall 商品", "SunTVMall コレクション") : product.isDemo ? t("Sample product", "示範商品") : product.stockQty > 0 ? t(`${product.stockQty} in stock`, `${product.stockQty} 件現貨`, `在庫${product.stockQty}点`) : t("Sold out", "售罄")}</small></div>
+          <div><strong>{product.sourceListing && new Set(product.sourceListing.variants.map(v=>v.priceAmount)).size > 1 && t("From ", "起價 ", "最低価格 ")}{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</strong><small>{product.sourceListing?.variants.some(v=>v.priceIsPlaceholder && v.priceAmount===product.priceAmount) ? t("Price to be confirmed", "價格待確認", "価格確認中") : product.sourceListing ? t("SunTVMall collection", "SunTVMall 商品", "SunTVMall コレクション") : product.isDemo ? t("Sample product", "示範商品") : product.stockQty > 0 ? t(`${product.stockQty} in stock`, `${product.stockQty} 件現貨`, `在庫${product.stockQty}点`) : t("Sold out", "售罄")}</small></div>
           {product.sourceListing ? <Link className="button source-card-link" href={productUrl}>{t("Details", "詳情", "詳細")}</Link> : <AddToCartButton productId={product.id} source={source} disabled={product.stockQty < 1} compact />}
         </div>
       </div>
