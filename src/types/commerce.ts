@@ -11,7 +11,16 @@ export interface ProductImage {
   position: number;
 }
 
+export type CatalogueCopy = Record<"en" | "zh-Hant" | "zh-Hans" | "ja", string>;
+export interface SourceListing {
+  photoCrop?: { x: number; y: number; width: number; height: number; imageWidth: number; imageHeight: number };
+  handle: string; snapshotAt: string; title: CatalogueCopy; description: CatalogueCopy;
+  options: CatalogueCopy[];
+  variants: { id: string; priceAmount: number; available: boolean; options: CatalogueCopy[] }[];
+}
+
 export interface Product {
+  sourceListing?: SourceListing;
   isDemo?: boolean;
   id: string;
   sku: string;

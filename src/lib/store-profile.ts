@@ -7,7 +7,7 @@ export interface StoreProfile {
  brand: { logo: string; secondaryName: { text: string; lang: StoreLocale } | null; icons: { favicon: string; icon192: string; icon512: string; apple: string } };
  copy: { title: StoreCopy; description: StoreCopy; homeLabel: StoreCopy; tagline: StoreCopy; market: StoreCopy | null };
  hero: { image: string; alt: StoreCopy; eyebrow: StoreCopy; title: StoreCopy; body: StoreCopy; href: string; cta: StoreCopy };
- demoSet: "isun" | "neutral"; collections: { supplierDemo: boolean; holidays: boolean }; excludedProductIds: string[];
+ demoSet: "isun" | "neutral"; collections: { supplierDemo: boolean; holidays: boolean; suntvmall?: boolean }; excludedProductIds: string[];
  policies: { merchantName: string | null; contactEmail: string | null; contactAddress: StoreCopy | null; shipping: StoreCopy | null; returns: StoreCopy | null; privacy: StoreCopy | null; terms: StoreCopy | null };
  indexing: "index" | "noindex";
 }
@@ -23,3 +23,5 @@ export function storeStorageKeys() {
 export function supplierCollectionEnabled() { const p = getStoreProfile(); return p.catalogueMode === "demo" && p.collections.supplierDemo; }
 export function holidayCollectionsEnabled() { const p = getStoreProfile(); return p.catalogueMode === "demo" && p.collections.holidays; }
 export function hasMerchantPolicies() { const p = getStoreProfile(); return p.catalogueMode === "merchant" && Boolean(p.policies.merchantName && p.policies.contactEmail && p.policies.shipping && p.policies.returns && p.policies.privacy && p.policies.terms); }
+
+export function sourceCatalogueEnabled() { return getStoreProfile().collections.suntvmall === true; }

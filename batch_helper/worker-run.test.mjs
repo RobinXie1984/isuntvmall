@@ -27,6 +27,9 @@ test('real SDK worker exits within run budget against a stalled local API',async
 const approvalCases = [
  { name: 'active Admin', approver: { role: 'admin', active: true }, allowed: true },
  { name: 'active Super Admin', approver: { role: 'super_admin', active: true }, allowed: true },
+ { name: 'active Business Super Admin', approver: { role: 'business_super_admin', active: true }, allowed: true },
+ { name: 'Finance Admin', approver: { role: 'finance_admin', active: true }, allowed: false },
+ { name: 'Merchandise Admin', approver: { role: 'merchandise_admin', active: true }, allowed: false },
  { name: 'Operator', approver: { role: 'operator', active: true }, allowed: false },
  { name: 'revoked Admin', approver: { role: 'admin', active: false }, allowed: false },
  { name: 'missing approver', approver: null, allowed: false },

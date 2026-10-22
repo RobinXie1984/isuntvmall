@@ -1,4 +1,5 @@
 import "server-only";
+import { enrichSourceProduct, isSourceProductId } from "./source-catalogue";
 import { hasProductImage } from "@/lib/product-image";
 
 import { demoKols, demoProducts, getDemoLiveSessions } from "@/lib/data/demo";
@@ -8,9 +9,9 @@ import type { Kol, LiveSession, Order, Product, ProductImage } from "@/types/com
 
 import { supplierDemoProducts } from "./supplier-demo";
 import { expandedProducts } from "./expanded-catalogue";
-import { getStoreProfile, supplierCollectionEnabled } from "@/lib/store-profile";
+import { getStoreProfile, supplierCollectionEnabled, sourceCatalogueEnabled } from "@/lib/store-profile";
 
-function publicProduct(product: Product) { const profile = getStoreProfile(); return hasProductImage(product) && !profile.excludedProductIds.includes(product.id) && (profile.catalogueMode !== "merchant" || !product.isDemo); }
+function publicProduct(product: Product) { const profile = getStoreProfile(); return (!isSourceProductId(product.id) || sourceCatalogueEnabled()) && hasProductImage(product) && !profile.excludedProductIds.includes(product.id) && (profile.catalogueMode !== "merchant" || !product.isDemo); }
 function sampleProducts() {
  const profile = getStoreProfile();
  if (profile.catalogueMode !== "demo") return [];
@@ -38,7 +39,7 @@ function mapImage(row: RecordValue): ProductImage {
 
 function mapProduct(row: RecordValue): Product {
   const images = Array.isArray(row.product_images) ? row.product_images.filter((image: { is_visible?: boolean }) => image.is_visible !== false) : [];
-  return {
+  return enrichSourceProduct({
     id: String(row.id),
     isDemo: Boolean(row.is_demo),
     sku: String(row.sku),
@@ -55,7 +56,7 @@ function mapProduct(row: RecordValue): Product {
     featured: Boolean(row.featured),
     createdAt: String(row.created_at),
     images: (images as RecordValue[]).sort((a, b) => Number(a.position) - Number(b.position)).map(mapImage),
-  };
+  });
 }
 
 export async function getProducts(options: { includeDrafts?: boolean } = {}) {
@@ -89,7 +90,7 @@ export async function getProductsByIds(ids: string[]) {
     .in("id", ids)
     .eq("status", "published");
   if (error) throw new Error(`Unable to load checkout products: ${error.message}`);
-  return (data as RecordValue[]).map(mapProduct).filter(publicProduct);
+  return (data as RecordValue[]).map(mapProduct).filter(publicProduct).filter(product => !isSourceProductId(product.id));
 }
 
 export async function getProductBySlug(slug: string) {

@@ -86,6 +86,8 @@ const sampleTranslations: Record<string, readonly [string, string]> = Object.fro
   Object.entries(translations).flatMap(([source, pair]) => [[source, pair], [pair[0], pair], [pair[1], pair]]),
 );
 export function localize(value: string, locale: Locale): string {
+  const categories: Record<string, [string, string]> = { "Bags & accessories": ["手袋與配飾", "バッグ・アクセサリー"], "Hair care": ["護髮用品", "ヘアケア"], "Food & nutrition": ["食品與營養", "食品・栄養" ] };
+  if (categories[value]) return translate(value, categories[value][0], locale, categories[value][1]);
   if (supplierDemoTranslations[value]) return supplierDemoTranslations[value][locale];
   const pair = sampleTranslations[value];
   if (pair) return translate(pair[0], pair[1], locale);

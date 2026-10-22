@@ -11,7 +11,7 @@ export const storeProfileSchema = z.object({
  brand: z.object({ logo: asset, secondaryName: z.object({ text: z.string().min(1).max(60), lang: locale }).strict().nullable(), icons: z.object({ favicon: asset, icon192: asset, icon512: asset, apple: asset }).strict() }).strict(),
  copy: z.object({ title: copy, description: copy, homeLabel: copy, tagline: copy, market: copy.nullable() }).strict(),
  hero: z.object({ image: asset, alt: copy, eyebrow: copy, title: copy, body: copy, href: z.string().max(300).refine(s => /^\/(?!\/)/.test(s) && !/[\\\r\n]/.test(s)), cta: copy }).strict(),
- demoSet: z.enum(["isun", "neutral"]), collections: z.object({ supplierDemo: z.boolean(), holidays: z.boolean() }).strict(),
+ demoSet: z.enum(["isun", "neutral"]), collections: z.object({ supplierDemo: z.boolean(), holidays: z.boolean(), suntvmall: z.boolean().optional() }).strict(),
  excludedProductIds: z.array(z.string().uuid()).max(1000),
  policies: z.object({ merchantName: z.string().trim().min(1).max(200).nullable(), contactEmail: z.string().email().max(254).nullable(), contactAddress: copy.nullable(), shipping: copy.nullable(), returns: copy.nullable(), privacy: copy.nullable(), terms: copy.nullable() }).strict(),
  indexing: z.enum(["index", "noindex"])

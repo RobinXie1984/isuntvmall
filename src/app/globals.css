@@ -463,3 +463,17 @@ button,a,input,select,textarea{outline-offset:4px}button:focus-visible,a:focus-v
 .supplier-reference-list li{padding:12px 0;border-bottom:1px solid #e3e3de}
 
 .store-information{max-width:720px;line-height:1.9;color:var(--muted);overflow-wrap:anywhere}.store-information p{white-space:pre-line}.store-information h2{font-size:22px;font-weight:400;color:var(--ink,#252522)}.store-information section{margin-bottom:32px}.store-information-links{display:flex;flex-wrap:wrap;gap:16px 24px;border-top:1px solid var(--line);padding-top:28px;margin-top:40px;font-size:13px}.store-information-links a{text-decoration:underline;text-underline-offset:4px}
+
+/* Current source catalogue: quiet controls, explicit original-store checkout. */
+.source-options { margin: 1.5rem 0; display: grid; gap: 1rem; }
+.source-options label { display: grid; gap: .5rem; font-size: .9rem; }
+.source-options select { width: 100%; max-width: 100%; padding: .8rem; border: 1px solid #d8d6ce; background: #faf9f5; color: #33342e; font: inherit; }
+.source-options .button { width: fit-content; max-width: 100%; text-align: center; }
+.source-note { font-size: .85rem; line-height: 1.7; color: #66695f; }
+.source-options small { color: #77796e; }
+.source-card-link { padding: .6rem .8rem; font-size: .8rem; white-space: nowrap; }
+.source-photo { display: block; position: relative; width: 100%; height: 100%; aspect-ratio: 1; background: #f5f3ee; overflow: hidden; }
+.source-photo > img { position: absolute; inset: 7%; width: 86%; height: 86%; object-fit: contain; }
+.source-photo-crop { position: absolute; overflow: hidden; }
+.source-photo-crop > img { position: absolute; max-width: none; object-fit: fill; }
+.product-image-wrap:hover .source-photo img { transform: none; }

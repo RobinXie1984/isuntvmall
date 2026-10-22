@@ -95,7 +95,8 @@
   "demoSet": "isun",
   "collections": {
     "supplierDemo": true,
-    "holidays": true
+    "holidays": true,
+    "suntvmall": true
   },
   "excludedProductIds": [
     "ef77ccff-7f54-4bbd-a4a4-a87f143a2520"
