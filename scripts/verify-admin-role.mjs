@@ -56,19 +56,19 @@ await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_to
 await q("select batch_processed($1,1,$2,$3,$4,$5,repeat('c',64),'sharp-0.35.4/v1')",[item,claim.lease_token,'a'.repeat(64),'b'.repeat(64),imagePath]);
 const summary = async actor => (await one('select backend_summary($1) value',[actor])).value;
 check('admin report includes another submitter pending review',(await summary(users.admin)).batchNeedsReview===1&&(await summary(users.operator)).batchNeedsReview===0);
-check('operator still cannot approve merchandise',await fails(()=>q("select batch_review($1,$2,1,'approve','')",[users.operator,item]),'STAFF_FORBIDDEN'));
-await q("select batch_review($1,$2,1,'approve','')",[users.admin,item]);
+check('operator still cannot approve merchandise',await fails(()=>q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[users.operator,item]),'STAFF_FORBIDDEN'));
+await q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[users.admin,item]);
 check('admin can approve merchandise submitted by an editor',(await state()).approved_by===users.admin);
 await q("update staff_members set role='operator' where user_id=$1",[users.admin]);
 await q('select * from batch_claim(1)');
 check('demoted admin approval is revoked before worker claim',(await state()).status==='review'&&(await state()).error==='APPROVAL_REVOKED');
 await q("update staff_members set role='admin' where user_id=$1",[users.admin]);
-await q("select batch_review($1,$2,1,'approve','')",[users.admin,item]);
+await q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[users.admin,item]);
 await q('update staff_members set active=false where user_id=$1',[users.admin]);
 await q('select * from batch_claim(1)');
 check('deactivated admin approval is revoked before worker claim',(await state()).status==='review');
 await q('update staff_members set active=true where user_id=$1',[users.admin]);
-await q("select batch_review($1,$2,1,'approve','')",[users.admin,item]);
+await q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[users.admin,item]);
 claim = await one('select * from batch_claim(1)');
 check('active admin approval is claimable for publication',claim.status==='publishing'&&claim.id===item);
 const publicPath=`batch/${item}/r1-${'b'.repeat(64)}.webp`;
@@ -111,7 +111,7 @@ for(const role of ['anon','authenticated']) {
   await db.exec(`set role ${role}`);
   check(`${role} cannot delete, update or inspect staff`,await fails(()=>q('delete from staff_members where user_id=$1',[users.super_admin]),'permission denied')&&await fails(()=>q("update staff_members set role='super_admin' where user_id=$1",[users.admin]),'permission denied')&&await fails(()=>q('select * from staff_members'),'permission denied'));
   check(`${role} cannot insert staff invitations`,await fails(()=>q("insert into staff_invitations(id,actor_id,email,role) values($1,$2,'blocked@example.test','super_admin')",[randomUUID(),users.admin]),'permission denied'));
-  check(`${role} cannot invoke privileged role or approval RPCs`,await fails(()=>q("select staff_set_member($1,$2,'admin',true,null)",[users.super_admin,target]),'permission denied')&&await fails(()=>q("select batch_review($1,$2,1,'approve','')",[users.admin,item]),'permission denied'));
+  check(`${role} cannot invoke privileged role or approval RPCs`,await fails(()=>q("select staff_set_member($1,$2,'admin',true,null)",[users.super_admin,target]),'permission denied')&&await fails(()=>q("select batch_review_visual($1,$2,1,'approve','','{\"version\":\"muji-v1\",\"calmBackground\":true,\"cleanComposition\":true,\"faithfulAppearance\":true,\"noPromotionalText\":true}'::jsonb)",[users.admin,item]),'permission denied'));
   await db.exec('reset role');
 }
 console.log(JSON.stringify({checksPassed:passed,liveDatabaseTouched:false,realProviderPlaybackTested:false,realPaymentsExecuted:false}));

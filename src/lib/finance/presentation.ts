@@ -5,9 +5,15 @@ export type FinanceList = { count: number; page: number; items: Array<{
  refund_requests: Array<{ id: string; status: string }>;
  commands: Array<{ id: string; order_id: string; status: string; provider_refund_id: string | null; created_at: string }>;
 }> };
+export function paymentEvidence(o: FinanceList["items"][number]) {
+ if (o.payment?.livemode === false) return "test" as const;
+ if (o.payment?.livemode === true && o.payment_intent_id && o.snapshot && o.snapshot.amount_captured > 0) return "confirmed" as const;
+ if (!o.payment_intent_id && !["paid", "refunded", "review"].includes(o.status)) return "unpaid" as const;
+ return "unverified" as const;
+}
 export function financeView(data: FinanceList, enabled: boolean): FinancePageView {
  return { page: data.page, hasMore: (data.page + 1) * 25 < data.count,
-  orders: data.items.map(o => ({ id: o.id, status: o.status, currency: o.currency,
+  orders: data.items.map(o => ({ id: o.id, status: o.status, currency: o.currency, evidence: paymentEvidence(o),
    paidAmount: o.snapshot?.amount_captured ?? null, remainingAmount: o.snapshot ? o.snapshot.amount_captured - o.snapshot.amount_refunded : null,
    merchantAccountId: o.payment?.accountId ?? null, mode: o.payment ? (o.payment.livemode ? "live" : "test") : null,
    paymentReference: o.payment_intent_id, reconciledAt: o.snapshot?.checked_at ?? null,
@@ -23,7 +29,7 @@ function csvCell(value: unknown) {
  return `"${safe.replaceAll('"', '""')}"`;
 }
 export function financeCsv(data: FinanceList) {
- const rows: unknown[][] = [["order_id", "order_status", "currency", "account_id", "mode", "payment_intent", "captured_minor", "refunded_minor", "fee_minor", "net_minor", "checked_at"]];
- for (const o of data.items) rows.push([o.id, o.status, o.currency, o.payment?.accountId, o.payment ? (o.payment.livemode ? "live" : "test") : null, o.payment_intent_id, o.snapshot?.amount_captured, o.snapshot?.amount_refunded, o.snapshot?.facts?.fee, o.snapshot?.facts?.net, o.snapshot?.checked_at]);
+ const rows: unknown[][] = [["order_id", "order_status", "payment_evidence", "currency", "account_id", "mode", "payment_intent", "captured_minor", "refunded_minor", "fee_minor", "net_minor", "checked_at"]];
+ for (const o of data.items) rows.push([o.id, o.status, paymentEvidence(o), o.currency, o.payment?.accountId, o.payment ? (o.payment.livemode ? "live" : "test") : null, o.payment_intent_id, o.snapshot?.amount_captured, o.snapshot?.amount_refunded, o.snapshot?.facts?.fee, o.snapshot?.facts?.net, o.snapshot?.checked_at]);
  return rows.map(row => row.map(csvCell).join(",")).join("\r\n") + "\r\n";
 }

@@ -5,7 +5,7 @@ import {getLocale} from "@/lib/locale-server";
 import {hasSupabaseConfig,hasStripeConfig} from "@/lib/env";
 import {checkoutReleaseReady} from "@/lib/stripe/runtime";
 export default async function SettingsPage(){
- const staff=await getStaff();if(!staff)notFound();requirePermission(staff,"team.manage");const{t}=await getLocale();
+ const staff=await getStaff();if(!staff)notFound();requirePermission(staff,"system.manage");const{t}=await getLocale();
  const rows:[string,string,boolean|null][]=[
  ["Database connection settings","資料庫連線設定",hasSupabaseConfig()],
  ["Payment connection settings","付款連線設定",hasStripeConfig()],

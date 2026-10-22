@@ -1,0 +1,61 @@
+import {PGlite} from '@electric-sql/pglite';
+import {readFileSync,readdirSync} from 'node:fs';
+import {randomUUID} from 'node:crypto';
+import assert from 'node:assert/strict';
+const db=new PGlite();let passed=0;const q=(s,a=[])=>db.query(s,a);const one=async(s,a=[])=>(await q(s,a)).rows[0];const check=(n,b)=>{assert.ok(b,n);console.log(`PASS ${++passed}: ${n}`);};const denied=async(fn,code='STAFF_FORBIDDEN')=>{try{await fn();return false;}catch(e){return String(e).includes(code);}};
+await db.exec("create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);");
+for(const f of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${f}`,'utf8'));
+const users={};for(const role of ['super_admin','business_super_admin','finance_admin','merchandise_admin','operator']){users[role]=randomUUID();await q('insert into auth.users(id,email)values($1,$2)',[users[role],`${role}@example.invalid`]);await q('insert into staff_members(user_id,role)values($1,$2)',[users[role],role]);}
+const b=users.business_super_admin,f=users.finance_admin,m=users.merchandise_admin,t=users.super_admin;
+check('three distinct role identities',new Set([b,f,m]).size===3);
+for(const actor of [f,m])check('finance/merchandise denied team directory',await denied(()=>q('select staff_directory($1)',[actor])));
+check('business sees named colleague directory',(await one('select staff_directory($1) v',[b])).v.length===5);
+await db.exec('set role service_role');check('production service role can read directory email',(await one('select staff_directory($1) v',[b])).v.every(x=>x.email.endsWith('@example.invalid')));await db.exec('reset role');
+check('business cannot grant technical ownership',await denied(()=>q("select staff_set_member($1,$2,'super_admin',true,null)",[b,m])));
+check('business cannot revoke technical owner',await denied(()=>q("select staff_set_member($1,$2,'merchandise_admin',false,null)",[b,t])));
+check('business cannot change own access',await denied(()=>q("select staff_set_member($1,$1,'finance_admin',true,null)",[b]),'SELF_MEMBERSHIP_CHANGE_DENIED'));
+await q("select staff_set_member($1,$2,'finance_admin',false,null)",[b,f]);check('business can revoke colleague',(await one('select active from staff_members where user_id=$1',[f])).active===false);
+check('revoked finance cannot read reports',await denied(()=>q('select finance_list($1)',[f]),'FINANCE_FORBIDDEN'));
+await q("select staff_set_member($1,$2,'finance_admin',true,null)",[b,f]);
+for(const actor of [b,f,m]){check('colleague cannot read checkout infrastructure policy',await denied(()=>q('select checkout_admission_policy_get($1)',[actor])));check('colleague cannot alter processing capacity',await denied(()=>q("select batch_configure_capacity($1,'{}')",[actor])));}
+const product=randomUUID(),image=randomUUID();await q("insert into products(id,sku,slug,title,price_amount,currency,stock_qty,status,is_demo)values($1,'COLLEAGUE-TEST','colleague-test','Test cup',10000,'hkd',5,'published',true)",[product]);await q("insert into product_images(id,product_id,source_url,position) values($1,$2,'https://example.invalid/cup.jpg',0)",[image,product]);
+const payload={title:'Updated cup',titleZh:'測試杯',description:'Test product',descriptionZh:'測試商品',category:'Cups',priceAmount:12000,status:'published',isDemo:true,visibleImageIds:[image]};
+check('finance denied product drafts',await denied(()=>q('select merchandise_list($1)',[f])));
+await q('select merchandise_save($1,$2,0,1,$3,$4)',[m,product,JSON.stringify(payload),JSON.stringify({name:'Private supplier',contact:'supplier@example.invalid',notes:'Internal'})]);
+check('merchandise draft leaves public product unchanged',(await one('select title from products where id=$1',[product])).title==='Test cup');
+check('merchandise cannot publish own draft',await denied(()=>q('select merchandise_publish($1,$2,1)',[m,product])));
+check('stale edit rejected',await denied(()=>q('select merchandise_save($1,$2,0,1,$3,$4)',[m,product,JSON.stringify(payload),'{}']),'STALE_REVISION'));
+await q('select merchandise_publish($1,$2,1)',[b,product]);check('business publishes reviewed draft',(await one('select title from products where id=$1',[product])).title===payload.title);
+check('private supplier info not in public product',!JSON.stringify((await one('select to_jsonb(p) v from products p where id=$1',[product])).v).includes('supplier'));
+await q('select stock_adjust($1,$2,1,$3,7,$4)',[m,product,randomUUID(),'Count correction']);check('merchandise can adjust stock',(await one('select stock_qty from products where id=$1',[product])).stock_qty===7);
+check('finance cannot adjust stock',await denied(()=>q('select stock_adjust($1,$2,2,$3,8,$4)',[f,product,randomUUID(),'Invalid']),'STOCK_FORBIDDEN'));
+for(const actor of [m,f])check('finance/merchandise cannot inspect customer orders',await denied(()=>q('select order_list_scoped($1)',[actor]),'ORDER_FORBIDDEN'));
+for(let i=0;i<31;i++)await q("insert into orders(status,currency,subtotal_amount,total_amount)values('pending','hkd',100,100)");
+check('finance list includes unpaid orders',(await one('select finance_list($1) v',[f])).v.count===31);
+check('finance export includes records beyond page one',(await one('select finance_export($1) v',[f])).v.items.length===31);
+check('export is audited',(await one("select count(*)::int n from private.finance_audit where actor_id=$1 and action='report_exported'",[f])).n===1);
+check('merchandise cannot export finance',await denied(()=>q('select finance_export($1)',[m]),'FINANCE_FORBIDDEN'));
+check('finance cannot execute refunds',await denied(()=>q('select finance_refund_prepare($1,$2,$3,$4)',[f,randomUUID(),randomUUID(),randomUUID()]),'FINANCE_FORBIDDEN'));
+// Existing-product media reuses approval and leaves merchandise facts/stock intact.
+const style=JSON.parse(readFileSync('style/muji/tokens.json','utf8'));
+const mediaData={targetProductId:product,sku:'COLLEAGUE-TEST',title:'Image only',titleZh:'圖片測試',description:'Fixture image',descriptionZh:'圖片測試',category:'Fixture',priceAmount:999,currency:'hkd',stockQty:999,isDemo:true};
+const batch=(await one('select batch_create($1,$2,$3,$4,$5,$6) id',[m,'Existing image test','muji',JSON.stringify(style),JSON.stringify([{filename:'cup.jpg',mime:'image/jpeg',byte_size:120,product_data:mediaData}]),randomUUID()])).id;
+const item=(await one('select id from media_batch_items where batch_id=$1',[batch])).id;
+await q('select batch_finalize($1,$2,1)',[m,item]);let claim=await one('select * from batch_claim(1)');const hash='b'.repeat(64),path=`${batch}/${item}/r1-${hash}.webp`;
+await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_token,'batch-processed',path,hash]);
+await q("select batch_processed($1,1,$2,$3,$4,$5,repeat('c',64),'sharp-0.35.4/v1')",[item,claim.lease_token,'a'.repeat(64),hash,path]);
+const visual={version:'muji-v1',calmBackground:true,cleanComposition:true,faithfulAppearance:true,noPromotionalText:true};
+check('merchandise cannot approve existing-product media',await denied(()=>q("select batch_review_visual($1,$2,1,'approve','',$3)",[m,item,JSON.stringify(visual)])));
+await q("select batch_review_visual($1,$2,1,'approve','',$3)",[b,item,JSON.stringify(visual)]);claim=await one('select * from batch_claim(1)');
+check('business approval survives worker claim',claim.id===item&&claim.status==='publishing');
+const publicPath=`batch/${item}/r1-${hash}.webp`;await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_token,'product-images',publicPath,hash]);
+await q('select batch_publish($1,1,$2,$3,$4,$5)',[item,claim.lease_token,`https://example.supabase.co/storage/v1/object/public/product-images/${publicPath}`,publicPath,hash]);
+check('approved image attaches to existing product',(await one('select count(*)::int n from product_images where product_id=$1',[product])).n===2);
+const unchanged=await one('select title,price_amount,stock_qty from products where id=$1',[product]);check('media upload never overwrites product facts or stock',unchanged.title===payload.title&&unchanged.price_amount===payload.priceAmount&&unchanged.stock_qty===7);
+await q('update staff_members set active=false where user_id=$1',[m]);check('revoked merchandise cannot read drafts',await denied(()=>q('select merchandise_list($1)',[m])));
+for(const role of ['anon','authenticated']){
+ check(`${role} cannot invoke privileged business functions`,(await one("select count(*)::int n from pg_proc p join pg_namespace n on p.pronamespace=n.oid where n.nspname in ('private','public') and p.proname in ('staff_directory','staff_set_member','merchandise_list','merchandise_save','merchandise_publish','finance_list','finance_export') and has_function_privilege($1,p.oid,'execute')",[role])).n===0);
+ check(`${role} cannot read private supplier drafts`,!(await one("select has_table_privilege($1,'private.merchandise_drafts','select') v",[role])).v);
+}
+check('merchandise changes retain audit trail',(await one('select count(*)::int n from private.merchandise_audit')).n===2);
+console.log(JSON.stringify({checksPassed:passed,engine:'PGlite',liveAccounts:false}));await db.close();

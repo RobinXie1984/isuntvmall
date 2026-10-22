@@ -18,7 +18,7 @@ export type MerchantReceivingConfiguration=z.infer<typeof merchantReceivingSchem
 export function parseMerchantReceivingConfiguration(value:unknown,expectedStoreId:string){const config=merchantReceivingSchema.parse(value);if(config.storeId!==expectedStoreId)throw Error("RECEIVER_STORE_MISMATCH");return config;}
 // An offline preparation helper, not a live payment API or a write into the wallet rail.
 export function prepareMerchantReceivingChange(staff:Staff,previous:unknown,next:unknown,expectedStoreId:string,reason:string){
- requirePermission(staff,"team.manage");
+ requirePermission(staff,"system.manage");
  const oldConfig=parseMerchantReceivingConfiguration(previous,expectedStoreId);const newConfig=parseMerchantReceivingConfiguration(next,expectedStoreId);
  if(newConfig.revision!==oldConfig.revision+1)throw Error("RECEIVER_REVISION_CONFLICT");
  if(!reason.trim()||reason.length>1000)throw Error("RECEIVER_CHANGE_REASON_REQUIRED");

@@ -1,3 +1,4 @@
+import { requireAssignableRole } from "@/lib/staff/permissions";
 import { z } from "zod";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getSiteUrl } from "@/lib/env";
@@ -7,6 +8,7 @@ export async function POST(request: Request) {
  try {
   requireStaffOrigin(request); const staff = await requireStaff(request); requirePermission(staff, "team.manage");
   const body = z.object({ requestId: z.string().uuid(), email: z.string().email().max(254), role: z.enum(STAFF_ROLES), kolId: z.string().uuid().nullable() }).strict().parse(await readStaffJson(request));
+  requireAssignableRole(staff, body.role);
   if ((body.role === "kol") !== Boolean(body.kolId)) throw new StaffError("KOL_BINDING_REQUIRED", 422);
   const db = getSupabaseAdmin();
   if (body.kolId) { const host = await db.from("kols").select("id").eq("id", body.kolId).eq("status", "active").maybeSingle(); if (host.error || !host.data) throw new StaffError("KOL_NOT_ACTIVE", 422); }

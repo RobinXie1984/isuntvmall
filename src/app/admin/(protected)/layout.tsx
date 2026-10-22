@@ -9,5 +9,5 @@ export const dynamic = "force-dynamic";
 export default async function ProtectedAdminLayout({ children }: { children: React.ReactNode }) {
   const staff = await requireAdminPage();
   const { t } = await getLocale();
-  return <div className="admin-shell shell"><div className="admin-heading"><div><span className="eyebrow">SUNTV MALL</span><h1>{t("Operator console", "營運工作台")}</h1></div><ReadinessBanner readiness={getDeploymentReadiness()} /></div><AdminNav staff={staff} />{children}</div>;
+  return <div className="admin-shell shell"><div className="admin-heading"><div><span className="eyebrow">SUNTV MALL</span><h1>{t("Staff console", "同事工作台")}</h1></div>{staff.role === "super_admin" && <ReadinessBanner readiness={getDeploymentReadiness()} />}</div><AdminNav staff={staff} />{children}</div>;
 }

@@ -16,7 +16,7 @@ export function batchFailure(error: unknown) {
 export function uuid(value: string) { return z.string().uuid().parse(value); }
 export async function batchForStaff(id: string, staff: BatchStaff): Promise<MediaBatch> {
   const { data, error } = await getSupabaseAdmin().from("media_batches").select("id,title,style_id,created_at,created_by").eq("id", uuid(id)).maybeSingle();
-  if (error || !data || (!permissionAllowed(staff, "batch.approve") && data.created_by !== staff.id)) throw new BatchError("BATCH_NOT_FOUND", 404);
+  if (error || !data || (!permissionAllowed(staff, "batch.approve") && staff.role !== "merchandise_admin" && data.created_by !== staff.id)) throw new BatchError("BATCH_NOT_FOUND", 404);
   return data as MediaBatch;
 }
 export async function itemForStaff(id: string, staff: BatchStaff): Promise<BatchItem> {

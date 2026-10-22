@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { requireStaff, requirePermission } from "@/lib/staff/auth";
+import { requireStaff, requirePermission, permissionAllowed } from "@/lib/staff/auth";
 import { requireBatchOrigin } from "@/lib/batch/auth";
 import { readBatchJson } from "@/lib/batch/contracts";
 import { privateResponse, operationFailure } from "@/lib/admin/response";
@@ -12,11 +12,12 @@ const schema = z.discriminatedUnion("action", [
 ]);
 export async function GET(request: Request) {
  try {
-  const staff = await requireStaff(request); requirePermission(staff, "finance.manage");
+  const staff = await requireStaff(request); requirePermission(staff, "finance.read");
   const url = new URL(request.url); const page = z.coerce.number().int().min(0).max(100000).parse(url.searchParams.get("page") ?? 0);
-  const data = await financeRpc<FinanceList>("finance_list", { p_actor: staff.id, p_page: page });
-  if (url.searchParams.get("format") === "csv") return new Response(financeCsv(data), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="reconciliation-page-${page + 1}.csv"`, "Cache-Control": "private, no-store", "Vary": "Cookie" } });
-  return privateResponse(financeView(data, paymentOperationsConfigured() && process.env.STRIPE_REFUNDS_ENABLED === "true"));
+  const exporting = url.searchParams.get("format") === "csv";
+  const data = exporting ? await financeRpc<FinanceList>("finance_export", { p_actor: staff.id }) : await financeRpc<FinanceList>("finance_list", { p_actor: staff.id, p_page: page });
+  if (url.searchParams.get("format") === "csv") return new Response(financeCsv(data), { headers: { "Content-Type": "text/csv; charset=utf-8", "Content-Disposition": `attachment; filename="reconciliation-all-orders.csv"`, "Cache-Control": "private, no-store", "Vary": "Cookie" } });
+  return privateResponse({ ...financeView(data, permissionAllowed(staff, "finance.manage") && paymentOperationsConfigured() && process.env.STRIPE_REFUNDS_ENABLED === "true"), canManage: permissionAllowed(staff, "finance.manage") && paymentOperationsConfigured(), connected: paymentOperationsConfigured() });
  } catch (error) { return operationFailure(error); }
 }
 export async function POST(request: Request) {

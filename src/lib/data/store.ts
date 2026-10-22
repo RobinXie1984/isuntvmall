@@ -37,7 +37,7 @@ function mapImage(row: RecordValue): ProductImage {
 }
 
 function mapProduct(row: RecordValue): Product {
-  const images = Array.isArray(row.product_images) ? row.product_images : [];
+  const images = Array.isArray(row.product_images) ? row.product_images.filter((image: { is_visible?: boolean }) => image.is_visible !== false) : [];
   return {
     id: String(row.id),
     isDemo: Boolean(row.is_demo),

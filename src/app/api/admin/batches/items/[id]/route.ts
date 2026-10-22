@@ -30,6 +30,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       return batchResponse({ ok: true });
     }
     if ((input.action === "approve" || input.action === "reject") && !permissionAllowed(staff, "batch.approve")) throw new BatchError("APPROVER_REQUIRED", 403);
+    if (input.action === "edit" && input.productData.targetProductId && !permissionAllowed(staff, "merchandise.manage")) throw new BatchError("STAFF_FORBIDDEN",403);
     const common = { p_actor: staff.id, p_item_id: item.id, p_revision: input.revision };
     const result = input.action === "edit" ? await db.rpc("batch_edit", { ...common, p_product_data: input.productData })
       : input.action === "retry" ? await db.rpc("batch_retry", common)
