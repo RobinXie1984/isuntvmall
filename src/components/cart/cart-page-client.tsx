@@ -1,5 +1,6 @@
 "use client";
 
+import { productPriceDisclosure, priceDisclosureCopy } from "@/lib/price-disclosure";
 import { cartLineKey, CHECKOUT_HOLD_REASON } from "@/lib/cart";
 import { useMemo, useState } from "react";
 import Link from "next/link";
@@ -118,6 +119,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
               <span className="product-category">{localize(product.category)}</span>
               {compact ? <strong>{productTitle(product, locale, localize)}</strong> : <Link href={`/product/${product.slug}`}>{productTitle(product, locale, localize)}</Link>}
               <span>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</span>
+              {productPriceDisclosure(product) && <small>{t(...priceDisclosureCopy[productPriceDisclosure(product)!])}</small>}
               <small className="attribution">{item.source ? t(`From: ${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `來自：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `紹介元：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`) : t("Direct selection", "直接選購")}</small>
               <div className="quantity-control" aria-label={t(`${productTitle(product, locale, localize)} quantity`, `${productTitle(product, locale, localize)}數量`, `${productTitle(product, locale, localize)}の数量`)}>
                 <button type="button" onClick={() => setQuantity(cartLineKey(item), item.quantity - 1)} aria-label={t("Decrease quantity", "減少數量")}>−</button>
@@ -136,6 +138,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
         <div className="summary-row"><span>{t("Items", "商品")}</span><strong>{formatLocalizedMoney(subtotal, currency, locale)}</strong></div>
         <div className="summary-row"><span>{t("Shipping & tax", "運費與稅費")}</span><span>{t("At checkout", "結帳時計算")}</span></div>
         <div className="summary-total"><span>{t("Estimated subtotal", "預計小計")}</span><strong>{formatLocalizedMoney(subtotal, currency, locale)}</strong></div>
+        {rows.some(row => row.product && ["demo", "unverified"].includes(productPriceDisclosure(row.product) ?? "")) && <p className="source-note">{t("Includes demo or unverified prices. This subtotal is not a confirmed selling price.", "包含示範或未核實價格，此小計並非已確認售價。", "デモ価格または未確認価格を含みます。この小計は確定した販売価格ではありません。")}</p>}
         {attemptNotice}
         {!checkoutReady && <p className="notice warning">{localize(CHECKOUT_HOLD_REASON)}</p>}
         {error && <p className="form-error" role="alert">{error}</p>}
