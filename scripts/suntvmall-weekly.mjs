@@ -11,14 +11,55 @@ export function cents(value) {
   if (result <= 0 || result > 999999999) throw Error('INVALID_SOURCE_PRICE');
   return result;
 }
-/** Owner-approved exception: the supplier's generic HK$19.99 prices are unverified.
- * Keep this placeholder until the source supplies a different valid price.
- */
-export function sourceVariantPrice(value) {
+/** Bind a review to this exact source identity, option and amount, not just a reusable URL. */
+export function priceReviewFingerprint(product, variant) {
+  return digest([String(product.id), product.handle, String(variant.id), cents(variant.price),
+    variant.option1 ?? null, variant.option2 ?? null, variant.option3 ?? null]);
+}
+function priceReviewDecision(product, variant, reviews, checkedAt) {
+  const matches = reviews.filter(r => r.sourceId === String(product.id) && r.variantId === String(variant.id));
+  if (matches.length !== 1) return null;
+  const review = matches[0];
+  return ['source-listed', 'unverified'].includes(review.decision) && review.checkedAt === checkedAt &&
+    /^\d{4}-\d{2}-\d{2}$/.test(checkedAt) &&
+    review.fingerprint === priceReviewFingerprint(product, variant) && review.currency === 'HKD' &&
+    review.sourceUrl === `https://www.suntvmall.com/products/${product.handle}?variant=${variant.id}` &&
+    /^[a-f0-9]{64}$/.test(review.evidenceSha256 ?? '') &&
+    typeof review.explanation === 'string' && review.explanation.trim().length >= 20 ? review.decision : null;
+}
+/** Prior uncertainty is sticky. A changed number is not evidence of a genuine selling price. */
+export function sourceVariantPrice(value, previous, reviewed = false) {
   const amount = cents(value);
-  return amount === 1999
+  const unchangedVerified = previous && !previous.priceIsPlaceholder && previous.priceAmount === amount;
+  return amount === 1999 || (!unchangedVerified && !reviewed)
     ? { priceAmount: 99999, priceIsPlaceholder: true }
     : { priceAmount: amount, priceIsPlaceholder: false };
+}
+/** Full-catalogue review, also run before a no-change exit. Receipts stay in the private run archive. */
+export function auditSourcePrices(catalogue, feed, checkedAt, reviews = []) {
+  const source = checkedFeed(feed);
+  if (!Array.isArray(reviews)) throw Error('INVALID_PRICE_REVIEWS');
+  const known = new Map(catalogue.products.map(p => [p.sourceId, p]));
+  return [...source.values()].flatMap(p => p.variants.map(v => {
+    const previous = known.get(String(p.id))?.variants.find(old => old.id === String(v.id));
+    const amount = cents(v.price); const reasons = []; const warnings = [];
+    if (v.compare_at_price !== null && v.compare_at_price !== undefined) {
+      try { if (cents(v.compare_at_price) <= amount) warnings.push('INVALID_COMPARISON_PRICE'); }
+      catch { warnings.push('INVALID_COMPARISON_PRICE'); }
+    }
+    if (amount === 1999) reasons.push('GENERIC_19_99');
+    if (previous?.priceIsPlaceholder) reasons.push('PREVIOUSLY_UNVERIFIED');
+    if (!previous) reasons.push('NEW_VARIANT');
+    else if (!previous.priceIsPlaceholder && previous.priceAmount !== amount) reasons.push('CHANGED_PRICE');
+    if (amount <= 100) reasons.push('TOKEN_PRICE');
+    if (previous && !previous.priceIsPlaceholder && (amount <= previous.priceAmount / 2 || amount >= previous.priceAmount * 2)) reasons.push('LARGE_PRICE_CHANGE');
+    const decision = priceReviewDecision(p, v, reviews, checkedAt);
+    const reviewed = decision === 'source-listed';
+    if (decision === 'unverified') reasons.push('REVIEW_UNVERIFIED');
+    const expected = decision === 'unverified' ? { priceAmount: 99999, priceIsPlaceholder: true } : sourceVariantPrice(v.price, previous, reviewed);
+    return { sourceId: String(p.id), variantId: String(v.id), sourceAmount: amount,
+      reasons, warnings, reviewed, ...expected, fingerprint: priceReviewFingerprint(p, v) };
+  }));
 }
 function checkedFeed(feed) {
   if (!Array.isArray(feed?.products) || !feed.products.length) throw Error('EMPTY_OR_INVALID_FEED');
@@ -37,7 +78,8 @@ function checkedFeed(feed) {
 const pictures = p => (p.images || []).map(i => ({ id: String(i.id), src: i.src, width: i.width, height: i.height }));
 const commercial = p => ({ title: p.title, body: p.body_html, vendor: p.vendor, handle: p.handle, options: p.options, variants: p.variants.map(v => ({ id: String(v.id), price: cents(v.price), available: v.available, options: [v.option1, v.option2, v.option3] })) });
 
-export function validatePreparedCatalogue(previous, next, feed) {
+export function validatePreparedCatalogue(previous, next, feed, reviews = []) {
+  const prices = new Map(auditSourcePrices(previous, feed, next.snapshotAt, reviews).map(r => [r.variantId, r]));
   const source = checkedFeed(feed); const old = new Map(previous.products.map(p=>[p.sourceId,p]));
   const ids = new Set(); const sourceIds = new Set();
   for (const p of next.products) {
@@ -46,13 +88,17 @@ export function validatePreparedCatalogue(previous, next, feed) {
     const before = old.get(p.sourceId);
     if (before && (p.id!==before.id || p.sku!==before.sku || p.slug!==before.slug || p.reviewedImageName!==before.reviewedImageName)) throw Error('IDENTITY_OR_APPROVED_MEDIA_CHANGED');
     if (!before && p.reviewedImageName) throw Error('NEW_PHOTO_NOT_APPROVED');
-    const current = source.get(p.sourceId); if (!current) continue;
+    const current = source.get(p.sourceId);
+    if (!current) {
+      if (!before || p.priceAmount !== before.priceAmount || digest(p.variants) !== digest(before.variants)) throw Error('MISSING_SOURCE_PRICE_CHANGE');
+      continue;
+    }
     if (p.sku!=='SUNTV-'+p.sourceId || p.sourceHandle!==current.handle || p.variants.length!==current.variants.length) throw Error('SOURCE_COVERAGE_MISMATCH');
     const variants = new Map(current.variants.map(v=>[String(v.id),v]));
     if (new Set(p.variants.map(v=>v.id)).size!==p.variants.length) throw Error('DUPLICATE_PREPARED_VARIANT');
     for (const v of p.variants) {
       if (!variants.has(v.id)) throw Error('SOURCE_PRICE_MISMATCH');
-      const expected = sourceVariantPrice(variants.get(v.id).price);
+      const expected = prices.get(v.id);
       if (expected.priceAmount !== v.priceAmount || expected.priceIsPlaceholder !== Boolean(v.priceIsPlaceholder)) throw Error('SOURCE_PRICE_MISMATCH');
       for (const locale of ['en','zh-Hant','zh-Hans','ja']) if (!p.title[locale]?.trim() || !p.description[locale]?.trim() || v.options.some(o=>!o[locale]?.trim())) throw Error('MISSING_TRANSLATION');
     }
@@ -63,7 +109,9 @@ export function validatePreparedCatalogue(previous, next, feed) {
   return { products: next.products.length, sourceProducts: source.size, approvedMediaUnchanged: true };
 }
 
-export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt) {
+export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt, reviews = []) {
+  const priceAudit = auditSourcePrices(catalogue, currentFeed, checkedAt, reviews);
+  const prices = new Map(priceAudit.map(r => [r.variantId, r]));
   const before = checkedFeed(previousFeed); const now = checkedFeed(currentFeed);
   const known = new Map(catalogue.products.map(p => [p.sourceId, p]));
   const changes = []; const metadata = structuredClone(catalogue);
@@ -72,10 +120,14 @@ export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt) {
     const old = before.get(id); const entry = known.get(id);
     const imageChanged = !old || digest(pictures(old)) !== digest(pictures(source));
     if (!entry || !old) {
-      changes.push({ sourceId: id, kind: 'new', publish: false, imageReview: true, copyReview: true });
+      changes.push({ sourceId: id, kind: 'new', publish: false, imageReview: true, copyReview: true, priceReview: true });
       continue;
     }
-    const changed = digest(commercial(old)) !== digest(commercial(source));
+    const priceStateChanged = entry.variants.some(v => {
+      const next = prices.get(v.id);
+      return next && (next.priceAmount !== v.priceAmount || next.priceIsPlaceholder !== Boolean(v.priceIsPlaceholder));
+    });
+    const changed = digest(commercial(old)) !== digest(commercial(source)) || priceStateChanged;
     const optionsChanged = digest(old.options) !== digest(source.options);
     // Match original option identity, never a lossy translated display label.
     const oldVariants = new Map(old.variants.map(v => [String(v.id), v]));
@@ -84,18 +136,19 @@ export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt) {
     for (const v of source.variants) {
       const previous = oldVariants.get(String(v.id)); const translation = translated.get(String(v.id));
       if (!previous || !translation || ['option1','option2','option3'].some(k => previous[k] !== v[k])) { needsCopy = true; continue; }
-      nextVariants.push({ ...translation, ...sourceVariantPrice(v.price), available: Boolean(v.available) });
+      const { priceAmount, priceIsPlaceholder } = prices.get(String(v.id));
+      nextVariants.push({ ...translation, priceAmount, priceIsPlaceholder, available: Boolean(v.available) });
     }
     if (!needsCopy && nextVariants.length === source.variants.length) {
       const next = metadata.products.find(p => p.sourceId === id);
       next.variants = nextVariants; next.priceAmount = Math.min(...nextVariants.map(v => v.priceAmount));
       next.sourceHandle = source.handle; next.sourceUpdatedAt = source.updated_at;
     }
-    if (changed || imageChanged) changes.push({ sourceId: id, kind: 'existing', metadataChanged: changed, imageReview: imageChanged, copyReview: needsCopy, publishImage: false });
+    if (changed || imageChanged) changes.push({ sourceId: id, kind: 'existing', metadataChanged: changed, imageReview: imageChanged, copyReview: needsCopy, priceReview: priceAudit.some(r => r.sourceId === id && r.priceIsPlaceholder), publishImage: false });
   }
   // A missing product may indicate a partial source response. Never delete/archive it.
   const missing = [...before.keys()].filter(id => !now.has(id));
-  return { checkedAt, sourceCount: now.size, changes, missing, metadata, sourceDigest: digest(currentFeed), mediaPolicy: 'private-review-only' };
+  return { checkedAt, sourceCount: now.size, changes, missing, metadata, priceAudit, sourceDigest: digest(currentFeed), mediaPolicy: 'private-review-only' };
 }
 
 const checked = result => { if (result.error) throw Error(result.error.message); return result.data; };
