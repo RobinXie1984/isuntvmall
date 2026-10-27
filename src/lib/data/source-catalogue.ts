@@ -1,18 +1,19 @@
 import { sourceCatalogueEnabled } from "@/lib/store-profile";
 import catalogue from './suntvmall-catalogue.json';
+import { reviewedVariants } from './price-review';
 import type { Product, SourceListing } from '@/types/commerce';
 const byId = new Map(catalogue.products.map(product => [product.id, product]));
 export function isSourceProductId(id: string) { return byId.has(id); }
-export function enrichSourceProduct(product: Product): Product {
+export function enrichSourceProduct(product: Product, overrides?: unknown): Product {
   const entry = byId.get(product.id);
   if (!sourceCatalogueEnabled() || !entry || entry.sku !== product.sku) return product;
   const sourceListing: SourceListing = {
     photoCrop: product.images[0]?.sourceUrl.endsWith("/"+entry.reviewedImageName) ? crops[entry.sourceId] : undefined,
     handle: entry.sourceHandle, snapshotAt: catalogue.snapshotAt,
-    options: entry.options, variants: entry.variants,
+    options: entry.options, variants: reviewedVariants(entry, overrides),
     title: entry.title, description: entry.description,
   };
-  return { ...product, sourceListing };
+  return { ...product, priceAmount: (product.priceAmount === entry.priceAmount || (overrides && typeof overrides === "object" && entry.variants.some(v => Object.hasOwn(overrides,v.id)))) ? Math.min(...sourceListing.variants.map(v => v.priceAmount)) : product.priceAmount, sourceListing };
 }
 export function sourcePurchaseUrl(handle: string, variantId: string): string {
   if (!/^[a-z0-9-]+$/.test(handle) || !/^\d+$/.test(variantId)) throw new Error('Invalid source option');

@@ -56,7 +56,7 @@ function mapProduct(row: RecordValue): Product {
     featured: Boolean(row.featured),
     createdAt: String(row.created_at),
     images: (images as RecordValue[]).sort((a, b) => Number(a.position) - Number(b.position)).map(mapImage),
-  });
+  }, row.source_price_overrides);
 }
 
 export async function getProducts(options: { includeDrafts?: boolean } = {}) {

@@ -1,0 +1,2 @@
+export interface PriceDraft { product_id:string; variant_id:string; revision:number; source_key:string; price_amount:number; evidence_url:string; note:string; state:"draft"|"approved"|"demo"; updated_at:string }
+export interface PriceReviewItem { id:string; sku:string; slug:string; title:string; category:string; isDemo:boolean; status:string; cardUnverified:boolean; options:{id:string;label:string;labels?:Record<string,string>;amount:number;disclosure:string;sourceUrl:string;sourceKey:string;stale:boolean;draft:PriceDraft|null}[] }

@@ -477,3 +477,14 @@ button,a,input,select,textarea{outline-offset:4px}button:focus-visible,a:focus-v
 .source-photo-crop { position: absolute; overflow: hidden; }
 .source-photo-crop > img { position: absolute; max-width: none; object-fit: fill; }
 .product-image-wrap:hover .source-photo img { transform: none; }
+
+/* Price evidence review uses the existing restrained admin palette. */
+.price-review-panel>p{line-height:1.65;max-width:90ch}
+.price-review-filters{display:grid;grid-template-columns:minmax(220px,1fr) minmax(190px,.7fr) auto auto;align-items:end;margin-bottom:24px;gap:16px}
+.price-review-filters .text-link{align-self:center;font-size:13px}
+.price-review-panel details{margin-top:14px}
+.price-review-panel summary{cursor:pointer;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.price-review-panel .admin-form label:has(input[type=checkbox]){flex-direction:row;align-items:flex-start;line-height:1.6;font-size:13px;font-weight:400}
+.price-review-panel .admin-form input[type=checkbox]{width:18px;min-height:18px;height:18px;flex:none;margin-top:2px;accent-color:#626b4d}
+.price-review-panel button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:760px){.price-review-filters{grid-template-columns:1fr}.price-review-panel .admin-card{padding:18px 12px}.price-review-panel .button{white-space:normal}}

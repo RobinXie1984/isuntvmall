@@ -16,7 +16,7 @@ export interface SourceListing {
   photoCrop?: { x: number; y: number; width: number; height: number; imageWidth: number; imageHeight: number };
   handle: string; snapshotAt: string; title: CatalogueCopy; description: CatalogueCopy;
   options: CatalogueCopy[];
-  variants: { id: string; priceAmount: number; priceIsPlaceholder?: boolean; available: boolean; options: CatalogueCopy[] }[];
+  variants: { id: string; priceAmount: number; priceIsPlaceholder?: boolean; priceIsReviewed?: boolean; available: boolean; options: CatalogueCopy[] }[];
 }
 
 export interface Product {

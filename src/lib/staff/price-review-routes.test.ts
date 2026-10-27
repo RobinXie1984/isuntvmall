@@ -1,0 +1,21 @@
+import {describe,it,expect,vi,beforeEach} from "vitest";
+vi.mock("server-only",()=>({}));
+const m=vi.hoisted(()=>({staff:vi.fn(),rpc:vi.fn()}));
+vi.mock("@/lib/staff/auth",async original=>({...await original<typeof import("@/lib/staff/auth")>(),requireStaff:m.staff}));
+vi.mock("@/lib/env",()=>({getSiteUrl:()=>"https://shop.example"}));
+vi.mock("@/lib/supabase/admin",()=>({getSupabaseAdmin:()=>({rpc:m.rpc})}));
+import {GET,POST} from "@/app/api/admin/prices/route";
+import {sourcePriceEntries,sourcePriceKey} from "@/lib/data/price-review";
+const p=sourcePriceEntries[0],v=p.variants[0];const id="11111111-1111-4111-8111-111111111111";
+const body={action:"save",productId:p.id,variantId:v.id,revision:0,amount:32000,evidence:"https://example.invalid/proof",note:"Supplier dated confirmation of exact option and price."};
+const request=(value:unknown,origin="https://shop.example")=>new Request("https://shop.example/api/admin/prices",{method:"POST",headers:{origin,"content-type":"application/json"},body:JSON.stringify(value)});
+beforeEach(()=>{vi.clearAllMocks();m.staff.mockResolvedValue({id,role:"merchandise_admin",aal:"aal2",kolId:null});m.rpc.mockResolvedValue({data:{revision:1},error:null});});
+describe("price review API",()=>{
+ it("finance denied read and write",async()=>{m.staff.mockResolvedValue({id,role:"finance_admin",aal:"aal2"});expect((await GET(new Request("https://shop.example/api/admin/prices"))).status).toBe(403);expect((await POST(request(body))).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();});
+ it("merchandise saves draft with server-bound source identity",async()=>{expect((await POST(request(body))).status).toBe(200);expect(m.rpc).toHaveBeenCalledWith("price_review_change",expect.objectContaining({p_actor:id,p_source_key:sourcePriceKey(p,v.id),p_amount:32000,p_action:"save"}));});
+ it("merchandise cannot approve or demote",async()=>{for(const action of ["approve","demo"])expect((await POST(request({action,productId:p.id,variantId:v.id,revision:1,confirmed:true,...(action==="demo"?{note:body.note}:{})}))).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();});
+ it("business needs explicit confirmation",async()=>{m.staff.mockResolvedValue({id,role:"business_super_admin",aal:"aal2"});const approval={action:"approve",productId:p.id,variantId:v.id,revision:1};expect((await POST(request(approval))).status).toBe(422);expect((await POST(request({...approval,confirmed:true}))).status).toBe(200);});
+ it("blocks unknown options, forged source keys and cross-origin requests",async()=>{expect((await POST(request({...body,variantId:"1"}))).status).toBe(422);expect((await POST(request({...body,sourceKey:"forged"}))).status).toBe(422);expect((await POST(request(body,"https://evil.example"))).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();});
+ it("rejects evidence-free and generic corrections",async()=>{for(const edit of [{note:"short"},{evidence:"http://example.invalid"},{amount:1999},{amount:0}])expect((await POST(request({...body,...edit}))).status).toBe(422);expect(m.rpc).not.toHaveBeenCalled();});
+ it("returns safe actionable stale-review result",async()=>{m.rpc.mockResolvedValue({error:{message:"STALE_REVIEW"}});const r=await POST(request(body));expect(r.status).toBe(409);expect(await r.json()).toEqual({ok:false,code:"STALE_REVIEW"});});
+});

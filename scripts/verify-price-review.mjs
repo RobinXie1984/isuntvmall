@@ -1,0 +1,42 @@
+import {PGlite} from '@electric-sql/pglite';
+import {readFileSync,readdirSync} from 'node:fs';
+import {randomUUID} from 'node:crypto';
+import assert from 'node:assert/strict';
+const db=new PGlite();let passed=0;const q=(s,a=[])=>db.query(s,a);const one=async(s,a=[])=>(await q(s,a)).rows[0];const check=(n,b)=>{assert.ok(b,n);console.log(`PASS ${++passed}: ${n}`);};const denied=async(fn,code='STAFF_FORBIDDEN')=>{try{await fn();return false;}catch(e){return String(e).includes(code);}};
+await db.exec("create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);");
+for(const f of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync(`supabase/migrations/${f}`,'utf8'));
+const users={};for(const role of ['business_super_admin','finance_admin','merchandise_admin']){users[role]=randomUUID();await q('insert into auth.users(id,email)values($1,$2)',[users[role],`${role}@example.invalid`]);await q('insert into staff_members(user_id,role)values($1,$2)',[users[role],role]);}
+const b=users.business_super_admin,m=users.merchandise_admin,f=users.finance_admin,p=randomUUID(),sample=randomUUID();
+await q("insert into products(id,sku,slug,title,price_amount,currency,stock_qty,status,is_demo)values($1,'SUNTV-PRIVATE-QA','private-price-test','Private fixture',99999,'hkd',0,'draft',false),($2,'DEMO-PRIVATE-QA','private-demo-test','Demo fixture',99999,'hkd',0,'draft',true)",[p,sample]);
+const key='exact-source-binding-v1';const change=(actor,action,rev,source=key,amount=32000,url='https://example.invalid/price-proof',note='Dated evidence confirms exact option and quantity.')=>q('select price_review_change($1,$2,$3,$4,$5,$6,$7,$8,$9)',[actor,action,p,'123',rev,source,amount,url,note]);
+await db.exec('set role service_role');
+check('finance cannot read private reviews',await denied(()=>q('select price_review_list($1)',[f])));
+check('finance cannot save correction',await denied(()=>change(f,'save',0)));
+check('missing evidence is rejected',await denied(()=>change(m,'save',0,key,32000,'','short'),'PRICE_EVIDENCE_REQUIRED'));
+check('generic 19.99 rejected',await denied(()=>change(m,'save',0,key,1999),'PRICE_EVIDENCE_REQUIRED'));
+await change(m,'save',0);check('merchandise draft saved',(await one('select price_review_list($1) v',[m])).v[0].state==='draft');
+check('draft leaves public amount and status unchanged',(await one('select source_price_overrides from products where id=$1',[p])).source_price_overrides['123']===undefined);
+check('merchandise cannot approve',await denied(()=>change(m,'approve',1)));
+check('merchandise cannot demote public amount',await denied(()=>change(m,'demo',1)));
+check('stale draft save rejected',await denied(()=>change(m,'save',0),'STALE_REVISION'));
+check('changed source rejects approval',await denied(()=>change(b,'approve',1,'changed-source-binding'),'STALE_REVIEW'));
+await change(b,'approve',1);let row=await one('select source_price_overrides,catalog_revision,price_amount from products where id=$1',[p]);
+check('business approval publishes only matching option',row.source_price_overrides['123'].priceAmount===32000&&Object.keys(row.source_price_overrides).length===1);
+check('approval invalidates stale ordinary product drafts',row.catalog_revision===2);
+check('underlying source amount preserved for sync',row.price_amount===99999);
+check('repeated approval blocked',await denied(()=>change(b,'approve',2),'STALE_REVIEW'));
+await change(m,'save',2,key,45000);check('new draft does not change approved price',(await one('select source_price_overrides from products where id=$1',[p])).source_price_overrides['123'].priceAmount===32000);
+await change(b,'demo',3);row=await one('select source_price_overrides from products where id=$1',[p]);check('business can deliberately restore demo',row.source_price_overrides['123'].priceAmount===99999&&row.source_price_overrides['123'].priceIsPlaceholder===true);
+check('every successful mutation audited',(await one("select count(*)::int n from private.merchandise_audit where product_id=$1 and action like 'price_%'",[p])).n===4);
+check('public override excludes private evidence',!JSON.stringify(row).includes('price-proof'));
+check('ordinary product update cannot clear demo',await denied(()=>q('update products set is_demo=false where id=$1',[sample]),'DEMO_LABEL_PROTECTED'));
+const payload={title:'Demo fixture',titleZh:'',description:'',descriptionZh:'',category:'Test',priceAmount:32000,status:'draft',isDemo:false,visibleImageIds:[]};
+check('ordinary draft cannot clear demo',await denied(()=>q('select merchandise_save($1,$2,0,1,$3,$4)',[m,sample,JSON.stringify(payload),'{}']),'DEMO_LABEL_PROTECTED'));
+await q('select merchandise_save($1,$2,0,1,$3,$4)',[m,sample,JSON.stringify({...payload,isDemo:true}),'{}']);await q('select merchandise_publish($1,$2,1)',[b,sample]);
+check('sample amount can be corrected while demo label remains',(await one('select price_amount,is_demo from products where id=$1',[sample])).is_demo===true);
+await db.exec('reset role');await q('update staff_members set active=false where user_id=$1',[m]);check('revoked role denied',await denied(()=>q('select price_review_list($1)',[m])));
+for(const role of ['anon','authenticated']){
+ check(role+' cannot read private evidence',!(await one("select has_table_privilege($1,'private.price_review_drafts','select') v",[role])).v);
+ check(role+' cannot execute privileged review functions',(await one("select count(*)::int n from pg_proc p join pg_namespace n on n.oid=p.pronamespace where n.nspname='public' and p.proname in ('price_review_list','price_review_change') and has_function_privilege($1,p.oid,'execute')",[role])).n===0);
+}
+console.log(JSON.stringify({passed,engine:'PGlite',realProductChanges:0}));await db.close();
