@@ -57,3 +57,7 @@ The approved production candidate is deployed with admission still closed during
 
 This document records the bounded release and distinguishes completed setup from pending real-card acceptance.
 Evidence resides in the canonical candidate's `evidence/fan-live-pilot` folder.
+
+## Edge runtime correction
+
+Normal Chrome reached a successful real Turnstile challenge, then the server returned CHECKOUT_VERIFICATION_UNAVAILABLE before any order or Stripe session existed. A real workerd probe reproduced the cause: Workers rejects Fetch redirect="error". The request now uses redirect="manual"; the existing non-2xx status check rejects redirects without forwarding credentials. Unit coverage asserts redirect rejection and no provider-error disclosure. A second workerd probe reached the provider and correctly rejected intentionally invalid fixture credentials. The initial test expectation of HTTP 200 was corrected to the observed/documented invalid-secret rejection (HTTP 400); no valid-token result was inferred from that fixture.

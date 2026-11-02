@@ -21,7 +21,8 @@ export async function verifyCheckoutRequest(request:Request,token:string,attempt
  const idempotencyKey=`${hex.slice(0,8)}-${hex.slice(8,12)}-4${hex.slice(13,16)}-8${hex.slice(17,20)}-${hex.slice(20,32)}`;
  const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),8000);
  try {
-  const response=await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({secret:process.env.TURNSTILE_SECRET_KEY!.trim(),response:token,remoteip:ip,idempotency_key:idempotencyKey}),signal:controller.signal,redirect:"error",cache:"no-store"});
+  const response=await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({secret:process.env.TURNSTILE_SECRET_KEY!.trim(),response:token,remoteip:ip,idempotency_key:idempotencyKey}),signal:controller.signal,redirect:"manual",cache:"no-store"});
+  // Workers supports manual/follow only; reject redirects through the status check.
   if(!response.ok||!response.body)throw new CheckoutVerificationError("CHECKOUT_VERIFICATION_UNAVAILABLE",503);
   const reader=response.body.getReader();let bytes=0;const chunks:Uint8Array[]=[];
   try{for(;;){const part=await reader.read();if(part.done)break;bytes+=part.value.byteLength;if(bytes>16384){await reader.cancel();throw new CheckoutVerificationError("CHECKOUT_VERIFICATION_UNAVAILABLE",503);}chunks.push(part.value);}}finally{reader.releaseLock();}
