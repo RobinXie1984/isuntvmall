@@ -30,7 +30,7 @@ collection on 2 November 2026 (HKT).
 547 unit tests pass, including wrong-product rejection, aggregate quantity
 rejection and omission of shipping/phone fields for collection. Lint, typecheck,
 Next build and Cloudflare/Vinext build pass with the opt-in pilot profile.
-The approved production candidate is deployed with admission still closed during verification. The live merchant identity, HKD currency, charges and payouts are verified. The private signing secret was replaced before activation after appearing in a tool image. Credentials were installed only in the existing Worker; no live secret was copied to Studio or Git.
+The approved production candidate is deployed with new checkout now closed after the completed one-unit purchase. The live merchant identity, HKD currency, charges and payouts are verified. The private signing secret was replaced before activation after appearing in a tool image. Credentials were installed only in the existing Worker; no live secret was copied to Studio or Git.
 
 ## Production configuration
 
@@ -43,14 +43,11 @@ The approved production candidate is deployed with admission still closed during
 - Existing completed-card settlement is reused. The additive asynchronous-settlement migration remains unapplied in production; delayed methods require separate release verification. No schema change or main-branch migration was needed for the bounded card purchase.
 - Existing Supabase and Stream credentials remain bound to the same Worker.
 - Closed edge checks passed: checkout 503, unsigned webhook 400, locally signed no-op webhook 200. The last is an endpoint/signing check, not a real provider-delivery claim.
-- Public product, illustration disclaimer and stock/price verified in all four languages; measured mobile viewport 300 x 649 and desktop viewport 984 x 692 (the browser's existing zoom changes requested dimensions). The actual live hosted Checkout is now verified at HK$28.00, shipping/tax/discount zero, with one active reservation; real payment remains pending.
+- Public product, illustration disclaimer and stock/price verified in all four languages; measured mobile viewport 300 x 649 and desktop viewport 984 x 692 (the browser's existing zoom changes requested dimensions). The actual live hosted Checkout is now verified at HK$28.00, shipping/tax/discount zero, with one active reservation; real payment has been confirmed.
 
 ## Remaining acceptance
 
-5. Enable the bounded pilot only, then hand the hosted payment page to Robin for
-   his own card entry, bank authentication and payment. Do not ask for card data
-   in chat. Verify actual provider account/mode, signed event, order, exactly one
-   stock decrement and collection state. Payment does not mean collected.
+5. Completed: the limited order reached real hosted Checkout, Robin completed payment, and the actual provider event settled the order once. Physical collection remains pending.
 6. Mark collected only after confirmed handover. Refunds are a separate authorized
    financial action, not an automatic cleanup step. Close new admissions after
    the one purchase and preserve webhook settlement/reconciliation.
@@ -64,4 +61,18 @@ Normal Chrome reached a successful real Turnstile challenge, then the server ret
 
 ## Live hosted Checkout observed
 
-Worker `c6c91e20-0720-4931-a782-915605892ce4` contains the verified runtime correction. Real Turnstile validation, audited reservation and Stripe Checkout creation now pass. Session `cs_live_a1bgDIgp4LTxqvtWOzwyHtFcazCtmyUMnxTGHETmBpWgKILn1Lgc7fmtOy` belongs to order `17f4f561-d9cc-4296-94b6-47ece801dc1f`, live mode, HKD 2800 total, with no shipping, tax or discount. The unit is reserved until 3 November 2026 01:06 HKT. Robin must enter the card and complete payment privately. Provider-delivered settlement, final order/stock and collection state are not claimed before payment.
+Worker `c6c91e20-0720-4931-a782-915605892ce4` contains the verified runtime correction. Real Turnstile validation, audited reservation and Stripe Checkout creation now pass. Session `cs_live_a1bgDIgp4LTxqvtWOzwyHtFcazCtmyUMnxTGHETmBpWgKILn1Lgc7fmtOy` belongs to order `17f4f561-d9cc-4296-94b6-47ece801dc1f`, live mode, HKD 2800 total, with no shipping, tax or discount. The unit is reserved until 3 November 2026 01:06 HKT. Robin completed payment privately. The final provider and database receipts verify captured payment, signed-event settlement and stock 0; physical collection remains pending.
+
+## Completed live purchase — 3 November 2026 (HKT)
+
+- Actual Stripe payment captured: HK$28.00; payment intent succeeded, amount received 2800 HKD; no refund.
+- Actual method used: Stripe Link, as reported by the provider. Do not mislabel this production transaction as standalone card-entry acceptance or a production 3DS test. Separate real Sandbox card/3DS acceptance remains in its prior report.
+- Customer confirmation observed in Chrome: Order confirmed, reference 17F4F561, paid, HK$28.00.
+- The matching provider-created checkout.session.completed event is stored as paid in the managed ledger. Provider pending-webhooks count is zero. Its creation timestamp was 00:33:22 HKT and the database paid_at was 00:33:24.410 HKT.
+- One active reservation was consumed; stock changed from 1 to 0, inventory revision 2 to 3. The product is publicly sold out.
+- Order fulfillment status remains unfulfilled: awaiting physical collection. No collection or delivery was invented.
+- Both new-sale gates are closed: admission=false and CHECKOUT_RELEASE_APPROVED=false. Final Worker version b3fecff7-c30b-445a-9e53-b111ccf671b1. The signed-settlement route and existing-order operations remain active.
+- Post-close public checks passed: product sold out; confirmation still paid; new Checkout returns 503 CHECKOUT_HOLD; unsigned webhook returns 400, demonstrating payment processing remains configured rather than disabled.
+- All temporary approved live credential files were removed; the private temporary directory is absent. Required permanent secrets remain only in the existing Worker.
+
+Canonical private evidence: /Users/headlessnick/RobinOS2/12_ventures/isuntvmall/candidates/20261102-stripe-sandbox/evidence/live-release-20261103. Provider and database receipts preserve exact references without customer contact or card information. Full production catalogue activation, delayed payment methods, collection completion and any real refund remain outside this completed limited purchase.
