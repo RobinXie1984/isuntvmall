@@ -1,0 +1,139 @@
+{
+  "id": "isuntvmall",
+  "name": "iSunTVMall",
+  "origin": "https://www.isuntvmall.com",
+  "currency": "hkd",
+  "catalogueMode": "demo",
+  "locales": {
+    "supported": [
+      "en",
+      "zh-Hant",
+      "zh-Hans",
+      "ja"
+    ],
+    "default": "en"
+  },
+  "brand": {
+    "logo": "/brand/comet.png",
+    "secondaryName": {
+      "text": "陽光精選",
+      "lang": "zh-Hant"
+    },
+    "icons": {
+      "favicon": "/brand/favicon-32.png",
+      "icon192": "/brand/icon-192.png",
+      "icon512": "/brand/icon-512.png",
+      "apple": "/brand/apple-touch-icon.png"
+    }
+  },
+  "copy": {
+    "title": {
+      "en": "iSunTVMall — Considered everyday",
+      "zh-Hant": "iSunTVMall — 用心選好物",
+      "zh-Hans": "iSunTVMall — 用心选好物",
+      "ja": "iSunTVMall — 日々を、丁寧に"
+    },
+    "description": {
+      "en": "Thoughtful everyday finds, independent hosts, and a simpler way to shop.",
+      "zh-Hant": "用心挑選日常好物，與主播一起探索生活。",
+      "zh-Hans": "用心挑选日常好物，与主播一起探索生活。",
+      "ja": "日々の品との出会い、個性豊かな配信者、シンプルなお買い物。"
+    },
+    "homeLabel": {
+      "en": "iSunTVMall home",
+      "zh-Hant": "iSunTVMall 首頁",
+      "zh-Hans": "iSunTVMall 首页",
+      "ja": "iSunTVMall ホーム"
+    },
+    "tagline": {
+      "en": "Thoughtful things. Everyday company.",
+      "zh-Hant": "用心選好物，陪伴每一天。",
+      "zh-Hans": "用心选好物，陪伴每一天。",
+      "ja": "丁寧に選んだ品を、毎日のそばに。"
+    },
+    "market": {
+      "en": "Hong Kong · Global",
+      "zh-Hant": "香港・全球",
+      "zh-Hans": "香港・全球",
+      "ja": "香港・世界へ"
+    }
+  },
+  "hero": {
+    "image": "/editorial/everyday.jpg",
+    "alt": {
+      "en": "Considered everyday essentials",
+      "zh-Hant": "用心挑選的日常好物",
+      "zh-Hans": "用心挑选的日常好物",
+      "ja": "丁寧に選んだ日々の品"
+    },
+    "eyebrow": {
+      "en": "CONSIDERED EVERYDAY",
+      "zh-Hant": "用心過日常",
+      "zh-Hans": "用心过日常",
+      "ja": "日々を、丁寧に"
+    },
+    "title": {
+      "en": "Good things.\nEvery day.",
+      "zh-Hant": "好物相伴，\n用心每一天。",
+      "zh-Hans": "好物相伴，\n用心每一天。",
+      "ja": "心地よい品を。\n毎日のそばに。"
+    },
+    "body": {
+      "en": "Thoughtful everyday finds, independent hosts, and a simpler way to shop.",
+      "zh-Hant": "用心挑選日常好物，與主播一起探索生活。",
+      "zh-Hans": "用心挑选日常好物，与主播一起探索生活。",
+      "ja": "日々の品との出会い、個性豊かな配信者、シンプルなお買い物。"
+    },
+    "href": "/shop",
+    "cta": {
+      "en": "Explore the collection",
+      "zh-Hant": "探索選物",
+      "zh-Hans": "探索选物",
+      "ja": "コレクションを見る"
+    }
+  },
+  "demoSet": "isun",
+  "collections": {
+    "supplierDemo": true,
+    "holidays": true,
+    "suntvmall": true
+  },
+  "excludedProductIds": [
+    "ef77ccff-7f54-4bbd-a4a4-a87f143a2520"
+  ],
+  "policies": {
+    "merchantName": "iSunTVMall Limited",
+    "contactEmail": "admin@tideisun.com",
+    "contactAddress": null,
+    "shipping": {
+      "en": "Pocket fan collection order only. No delivery or shipping charge. Collection will be arranged by email after payment; wait for confirmation before travelling.",
+      "zh-Hant": "僅限隨身風扇自取訂單，不設配送或運費。付款後將以電郵安排自取，出發前請先等候確認。",
+      "zh-Hans": "仅限随身风扇自取订单，不设配送或运费。付款后将以电邮安排自取，出发前请先等候确认。",
+      "ja": "ポケットファンの店頭受取注文限定です。配送・送料はありません。お支払い後にメールで受取を調整します。来訪前に確認をお待ちください。"
+    },
+    "returns": {
+      "en": "For cancellation before collection or an issue with the item, contact admin@tideisun.com with your order reference. Applicable statutory rights are unaffected.",
+      "zh-Hant": "自取前如需取消訂單，或商品有問題，請提供訂單編號並聯絡 admin@tideisun.com。法定權利不受影響。",
+      "zh-Hans": "自取前如需取消订单，或商品有问题，请提供订单编号并联系 admin@tideisun.com。法定权利不受影响。",
+      "ja": "受取前のキャンセルや商品に問題がある場合は、注文番号を添えて admin@tideisun.com へご連絡ください。法定の権利は影響を受けません。"
+    },
+    "privacy": {
+      "en": "We use your email and order details to confirm payment, arrange collection and handle support. Stripe processes card details; the Mall does not receive or store your card number.",
+      "zh-Hant": "我們使用電郵及訂單資料確認付款、安排自取及處理客服。信用卡資料由 Stripe 處理，商城不會接收或儲存卡號。",
+      "zh-Hans": "我们使用电邮及订单资料确认付款、安排自取及处理客服。信用卡资料由 Stripe 处理，商城不会接收或储存卡号。",
+      "ja": "メールアドレスと注文情報を支払い確認、受取調整、サポートに使用します。カード情報は Stripe が処理し、モールはカード番号を受領・保存しません。"
+    },
+    "terms": {
+      "en": "This limited offer is one Pocket fan at HK$28, collection only. Other demonstration merchandise is not offered for local checkout. Payment confirmation does not mean the item has been collected.",
+      "zh-Hant": "此限量商品為一件 HK$28 隨身風扇，僅限自取。其他示範商品不接受商城結帳。付款確認不代表已完成取貨。",
+      "zh-Hans": "此限量商品为一件 HK$28 随身风扇，仅限自取。其他示范商品不接受商城结账。付款确认不代表已完成取货。",
+      "ja": "本限定商品は HK$28 のポケットファン1点、受取限定です。他のデモ商品はモールで購入できません。支払確認は受取完了を意味しません。"
+    }
+  },
+  "indexing": "index",
+  "checkoutPilot": {
+    "productId": "11055abc-3a75-4c61-b99b-dbc732e6f300",
+    "fulfilment": "collection",
+    "maxQuantity": 1
+  }
+}

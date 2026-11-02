@@ -1,18 +1,22 @@
 import {beforeEach,describe,expect,it,vi} from "vitest";
 vi.mock("server-only",()=>({}));
-const mocks=vi.hoisted(()=>({gate:vi.fn(),rpc:vi.fn(),single:vi.fn(),retrieve:vi.fn(),create:vi.fn(),expire:vi.fn()}));
+const mocks=vi.hoisted(()=>({gate:vi.fn(),rpc:vi.fn(),single:vi.fn(),retrieve:vi.fn(),create:vi.fn(),expire:vi.fn(),profile:vi.fn()}));
 vi.mock("@/lib/stripe/runtime",()=>({checkoutReleaseReady:mocks.gate,verifyPaymentIdentity:async()=>({accountId:"acct_fixture",livemode:false}),frozenPaymentIdentity:()=>({accountId:"acct_fixture",livemode:false}),assertProviderMode:()=>{}}));
 vi.mock("@/lib/env",()=>({hasSupabaseConfig:()=>true,getSiteUrl:()=>"https://example.com"}));
 vi.mock("@/lib/stripe/client",()=>({getStripe:()=>({checkout:{sessions:{retrieve:mocks.retrieve,create:mocks.create,expire:mocks.expire}}})}));
 vi.mock("@/lib/supabase/admin",()=>({getSupabaseAdmin:()=>({rpc:mocks.rpc,from:()=>({select:()=>({eq:()=>({single:mocks.single,maybeSingle:mocks.single})})})})}));
+vi.mock("@/lib/store-profile",()=>({getStoreProfile:mocks.profile,storeStorageKeys:()=>({attempt:"suntv-checkout-attempt-v1"})}));
 import {isClosedAttempt} from "@/lib/checkout-attempt";
 import {createCheckoutSession as createVerifiedCheckout,cancelCheckoutAttempt} from "./checkout";
 const createCheckoutSession=(input:unknown,origin:string)=>createVerifiedCheckout(input,origin,"a".repeat(64));
 const attempt="11111111-1111-4111-8111-111111111111",product="22222222-2222-4222-8222-222222222222";
 const input={checkoutAttemptId:attempt,items:[{productId:product,quantity:1}]};
 const order=()=>({id:"order-1",status:"pending",currency:"hkd",subtotal_amount:100,reservation_expires_at:new Date(Date.now()+40*60_000).toISOString(),stripe_checkout_session_id:null,checkout_policy:{payment:{accountId:"acct_fixture",livemode:false},storeId:"isuntvmall",siteUrl:"https://example.com",shippingRate:null,automaticTax:false,countries:["HK"]},order_items:[{id:"item-1",product_id:product,title:"Snapshot",sku:"A",unit_amount:100,quantity:1}]});
-beforeEach(()=>{vi.resetAllMocks();mocks.gate.mockReturnValue(true);mocks.rpc.mockImplementation(async(name:string)=>({data:name==="reserve_checkout"?"order-1":name==="release_checkout"?"released":null,error:null}));mocks.single.mockResolvedValue({data:order(),error:null});mocks.create.mockResolvedValue({id:"cs_1",url:"https://checkout.stripe.com/session"});});
+beforeEach(()=>{vi.resetAllMocks();mocks.profile.mockReturnValue({id:"isuntvmall"});mocks.gate.mockReturnValue(true);mocks.rpc.mockImplementation(async(name:string)=>({data:name==="reserve_checkout"?"order-1":name==="release_checkout"?"released":null,error:null}));mocks.single.mockResolvedValue({data:order(),error:null});mocks.create.mockResolvedValue({id:"cs_1",url:"https://checkout.stripe.com/session"});});
 describe("reserved checkout orchestration (mock providers, never live)",()=>{
+ it("collection pilot rejects other products before reservation",async()=>{mocks.profile.mockReturnValue({id:"isuntvmall",checkoutPilot:{productId:attempt,maxQuantity:1,fulfilment:"collection"}});await expect(createCheckoutSession(input,"https://example.com")).rejects.toMatchObject({code:"PRODUCT_UNAVAILABLE"});expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("collection pilot rejects split-line excess quantity",async()=>{mocks.profile.mockReturnValue({id:"isuntvmall",checkoutPilot:{productId:product,maxQuantity:1,fulfilment:"collection"}});await expect(createCheckoutSession({...input,items:[{productId:product,quantity:1},{productId:product,quantity:1}]},"https://example.com")).rejects.toMatchObject({code:"PRODUCT_UNAVAILABLE"});expect(mocks.rpc).not.toHaveBeenCalled();});
+ it("collection order does not request shipping or phone details",async()=>{const o=order();mocks.single.mockResolvedValue({data:{...o,checkout_policy:{...o.checkout_policy,fulfilment:"collection"}},error:null});await createCheckoutSession(input,"https://example.com");const params=mocks.create.mock.calls[0][0];expect(params).not.toHaveProperty("shipping_address_collection");expect(params).not.toHaveProperty("phone_number_collection");});
  it("missing server verification fails before reservation",async()=>{await expect(createVerifiedCheckout(input,"https://example.com")).rejects.toMatchObject({code:"CHECKOUT_VERIFICATION_REQUIRED"});expect(mocks.rpc).not.toHaveBeenCalled();});
  it("passes only verified opaque client identity to atomic admission",async()=>{await createCheckoutSession(input,"https://example.com");expect(mocks.rpc).toHaveBeenCalledWith("reserve_checkout",expect.objectContaining({p_client_hash:"a".repeat(64)}));});
  it("hard hold prevents both DB and provider calls",async()=>{mocks.gate.mockReturnValue(false);await expect(createCheckoutSession(input,"https://example.com")).rejects.toMatchObject({code:"CHECKOUT_HOLD"});expect(mocks.rpc).not.toHaveBeenCalled();expect(mocks.create).not.toHaveBeenCalled();});

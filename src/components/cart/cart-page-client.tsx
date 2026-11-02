@@ -1,5 +1,6 @@
 "use client";
 
+import {getStoreProfile} from "@/lib/store-profile";
 import { productPriceDisclosure, priceDisclosureCopy } from "@/lib/price-disclosure";
 import { cartLineKey, CHECKOUT_HOLD_REASON } from "@/lib/cart";
 import { useMemo, useState } from "react";
@@ -34,6 +35,8 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
   async function checkout() {
     if (!checkoutReady || busy) return;
     setError("");
+    const pilot=getStoreProfile().checkoutPilot;
+    if(pilot&&(items.some(i=>i.productId!==pilot.productId)||items.reduce((n,i)=>n+i.quantity,0)>pilot.maxQuantity)){setError(t("This collection sale is limited to one Pocket fan. Remove other items and set its quantity to one.","此自取商品限購一件隨身風扇。請移除其他商品，並將數量設為一。","この受取販売はポケットファン1点限定です。他の商品を削除し、数量を1にしてください。"));return;}
     const attempt = getCheckoutAttempt();
     if(!turnstileSiteKey){setError(t("Checkout verification is not ready yet.","結帳驗證尚未準備完成。"));return;}
     if(challengeAttempt!==attempt.id||proof?.attemptId!==attempt.id){setProof(null);setChallengeAttempt(attempt.id);setError(t("Complete the verification below, then continue.","請完成下方驗證後繼續。"));return;}

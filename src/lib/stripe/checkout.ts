@@ -15,7 +15,7 @@ function checkoutGate() {
   if (!checkoutReleaseReady()) throw new CheckoutError("CHECKOUT_HOLD", CHECKOUT_HOLD_REASON, 503);
   if (!hasSupabaseConfig()) throw new CheckoutError("CHECKOUT_HOLD", "Ordering is not configured.", 503);
 }
-interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; paymentMethodConfiguration?: string; shippingRate: string | null; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
+interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; paymentMethodConfiguration?: string; shippingRate: string | null; fulfilment?: "collection"; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
 interface ReservedOrder {
  id: string; status: string; currency: string; subtotal_amount: number; reservation_expires_at: string;
  stripe_checkout_session_id: string | null; checkout_policy: Policy;
@@ -27,7 +27,8 @@ function policy(requestOrigin: string, payment: PaymentIdentity): Policy {
  if(!countries.length) throw new CheckoutError("CHECKOUT_HOLD","Shipping destinations are not configured.",503);
  const paymentMethodConfiguration = process.env.STRIPE_PAYMENT_METHOD_CONFIGURATION?.trim();
  if(paymentMethodConfiguration && !/^pmc_[a-zA-Z0-9]+$/.test(paymentMethodConfiguration))throw new CheckoutError("CHECKOUT_HOLD","Payment methods are not configured.",503);
- return {payment,paymentMethodConfiguration,storeId:getStoreProfile().id,siteUrl:getSiteUrl(requestOrigin),shippingRate:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
+ const pilot=getStoreProfile().checkoutPilot;
+ return {payment,paymentMethodConfiguration,...(pilot?{fulfilment:pilot.fulfilment}:{}),storeId:getStoreProfile().id,siteUrl:getSiteUrl(requestOrigin),shippingRate:pilot?null:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:pilot?false:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
 }
 function retryError(): CheckoutError { return new CheckoutError("CHECKOUT_RETRY","Checkout could not be confirmed. Please retry the same attempt shortly.",503); }
 async function release(orderId:string,reason:string) {
@@ -49,6 +50,8 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  checkoutGate();
  if(!clientHash||!/^[a-f0-9]{64}$/.test(clientHash))throw new CheckoutError("CHECKOUT_VERIFICATION_REQUIRED","Verification is required.",422);
  const parsed=checkoutInputSchema.parse(input);
+ const pilot=getStoreProfile().checkoutPilot;
+ if(pilot && (parsed.items.some(i=>i.productId!==pilot.productId) || parsed.items.reduce((n,i)=>n+i.quantity,0)>pilot.maxQuantity))throw new CheckoutError("PRODUCT_UNAVAILABLE","Only the authorised collection item can be purchased.");
  const normalized=parsed.items.map(i=>({product_id:i.productId,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
  const fingerprint=createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
  const identity=await verifyPaymentIdentity();
@@ -83,7 +86,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  const params:Stripe.Checkout.SessionCreateParams={
   mode:"payment",adaptive_pricing:{enabled:false},integration_identifier:"isuntvmall_checkout_qmvtpksa",
   ...(p.paymentMethodConfiguration?{payment_method_configuration:p.paymentMethodConfiguration}:{}),customer_creation:"always",billing_address_collection:"auto",
-  phone_number_collection:{enabled:true},shipping_address_collection:{allowed_countries:p.countries},
+  ...(p.fulfilment==="collection"?{}:{phone_number_collection:{enabled:true},shipping_address_collection:{allowed_countries:p.countries}}),
   ...(p.shippingRate?{shipping_options:[{shipping_rate:p.shippingRate}]}:{}),automatic_tax:{enabled:p.automaticTax},
   allow_promotion_codes:false,client_reference_id:order.id,metadata:{order_id:order.id,checkout_attempt_id:parsed.checkoutAttemptId},expires_at:expiresAt,
   line_items:order.order_items.sort((a,b)=>a.id.localeCompare(b.id)).map(i=>({quantity:i.quantity,price_data:{currency:order.currency,unit_amount:i.unit_amount,product_data:{name:i.title,metadata:{product_id:i.product_id,sku:i.sku}}}})),

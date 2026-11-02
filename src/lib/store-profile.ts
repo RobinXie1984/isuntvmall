@@ -9,6 +9,7 @@ export interface StoreProfile {
  hero: { image: string; alt: StoreCopy; eyebrow: StoreCopy; title: StoreCopy; body: StoreCopy; href: string; cta: StoreCopy };
  demoSet: "isun" | "neutral"; collections: { supplierDemo: boolean; holidays: boolean; suntvmall?: boolean }; excludedProductIds: string[];
  policies: { merchantName: string | null; contactEmail: string | null; contactAddress: StoreCopy | null; shipping: StoreCopy | null; returns: StoreCopy | null; privacy: StoreCopy | null; terms: StoreCopy | null };
+ checkoutPilot?: {productId:string;fulfilment:"collection";maxQuantity:1};
  indexing: "index" | "noindex";
 }
 // Injected once by both build tools. Never resolved from request headers or a browser-supplied path.
@@ -22,6 +23,6 @@ export function storeStorageKeys() {
 }
 export function supplierCollectionEnabled() { const p = getStoreProfile(); return p.catalogueMode === "demo" && p.collections.supplierDemo; }
 export function holidayCollectionsEnabled() { const p = getStoreProfile(); return p.catalogueMode === "demo" && p.collections.holidays; }
-export function hasMerchantPolicies() { const p = getStoreProfile(); return p.catalogueMode === "merchant" && Boolean(p.policies.merchantName && p.policies.contactEmail && p.policies.shipping && p.policies.returns && p.policies.privacy && p.policies.terms); }
+export function hasMerchantPolicies() { const p = getStoreProfile(); return (p.catalogueMode === "merchant" || Boolean(p.checkoutPilot)) && Boolean(p.policies.merchantName && p.policies.contactEmail && p.policies.shipping && p.policies.returns && p.policies.privacy && p.policies.terms); }
 
 export function sourceCatalogueEnabled() { return getStoreProfile().collections.suntvmall === true; }

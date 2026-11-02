@@ -1,11 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { validateStoreProfile } from "../../config/store-profile-loader.mjs";
+import pilotProfile from "../../config/isuntvmall-fan-pilot.json";
 import defaultProfile from "../../config/isuntvmall.json";
 import sampleProfile from "../../config/stillroom.json";
 import { getStoreProfile, hasMerchantPolicies, holidayCollectionsEnabled, storeStorageKeys, supplierCollectionEnabled } from "./store-profile";
 import { parseLocale } from "./i18n";
 afterEach(() => vi.unstubAllEnvs());
 describe("independent store profiles", () => {
+ it("collection pilot preserves demo catalogue while requiring policies",()=>{expect(validateStoreProfile(pilotProfile).checkoutPilot?.maxQuantity).toBe(1);vi.stubEnv("NEXT_PUBLIC_STORE_PROFILE",JSON.stringify(pilotProfile));expect(hasMerchantPolicies()).toBe(true);expect(supplierCollectionEnabled()).toBe(true);vi.stubEnv("NEXT_PUBLIC_STORE_PROFILE",JSON.stringify({...pilotProfile,policies:{...pilotProfile.policies,terms:null}}));expect(hasMerchantPolicies()).toBe(false);});
  it("accepts default and neutral profiles with no invented merchant policies", () => { for(const profile of [defaultProfile,sampleProfile]) { expect(validateStoreProfile(profile).name).toBe(profile.name); expect(profile.policies.contactEmail).toBeNull(); expect(profile.policies.shipping).toBeNull(); } });
  it("accepts an arbitrary external client profile without a code allowlist", () => { expect(validateStoreProfile({...sampleProfile,id:"another-client",name:"Another Client",origin:"https://client.example"}).id).toBe("another-client"); });
  it.each([

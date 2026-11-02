@@ -5,7 +5,7 @@ export async function StoreInformation({ section }: { section: "purchase" | "pri
  const {locale,t}=await getLocale();const profile=getStoreProfile(); const p=profile.policies;
  const title=section==="purchase"?t("Purchase information","購物須知","ご購入について"):section==="privacy"?t("Privacy","私隱","プライバシー"):section==="terms"?t("Terms","條款","利用規約"):t("Contact","聯絡我們","お問い合わせ");
  const missing=t("This information has not been provided yet.","此項資料尚未提供。","この情報はまだ提供されていません。");
- return <div className="shell page-space"><div className="page-intro"><span className="eyebrow">{profile.name}</span><h1>{title}</h1>{profile.catalogueMode==="demo"&&<p>{t("This is a sample store. Prices are illustrative; orders and payments are not accepted.","此為示範商店，價格僅供展示，不接受訂單或付款。","サンプルショップです。価格は表示例で、注文・決済は受け付けていません。")}</p>}</div><div className="store-information">
+ return <div className="shell page-space"><div className="page-intro"><span className="eyebrow">{profile.name}</span><h1>{title}</h1>{profile.catalogueMode==="demo"&&!profile.checkoutPilot&&<p>{t("This is a sample store. Prices are illustrative; orders and payments are not accepted.","此為示範商店，價格僅供展示，不接受訂單或付款。","サンプルショップです。価格は表示例で、注文・決済は受け付けていません。")}</p>}</div><div className="store-information">
  {section==="purchase"&&<><section><h2>{t("Shipping","送貨","配送")}</h2><p>{p.shipping?storeCopy(p.shipping,locale):missing}</p></section><section><h2>{t("Returns","退貨","返品")}</h2><p>{p.returns?storeCopy(p.returns,locale):missing}</p></section></>}
  {section==="privacy"&&<p>{p.privacy?storeCopy(p.privacy,locale):missing}</p>}
  {section==="terms"&&<p>{p.terms?storeCopy(p.terms,locale):missing}</p>}

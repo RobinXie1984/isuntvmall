@@ -14,6 +14,7 @@ export const storeProfileSchema = z.object({
  demoSet: z.enum(["isun", "neutral"]), collections: z.object({ supplierDemo: z.boolean(), holidays: z.boolean(), suntvmall: z.boolean().optional() }).strict(),
  excludedProductIds: z.array(z.string().uuid()).max(1000),
  policies: z.object({ merchantName: z.string().trim().min(1).max(200).nullable(), contactEmail: z.string().email().max(254).nullable(), contactAddress: copy.nullable(), shipping: copy.nullable(), returns: copy.nullable(), privacy: copy.nullable(), terms: copy.nullable() }).strict(),
+ checkoutPilot: z.object({ productId: z.string().uuid(), fulfilment: z.literal("collection"), maxQuantity: z.literal(1) }).strict().optional(),
  indexing: z.enum(["index", "noindex"])
 }).strict().refine(p => p.catalogueMode !== "merchant" || (!p.collections.supplierDemo && !p.collections.holidays), "Merchant profiles cannot enable bundled demo collections.");
 export function validateStoreProfile(value) { return storeProfileSchema.parse(value); }
