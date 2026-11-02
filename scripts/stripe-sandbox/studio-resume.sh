@@ -8,7 +8,7 @@ test_root=$(dirname "$source_root")
 test -f "$test_root/pgdata/PG_VERSION"
 test -f "$test_root/postgrest.conf"
 pg_ctl=/opt/homebrew/opt/postgresql@17/bin/pg_ctl
-if ! "$pg_ctl" -D "$test_root/pgdata" status >/dev/null 2>&1; then "$pg_ctl" -D "$test_root/pgdata" -l "$test_root/postgres.log" start -w; fi
+if ! "$pg_ctl" -D "$test_root/pgdata" status >/dev/null 2>&1; then "$pg_ctl" -D "$test_root/pgdata" -l "$test_root/postgres.log" -o "-c listen_addresses='' -c unix_socket_directories='/private/tmp/isuntvmall-stripe-20261102' -c unix_socket_permissions=0700 -p 55442" start -w; fi
 if ! curl --silent --fail --unix-socket /private/tmp/isuntvmall-stripe-20261102/postgrest.sock 'http://localhost/products?select=id&limit=1' >/dev/null; then
  nohup postgrest "$test_root/postgrest.conf" > "$test_root/postgrest-resume.log" 2>&1 < /dev/null &
  printf '%s\n' "$!" > "$test_root/postgrest.pid"

@@ -51,8 +51,9 @@ Supabase, and does not replace the existing storefront.
 ## Remaining acceptance gates
 
 Real Stripe-created Checkout, test-card payment, 3DS, decline and actual CLI-forwarded
-webhook delivery require the approved Sandbox credential. Synthetic tests must not
-be represented as those checks. Full storefront browser acceptance remains separate.
+webhook delivery passed on 2 November 2026; see the dated acceptance report. Future
+runs require approved Sandbox credentials. Synthetic tests must not be represented
+as real provider checks. Full storefront browser acceptance remains separate.
 No live transaction, live key configuration, main-branch merge, production database
 migration or production deployment is authorized by this Sandbox task.
 

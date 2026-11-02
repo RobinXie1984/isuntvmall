@@ -5,6 +5,7 @@
 import {createServer} from "node:http";
 import {createHash,randomUUID} from "node:crypto";
 import assert from "node:assert/strict";
+import {getStripe} from "../../src/lib/stripe/client";
 import {getStoreProfile} from "../../src/lib/store-profile";
 import {createCheckoutSession,cancelCheckoutAttempt} from "../../src/lib/stripe/checkout";
 import {getCheckoutResult} from "../../src/lib/stripe/result";
@@ -21,13 +22,21 @@ createServer(async(req,res)=>{
  try{
   const url=new URL(req.url??"/","http://127.0.0.1:3031");
   if(req.method==="GET"&&url.pathname==="/"){
-   res.writeHead(200,{"content-type":"text/html","cache-control":"no-store"}).end('<!doctype html><meta name="viewport" content="width=device-width"><title>iSunTVMall Sandbox acceptance</title><main style="max-width:600px;margin:4rem auto;padding:2rem;font:18px system-ui;color:#454a3b;background:#faf9f6"><h1>Stripe Sandbox</h1><p>Isolated test fixture. No real payment or shipment.</p><p>Test mug · HK$120.00</p><form action="/checkout" method="post"><button style="padding:1rem">Test secure Checkout</button></form></main>');return;
+   res.writeHead(200,{"content-type":"text/html","cache-control":"no-store"}).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>iSunTVMall Sandbox acceptance</title><main style="max-width:600px;margin:4rem auto;padding:2rem;font:18px system-ui;color:#454a3b;background:#faf9f6"><h1>Stripe Sandbox</h1><p>Isolated test fixture. No real payment or shipment.</p><p>Test mug · HK$120.00</p><form action="/checkout" method="post"><button style="padding:1rem">Test secure Checkout</button></form></main>');return;
   }
   if(req.method==="POST"&&url.pathname==="/checkout"){
    const attempt=randomUUID();
    const result=await createCheckoutSession({checkoutAttemptId:attempt,items:[{productId:fixtureProduct,quantity:1}]},url.origin,createHash("sha256").update(`sandbox:${attempt}`).digest("hex"));
    if(!result.url)throw Error("Missing Checkout URL");
    res.writeHead(303,{Location:result.url}).end();return;
+  }
+  if(req.method==="POST"&&url.pathname==="/replay"){
+   const id=url.searchParams.get("event");assert.match(id??"",/^evt_[a-zA-Z0-9]+$/);
+   const event=await getStripe().events.retrieve(id!);assert.equal(event.livemode,false);
+   const body=JSON.stringify(event);
+   const signature=getStripe().webhooks.generateTestHeaderString({payload:body,secret:process.env.STRIPE_WEBHOOK_SECRET!});
+   const result=await webhook(new Request(new URL("/api/stripe/webhook",url),{method:"POST",body:body+(url.searchParams.has("tamper")?" ":""),headers:{"stripe-signature":signature}}));
+   res.writeHead(result.status,Object.fromEntries(result.headers)).end(await result.text());return;
   }
   if(req.method==="GET"&&url.pathname==="/success"){json(res,await getCheckoutResult(url.searchParams.get("session_id")??undefined));return;}
   if(req.method==="GET"&&url.pathname==="/cart"){json(res,{cancelledByCustomer:true,attempt:url.searchParams.get("attempt"),note:"A return URL is not payment evidence; no inventory mutation."});return;}

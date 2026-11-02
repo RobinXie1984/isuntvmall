@@ -81,7 +81,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  }
  const p=order.checkout_policy;
  const params:Stripe.Checkout.SessionCreateParams={
-  mode:"payment",integration_identifier:"isuntvmall_checkout_qmvtpksa",
+  mode:"payment",adaptive_pricing:{enabled:false},integration_identifier:"isuntvmall_checkout_qmvtpksa",
   ...(p.paymentMethodConfiguration?{payment_method_configuration:p.paymentMethodConfiguration}:{}),customer_creation:"always",billing_address_collection:"auto",
   phone_number_collection:{enabled:true},shipping_address_collection:{allowed_countries:p.countries},
   ...(p.shippingRate?{shipping_options:[{shipping_rate:p.shippingRate}]}:{}),automatic_tax:{enabled:p.automaticTax},
