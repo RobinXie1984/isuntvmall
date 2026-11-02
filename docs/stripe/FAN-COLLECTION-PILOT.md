@@ -43,7 +43,7 @@ The approved production candidate is deployed with admission still closed during
 - Existing completed-card settlement is reused. The additive asynchronous-settlement migration remains unapplied in production; delayed methods require separate release verification. No schema change or main-branch migration was needed for the bounded card purchase.
 - Existing Supabase and Stream credentials remain bound to the same Worker.
 - Closed edge checks passed: checkout 503, unsigned webhook 400, locally signed no-op webhook 200. The last is an endpoint/signing check, not a real provider-delivery claim.
-- Public product, illustration disclaimer and stock/price verified in all four languages; mobile viewport 390 x 844. Actual live hosted Checkout and payment remain pending.
+- Public product, illustration disclaimer and stock/price verified in all four languages; measured mobile viewport 300 x 649 and desktop viewport 984 x 692 (the browser's existing zoom changes requested dimensions). Actual live hosted Checkout and payment remain pending.
 
 ## Remaining acceptance
 
