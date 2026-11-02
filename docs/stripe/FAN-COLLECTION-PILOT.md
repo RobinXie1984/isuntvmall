@@ -6,7 +6,7 @@ collection on 2 November 2026 (HKT).
 - Product: `11055abc-3a75-4c61-b99b-dbc732e6f300`
 - SKU: `ISUN-PILOT-FAN-28`; slug: `pocket-fan-live-pilot`
 - Managed stock: 1, recorded using the existing audited `stock_adjust` workflow.
-- Merchandise working copy: draft revision 3. The original demo and sample 120
+- Merchandise published through reviewed revision 4 (catalogue revision 2). The original demo and sample 120
   units were preserved. New draft carries no invented speed/charging claims.
 - Existing owned illustration is selected privately and explicitly described as
   illustration, not a photograph of the collection item. No supplier photograph
@@ -30,29 +30,23 @@ collection on 2 November 2026 (HKT).
 547 unit tests pass, including wrong-product rejection, aggregate quantity
 rejection and omission of shipping/phone fields for collection. Lint, typecheck,
 Next build and Cloudflare/Vinext build pass with the opt-in pilot profile.
-No production Worker deployment, new Stripe live credential or live transaction
-has occurred. Full browser acceptance of the final pilot remains open.
+The approved production candidate is deployed with admission still closed during verification. The live merchant identity, HKD currency, charges and payouts are verified. The private signing secret was replaced before activation after appearing in a tool image. Credentials were installed only in the existing Worker; no live secret was copied to Studio or Git.
 
-## Remaining activation work
+## Production configuration
 
-1. Chrome extension controls timed out, but native Chrome app controls recovered
-   the workflow. Cloudflare is signed in. Three prepared final credential-creation
-   steps await owner action: restricted live key, Turnstile widget and webhook
-   destination. Additional webhook/Turnstile secret storage approval is pending.
-2. Set up an appropriately restricted live Stripe key for merchant
-   `acct_1UXHoBLOVAOX5yur`, plus a live raw-body webhook pointing to
-   `https://www.isuntvmall.com/api/stripe/webhook`. Confirm/create credentials
-   through the owner's required UI handoff. A Sandbox-only key approval does not
-   authorize transferring a live key to Cloudflare.
-3. Configure the actual Turnstile widget for `www.isuntvmall.com`, public site key,
-   server secret and checkout client-hash secret. Current Worker secret inventory
-   contains Supabase/Stream secrets but no Stripe or Turnstile secrets. Confirm
-   new credential creation/storage permissions at the actual setup step.
-4. Save exact production rollback version/config and database function definitions.
-   Apply only the required reviewed payment migration and opt-in build, retain
-   merchant admission/checkout release closed while verifying the deployed edge.
-   Publish only this merchandise revision through the audited publish RPC when
-   the limited release is ready. Complete desktop/mobile and four-language checks.
+- Merchant `acct_1UXHoBLOVAOX5yur`, HK / HKD, charges and payouts enabled.
+- Restricted live Checkout key: Accounts/Charges and Refunds/Events/Payment Intents read, Checkout Sessions/Customers write. No payout, transfer, refund-write or key-management rights.
+- Live webhook `we_1UXNVSLOVAOX5yurMxdQiI6J`, nine payment/exception events; version `2026-10-28.endive`.
+- Dedicated Dashboard configuration `pmc_1UXNkULOVAOX5yurEUMV1G9G` enables Cards only. Other methods remain disabled for this pilot.
+- Managed Turnstile hostname is `www.isuntvmall.com`, pre-clearance off.
+- Admission max store/client active = 1; max recent attempts = 5 per 15 minutes.
+- Existing completed-card settlement is reused. The additive asynchronous-settlement migration remains unapplied in production; delayed methods require separate release verification. No schema change or main-branch migration was needed for the bounded card purchase.
+- Existing Supabase and Stream credentials remain bound to the same Worker.
+- Closed edge checks passed: checkout 503, unsigned webhook 400, locally signed no-op webhook 200. The last is an endpoint/signing check, not a real provider-delivery claim.
+- Public product, illustration disclaimer and stock/price verified in all four languages; mobile viewport 390 x 844. Actual live hosted Checkout and payment remain pending.
+
+## Remaining acceptance
+
 5. Enable the bounded pilot only, then hand the hosted payment page to Robin for
    his own card entry, bank authentication and payment. Do not ask for card data
    in chat. Verify actual provider account/mode, signed event, order, exactly one
@@ -61,5 +55,5 @@ has occurred. Full browser acceptance of the final pilot remains open.
    financial action, not an automatic cleanup step. Close new admissions after
    the one purchase and preserve webhook settlement/reconciliation.
 
-This document records a candidate, not a claim that live checkout is enabled.
+This document records the bounded release and distinguishes completed setup from pending real-card acceptance.
 Evidence resides in the canonical candidate's `evidence/fan-live-pilot` folder.

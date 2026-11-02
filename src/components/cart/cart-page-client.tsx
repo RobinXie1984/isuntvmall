@@ -31,11 +31,12 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
   );
   const subtotal = rows.reduce((sum, row) => sum + (row.product?.priceAmount ?? 0) * row.item.quantity, 0);
   const currency = rows[0]?.product?.currency ?? "hkd";
+  const pilot = getStoreProfile().checkoutPilot;
+  const collectionOnly = Boolean(pilot && rows.length && rows.every(row => row.product?.id === pilot.productId));
 
   async function checkout() {
     if (!checkoutReady || busy) return;
     setError("");
-    const pilot=getStoreProfile().checkoutPilot;
     if(pilot&&(items.some(i=>i.productId!==pilot.productId)||items.reduce((n,i)=>n+i.quantity,0)>pilot.maxQuantity)){setError(t("This collection sale is limited to one Pocket fan. Remove other items and set its quantity to one.","此自取商品限購一件隨身風扇。請移除其他商品，並將數量設為一。","この受取販売はポケットファン1点限定です。他の商品を削除し、数量を1にしてください。"));return;}
     const attempt = getCheckoutAttempt();
     if(!turnstileSiteKey){setError(t("Checkout verification is not ready yet.","結帳驗證尚未準備完成。"));return;}
@@ -139,7 +140,8 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
         <span className="eyebrow">{t("ORDER SUMMARY", "訂單摘要")}</span>
         <h2>{t("Order subtotal", "訂單小計")}</h2>
         <div className="summary-row"><span>{t("Items", "商品")}</span><strong>{formatLocalizedMoney(subtotal, currency, locale)}</strong></div>
-        <div className="summary-row"><span>{t("Shipping & tax", "運費與稅費")}</span><span>{t("At checkout", "結帳時計算")}</span></div>
+        <div className="summary-row"><span>{collectionOnly ? t("Collection", "自取", "お受け取り") : t("Shipping & tax", "運費與稅費")}</span><span>{collectionOnly ? t("No delivery charge", "不收運費", "配送料なし") : t("At checkout", "結帳時計算")}</span></div>
+        {collectionOnly && <p className="source-note"><Link href="/purchase-information">{t("Collection arranged by email after payment. Read purchase information.", "付款後以電郵安排自取。查看購物須知。", "お支払い後にメールで受取を調整します。購入案内を確認する。")}</Link></p>}
         <div className="summary-total"><span>{t("Estimated subtotal", "預計小計")}</span><strong>{formatLocalizedMoney(subtotal, currency, locale)}</strong></div>
         {rows.some(row => row.product && ["demo", "unverified"].includes(productPriceDisclosure(row.product) ?? "")) && <p className="source-note">{t("Includes demo or unverified prices. This subtotal is not a confirmed selling price.", "包含示範或未核實價格，此小計並非已確認售價。", "デモ価格または未確認価格を含みます。この小計は確定した販売価格ではありません。")}</p>}
         {attemptNotice}
