@@ -1,5 +1,6 @@
 import {getLocale} from "@/lib/locale-server";
 import Link from "next/link";
+import {PaymentStatusRefresh} from "@/components/cart/payment-status-refresh";
 import { ClearCartOnSuccess } from "@/components/cart/clear-cart-on-success";
 import { formatMoney } from "@/lib/format";
 import { getCheckoutResult } from "@/lib/stripe/result";
@@ -15,6 +16,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: Prom
   return (
     <div className="shell page-space confirmation-wrap">
       <ClearCartOnSuccess paid={paid} />
+      <PaymentStatusRefresh pending={result?.orderStatus === "pending"} />
       <div className="confirmation-card">
         <span className={paid ? "confirmation-icon" : "confirmation-icon pending"}>{paid ? "✓" : "…"}</span>
         <span className="eyebrow">{paid ? t("PAYMENT RECEIVED","已收到付款") : t("PAYMENT STATUS","付款狀態")}</span>

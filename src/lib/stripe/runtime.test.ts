@@ -16,6 +16,7 @@ describe("merchant-owned Stripe boundary", () => {
  it("paused sales still permit existing payment operations", () => { expect(checkoutReleaseReady()).toBe(false); expect(paymentOperationsConfigured()).toBe(true); });
  it("credentials alone cannot enable sales", () => { m.policies.mockReturnValue(false); vi.stubEnv("CHECKOUT_RELEASE_APPROVED", "true"); expect(checkoutReleaseReady()).toBe(false); });
  it("requires approved profile, site, verification and identity configuration", () => { vi.stubEnv("CHECKOUT_RELEASE_APPROVED", "true"); expect(checkoutReleaseReady()).toBe(true); vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://other.example"); expect(checkoutReleaseReady()).toBe(false); });
+ it("supports restricted Sandbox keys and rejects a live restricted key",()=>{vi.stubEnv("STRIPE_SECRET_KEY","rk_test_fixture");expect(paymentOperationsConfigured()).toBe(true);vi.stubEnv("STRIPE_SECRET_KEY","rk_live_fixture");expect(paymentOperationsConfigured()).toBe(false);});
  it("test/live credential mismatch fails closed", () => { vi.stubEnv("STRIPE_MODE", "live"); expect(paymentOperationsConfigured()).toBe(false); });
  it("verifies actual provider account before payment operations", async () => { m.account.mockResolvedValue({ id: "acct_other" }); await expect(verifyPaymentIdentity()).rejects.toThrow("PAYMENT_IDENTITY_MISMATCH"); });
  it("cannot reroute old orders after changing configuration", async () => { await expect(verifyPaymentIdentity({ accountId: "acct_old", livemode: false })).rejects.toThrow("PAYMENT_IDENTITY_MISMATCH"); });

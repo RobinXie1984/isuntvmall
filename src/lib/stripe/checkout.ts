@@ -15,7 +15,7 @@ function checkoutGate() {
   if (!checkoutReleaseReady()) throw new CheckoutError("CHECKOUT_HOLD", CHECKOUT_HOLD_REASON, 503);
   if (!hasSupabaseConfig()) throw new CheckoutError("CHECKOUT_HOLD", "Ordering is not configured.", 503);
 }
-interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; shippingRate: string | null; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
+interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; paymentMethodConfiguration?: string; shippingRate: string | null; automaticTax: boolean; countries: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] }
 interface ReservedOrder {
  id: string; status: string; currency: string; subtotal_amount: number; reservation_expires_at: string;
  stripe_checkout_session_id: string | null; checkout_policy: Policy;
@@ -25,7 +25,9 @@ function policy(requestOrigin: string, payment: PaymentIdentity): Policy {
  const supported = new Set(["HK","SG","MY","US","GB","AU","CA","CN","TW","JP","KR","NZ","TH","PH","VN","ID","DE","FR","IT","ES","NL"]);
  const countries = (process.env.STRIPE_ALLOWED_SHIPPING_COUNTRIES || "HK").split(",").map(s=>s.trim().toUpperCase()).filter(s=>supported.has(s)) as Policy["countries"];
  if(!countries.length) throw new CheckoutError("CHECKOUT_HOLD","Shipping destinations are not configured.",503);
- return {payment,storeId:getStoreProfile().id,siteUrl:getSiteUrl(requestOrigin),shippingRate:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
+ const paymentMethodConfiguration = process.env.STRIPE_PAYMENT_METHOD_CONFIGURATION?.trim();
+ if(paymentMethodConfiguration && !/^pmc_[a-zA-Z0-9]+$/.test(paymentMethodConfiguration))throw new CheckoutError("CHECKOUT_HOLD","Payment methods are not configured.",503);
+ return {payment,paymentMethodConfiguration,storeId:getStoreProfile().id,siteUrl:getSiteUrl(requestOrigin),shippingRate:process.env.STRIPE_SHIPPING_RATE_ID?.trim() || null,automaticTax:process.env.STRIPE_AUTOMATIC_TAX === "true",countries};
 }
 function retryError(): CheckoutError { return new CheckoutError("CHECKOUT_RETRY","Checkout could not be confirmed. Please retry the same attempt shortly.",503); }
 async function release(orderId:string,reason:string) {
@@ -79,7 +81,8 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  }
  const p=order.checkout_policy;
  const params:Stripe.Checkout.SessionCreateParams={
-  mode:"payment",payment_method_types:["card"],customer_creation:"always",billing_address_collection:"auto",
+  mode:"payment",integration_identifier:"isuntvmall_checkout_qmvtpksa",
+  ...(p.paymentMethodConfiguration?{payment_method_configuration:p.paymentMethodConfiguration}:{}),customer_creation:"always",billing_address_collection:"auto",
   phone_number_collection:{enabled:true},shipping_address_collection:{allowed_countries:p.countries},
   ...(p.shippingRate?{shipping_options:[{shipping_rate:p.shippingRate}]}:{}),automatic_tax:{enabled:p.automaticTax},
   allow_promotion_codes:false,client_reference_id:order.id,metadata:{order_id:order.id,checkout_attempt_id:parsed.checkoutAttemptId},expires_at:expiresAt,

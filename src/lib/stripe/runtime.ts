@@ -9,7 +9,7 @@ export function paymentConfiguration(): PaymentIdentity {
  const accountId = process.env.STRIPE_ACCOUNT_ID?.trim() ?? "";
  const mode = process.env.STRIPE_MODE;
  const key = process.env.STRIPE_SECRET_KEY?.trim() ?? "";
- if (!hasStripeConfig() || !/^acct_[a-zA-Z0-9]+$/.test(accountId) || !["test", "live"].includes(mode ?? "") || !key.startsWith(`sk_${mode}_`)) throw new Error("PAYMENT_CONFIGURATION_REQUIRED");
+ if (!hasStripeConfig() || !/^acct_[a-zA-Z0-9]+$/.test(accountId) || !["test", "live"].includes(mode ?? "") || !new RegExp(`^(sk|rk)_${mode}_[a-zA-Z0-9]+$`).test(key)) throw new Error("PAYMENT_CONFIGURATION_REQUIRED");
  return { accountId, livemode: mode === "live" };
 }
 export function paymentOperationsConfigured() {

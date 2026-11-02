@@ -10,7 +10,7 @@ export async function POST(request: Request) {
  const signature=request.headers.get("stripe-signature");
  if(!signature)return NextResponse.json({received:false,error:"Missing signature."},{status:400});
  let event:Stripe.Event;
- try{event=getStripe().webhooks.constructEvent(await request.text(),signature,getStripeWebhookSecret());}
+ try{event=await getStripe().webhooks.constructEventAsync(await request.text(),signature,getStripeWebhookSecret());}
  catch{return NextResponse.json({received:false,error:"Invalid signature."},{status:400});}
  try{await handleStripeEvent(event);return NextResponse.json({received:true});}
  catch{return NextResponse.json({received:false,error:"Event processing requires retry."},{status:500});}

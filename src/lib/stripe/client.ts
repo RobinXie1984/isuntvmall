@@ -7,6 +7,7 @@ let stripe: Stripe | undefined;
 
 export function getStripe() {
   stripe ??= new Stripe(getStripeSecretKey(), {
+    apiVersion: "2026-10-28.endive",
     appInfo: { name: "White-label commerce", version: "1.0.0" },
     timeout: 15_000, maxNetworkRetries: 1,
   });

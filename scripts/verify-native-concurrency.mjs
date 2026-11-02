@@ -24,7 +24,7 @@ const check = (name, condition, detail = {}) => { assert.ok(condition, name); re
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 check('connection uses Unix socket, not TCP', sql('select inet_server_addr() is null') === 't');
 check('database has no application tables before setup', number("select count(*) from information_schema.tables where table_schema not in ('pg_catalog','information_schema')") === 0);
-sql('create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create table auth.users(id uuid primary key,is_anonymous boolean default false); create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz); create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+sql('create role anon; create role authenticated; create role service_role bypassrls; create schema auth; create table auth.users(id uuid primary key,email text,is_anonymous boolean default false); create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz); create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
 for (const file of readdirSync(path.join(root, 'supabase/migrations')).filter(file => file.endsWith('.sql')).sort()) {
  const source = readFileSync(path.join(root, 'supabase/migrations', file), 'utf8');
  execFileSync(psql, args, { input: source, env: environment, encoding: 'utf8', timeout: 20000, maxBuffer: 4 * 1024 * 1024 });
