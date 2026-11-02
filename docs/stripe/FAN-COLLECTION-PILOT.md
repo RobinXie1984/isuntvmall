@@ -35,8 +35,10 @@ has occurred. Full browser acceptance of the final pilot remains open.
 
 ## Remaining activation work
 
-1. Restore working Chrome control. Tab/state operations timed out repeatedly;
-   read-only account tools/CLI are available, but no Stripe connector is exposed.
+1. Chrome extension controls timed out, but native Chrome app controls recovered
+   the workflow. Cloudflare is signed in. Three prepared final credential-creation
+   steps await owner action: restricted live key, Turnstile widget and webhook
+   destination. Additional webhook/Turnstile secret storage approval is pending.
 2. Set up an appropriately restricted live Stripe key for merchant
    `acct_1UXHoBLOVAOX5yur`, plus a live raw-body webhook pointing to
    `https://www.isuntvmall.com/api/stripe/webhook`. Confirm/create credentials
