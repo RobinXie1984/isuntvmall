@@ -12,8 +12,8 @@ import {getProductsByIds} from './store';
 const row=catalogue.products[0];
 const base:Product={id:row.id,sku:row.sku,slug:row.slug,title:row.title.en,titleZh:row.title['zh-Hant'],description:row.description.en,descriptionZh:row.description['zh-Hant'],priceAmount:row.priceAmount,currency:'hkd',stockQty:0,category:row.category,status:'published',featured:true,createdAt:'2026-10-22',images:[]};
 describe('current SunTVMall catalogue',()=>{
- it('retains 75 unique listings and all 777 exact option identities',()=>{
-  expect(catalogue.products).toHaveLength(75);const variants=catalogue.products.flatMap(p=>p.variants);expect(variants).toHaveLength(777);expect(new Set(variants.map(v=>v.id)).size).toBe(777);expect(new Set(catalogue.products.map(p=>p.id)).size).toBe(75);
+ it('retains all 141 listings and 1,190 exact option identities',()=>{
+  expect(catalogue.products).toHaveLength(141);const variants=catalogue.products.flatMap(p=>p.variants);expect(variants).toHaveLength(1190);expect(new Set(variants.map(v=>v.id)).size).toBe(1190);expect(new Set(catalogue.products.map(p=>p.id)).size).toBe(141);
   for(const p of catalogue.products){expect(p.priceAmount).toBe(Math.min(...p.variants.map(v=>v.priceAmount)));expect(p.variants.every(v=>v.options.length===p.options.length)).toBe(true);for(const v of p.variants){expect(Number.isSafeInteger(v.priceAmount)&&v.priceAmount>0).toBe(true);expect(new URL(sourcePurchaseUrl(p.sourceHandle,v.id)).hostname).toBe('suntvmall.com');for(const o of v.options)expect(Object.values(o).every(Boolean)).toBe(true);}}
  });
  it('keeps every variant selectable without translated-name collisions',()=>{for(const p of catalogue.products){for(const locale of ['en','zh-Hant','zh-Hans','ja'] as const){expect(new Set(p.variants.map(v=>JSON.stringify(v.options.map(o=>o[locale])))).size).toBe(p.variants.length);}}});

@@ -8,6 +8,7 @@ import { getProducts } from "@/lib/data/store";
 import { getLocale } from "@/lib/locale-server";
 import { getHolidayCollection, holidayCollectionImage, productsForHoliday } from "@/lib/data/holiday-collections";
 
+import { browseGroup, browseGroups, matchesBrowseCategory } from "@/lib/browse-categories";
 import { rankSeasonalProducts } from "@/lib/data/seasonal-order";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +30,11 @@ export default async function ShopPage({ searchParams }: Props) {
   const supplierCollection = supplierCollectionEnabled() && collectionId === "supplier-demo";
   if (collectionId && !collection && !supplierCollection && !sourceCollection) notFound();
   const selection = sourceCollection ? products.filter(p => p.sourceListing) : supplierCollection ? products.filter(product => supplierDemoProducts.some(sample => sample.id === product.id)) : collection ? productsForHoliday(products, collection.id) : products;
-  const categories = [...new Set(selection.map(p => p.category))];
+  const categories = browseGroups.filter(group => selection.some(p => browseGroup(p) === group.id));
+  const otherCategories = [...new Set(selection.filter(p => !browseGroup(p)).map(p => p.category))];
+  const categoryLabel = category?.startsWith("group-") ? categories.find(g => `group-${g.id}` === category)?.label : undefined;
   const ordered = holidayCollectionsEnabled() ? rankSeasonalProducts(selection) : [...selection].sort((a,b) => Number(b.featured)-Number(a.featured));
-  const visible = ordered.filter(p => (!category || p.category === category) && (!q || [p.title, p.titleZh ?? "", p.description, p.descriptionZh ?? "", p.sku, productTitle(p, locale, localize), productDescription(p, locale, localize)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b) => sort === "price-asc" ? a.priceAmount-b.priceAmount : sort === "price-desc" ? b.priceAmount-a.priceAmount : 0);
+  const visible = ordered.filter(p => matchesBrowseCategory(p, category) && (!q || [p.title, p.titleZh ?? "", p.description, p.descriptionZh ?? "", p.sku, productTitle(p, locale, localize), productDescription(p, locale, localize)].join(" ").toLowerCase().includes(q.toLowerCase()))).sort((a,b) => sort === "price-asc" ? a.priceAmount-b.priceAmount : sort === "price-desc" ? b.priceAmount-a.priceAmount : 0);
   const totalPages = Math.max(1, Math.ceil(visible.length / 48));
   const requestedPage = Number(params.page);
   const page = Number.isSafeInteger(requestedPage) && requestedPage > 0 ? Math.min(requestedPage, totalPages) : 1;
@@ -55,7 +58,7 @@ export default async function ShopPage({ searchParams }: Props) {
     {collection && <div className="collection-banner"><img src={holidayCollectionImage(collection.id)} alt={t(...collection.title)} /><div><Link className="text-link" href="/collections">← {t("The holiday edit", "節日選物")}</Link><span className="eyebrow">{t(...collection.occasion)}</span><h1>{t(...collection.title)}</h1><p>{t(...collection.description)}</p></div></div>}
     <div className="catalogue-heading">
       {!collection && <span className="eyebrow">{t("CONSIDERED EVERYDAY", "用心選好物")}</span>}
-      {(!collection || q || category) && (collection ? <h2>{q ? t(`Results for “${q}”`, `「${q}」搜尋結果`, `「${q}」の検索結果`) : localize(category!)}</h2> : <h1>{q ? t(`Results for “${q}”`, `「${q}」搜尋結果`, `「${q}」の検索結果`) : category ? localize(category) : sourceCollection ? t("SunTVMall collection", "SunTVMall 商品", "SunTVMall コレクション") : supplierCollection ? t("New discoveries", "新選好物", "新しい出会い") : t("All products", "全部商品")}</h1>)}
+      {(!collection || q || category) && (collection ? <h2>{q ? t(`Results for “${q}”`, `「${q}」搜尋結果`, `「${q}」の検索結果`) : categoryLabel ? t(categoryLabel[0], categoryLabel[1], categoryLabel[2]) : localize(category!)}</h2> : <h1>{q ? t(`Results for “${q}”`, `「${q}」搜尋結果`, `「${q}」の検索結果`) : category ? (categoryLabel ? t(categoryLabel[0], categoryLabel[1], categoryLabel[2]) : localize(category)) : sourceCollection ? t("SunTVMall collection", "SunTVMall 商品", "SunTVMall コレクション") : supplierCollection ? t("New discoveries", "新選好物", "新しい出会い") : t("All products", "全部商品")}</h1>)}
       {sourceCollection && <p className="section-description">{t("Selected from our current SunTVMall catalogue. Choose a product to see its options and continue to the original store for checkout.", "來自 SunTVMall 現有商品目錄。選擇商品查看款式，並前往原商城完成購買。", "現在の SunTVMall カタログから選びました。商品を選んで種類を確認し、元のストアでご購入いただけます。")}</p>}
       {supplierCollection && <p className="section-description">{t("A demo selection of tableware, footwear, beauty and everyday goods. All HKD prices are illustrative; no orders or payments are taken.", "餐桌器具、鞋履、美妝與日常好物的示範選集。所有港幣售價僅供展示，暫不接受訂單或付款。", "食器、シューズ、化粧品、日用品のデモコレクションです。香港ドルの価格は表示例で、注文・決済は受け付けていません。")}</p>}
       <form className="mobile-catalogue-search" action="/shop" role="search">
@@ -65,7 +68,8 @@ export default async function ShopPage({ searchParams }: Props) {
     </div>
     <div className="catalogue-layout"><aside className="catalogue-sidebar"><h2>{t("Categories", "商品分類")}</h2><nav aria-label={t("Product categories", "商品分類")}>
       <Link className={!category ? "active" : ""} href={categoryUrl()}>{collection ? t("All in collection", "系列全部商品") : t("All products", "全部商品")}</Link>
-      {categories.map(c => <Link className={category === c ? "active" : ""} key={c} href={categoryUrl(c)}>{localize(c)}</Link>)}
+      {categories.map(c => <Link className={category === `group-${c.id}` ? "active" : ""} key={c.id} href={categoryUrl(`group-${c.id}`)}>{t(c.label[0], c.label[1], c.label[2])}</Link>)}
+      {otherCategories.map(c => <Link className={category === c ? "active" : ""} key={c} href={categoryUrl(c)}>{localize(c)}</Link>)}
       {products.some(p=>p.sourceListing)&&<Link href="/shop?collection=suntvmall">{t("SunTVMall collection", "SunTVMall 商品", "SunTVMall コレクション")}</Link>}{supplierCollectionEnabled()&&<Link href="/shop?collection=supplier-demo">{t("Sample collection", "示範商品系列", "サンプルコレクション")}</Link>}{holidayCollectionsEnabled()&&<Link href="/collections">{t("Holiday collections", "節日系列")}</Link>}{collection && <Link href="/shop">{t("Entire catalogue", "完整商品目錄")}</Link>}
     </nav></aside><div>
       <form className="catalogue-toolbar" action="/shop"><span>{t(`${visible.length} items`, `${visible.length} 件商品`, `${visible.length}点`)}</span>
