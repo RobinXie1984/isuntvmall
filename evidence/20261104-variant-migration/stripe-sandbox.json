@@ -1,0 +1,125 @@
+{
+  "observedAt": "2026-11-04T08:03:29.117Z",
+  "accountId": "acct_1UVopWQ0fHQKbZbH",
+  "realMoneyMoved": false,
+  "stock": [
+    {
+      "id": "61afe19e-4dff-4377-a52b-ba76f5592a4c",
+      "stock_qty": 0
+    }
+  ],
+  "observations": [
+    {
+      "order": {
+        "id": "a3f44686-b790-4bbc-a190-c623e6a02bdd",
+        "status": "cancelled",
+        "checkout_attempt_id": "e988d515-dd8e-45fc-a56b-286032c90acd",
+        "stripe_checkout_session_id": "cs_test_b1GgR9AHLQ1uamdZtMWRnDkUUQ2wJJKGuE9fu3nepcoI8Nornh7YZF5cRw",
+        "stripe_payment_intent_id": null,
+        "subtotal_amount": 3000,
+        "total_amount": null,
+        "currency": "usd",
+        "review_reason": "cancel_confirmed"
+      },
+      "provider": {
+        "id": "cs_test_b1GgR9AHLQ1uamdZtMWRnDkUUQ2wJJKGuE9fu3nepcoI8Nornh7YZF5cRw",
+        "livemode": false,
+        "status": "expired",
+        "payment_status": "unpaid",
+        "currency": "usd",
+        "amount_total": 3000,
+        "adaptive_pricing": {
+          "enabled": false
+        },
+        "paymentIntent": null,
+        "charge": null
+      },
+      "events": [
+        {
+          "id": "evt_1UXz9MQ0fHQKbZbHZoEsqY5G",
+          "event_type": "checkout.session.expired",
+          "outcome": "expired"
+        }
+      ],
+      "reservation": [
+        {
+          "status": "released",
+          "quantity": 1,
+          "release_reason": "cancel_confirmed"
+        },
+        {
+          "status": "released",
+          "quantity": 1,
+          "release_reason": "cancel_confirmed"
+        }
+      ]
+    },
+    {
+      "order": {
+        "id": "c3498089-8a94-4c28-8fcc-d787e5976c31",
+        "status": "paid",
+        "checkout_attempt_id": "0eb6dd10-303f-4974-b8d5-d5f6f6354624",
+        "stripe_checkout_session_id": "cs_test_b1Ww8m2l189p7brZYANR3asZHZMQE2J00g9KdquF6nOYgy52wDfSudVCau",
+        "stripe_payment_intent_id": "pi_3UXzAEQ0fHQKbZbH0VLdwVjK",
+        "subtotal_amount": 3000,
+        "total_amount": 3000,
+        "currency": "hkd",
+        "review_reason": null
+      },
+      "provider": {
+        "id": "cs_test_b1Ww8m2l189p7brZYANR3asZHZMQE2J00g9KdquF6nOYgy52wDfSudVCau",
+        "livemode": false,
+        "status": "complete",
+        "payment_status": "paid",
+        "currency": "hkd",
+        "amount_total": 3000,
+        "adaptive_pricing": {
+          "enabled": false
+        },
+        "paymentIntent": {
+          "id": "pi_3UXzAEQ0fHQKbZbH0VLdwVjK",
+          "status": "succeeded",
+          "amount_received": 3000,
+          "last_error_code": null
+        },
+        "charge": {
+          "id": "ch_3UXzAEQ0fHQKbZbH00X89d3Y",
+          "paid": true,
+          "status": "succeeded",
+          "three_d_secure": null
+        }
+      },
+      "events": [
+        {
+          "id": "evt_1UXzAGQ0fHQKbZbHFtBftnuY",
+          "event_type": "checkout.session.completed",
+          "outcome": "paid"
+        }
+      ],
+      "reservation": [
+        {
+          "status": "consumed",
+          "quantity": 1,
+          "release_reason": null
+        },
+        {
+          "status": "consumed",
+          "quantity": 1,
+          "release_reason": null
+        }
+      ]
+    }
+  ],
+  "variantStock": [
+    {
+      "id": "9d4ae390-900f-4745-be71-31902bb39f19",
+      "stock_qty": 1
+    },
+    {
+      "id": "55b54363-ab4e-4d89-922f-8d35efb58003",
+      "stock_qty": 1
+    }
+  ],
+  "duplicatePaymentEvent": "PASS",
+  "testTotalHKD": 30
+}

@@ -16,17 +16,18 @@ assert.match(process.env.STRIPE_SECRET_KEY??"",/^(sk|rk)_test_/);
 assert.equal(process.env.SUPABASE_URL,"http://127.0.0.1:54331");
 assert.equal(process.env.NEXT_PUBLIC_SITE_URL,"http://127.0.0.1:3031");
 assert.equal(getStoreProfile().id,"isuntvmall-stripe-sandbox");
-const fixtureProduct="55b54363-ab4e-4d89-922f-8d35efb58001";
+const fixtureProduct=process.env.STRIPE_FIXTURE_PRODUCT||"55b54363-ab4e-4d89-922f-8d35efb58001";
+const fixtureVariants=(process.env.STRIPE_FIXTURE_VARIANTS||"").split(",").filter(Boolean);
 const json=(res:import('node:http').ServerResponse,data:unknown,status=200)=>{res.writeHead(status,{"content-type":"application/json","cache-control":"no-store"}).end(JSON.stringify(data));};
 createServer(async(req,res)=>{
  try{
   const url=new URL(req.url??"/","http://127.0.0.1:3031");
   if(req.method==="GET"&&url.pathname==="/"){
-   res.writeHead(200,{"content-type":"text/html","cache-control":"no-store"}).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>iSunTVMall Sandbox acceptance</title><main style="max-width:600px;margin:4rem auto;padding:2rem;font:18px system-ui;color:#454a3b;background:#faf9f6"><h1>Stripe Sandbox</h1><p>Isolated test fixture. No real payment or shipment.</p><p>Test mug · HK$120.00</p><form action="/checkout" method="post"><button style="padding:1rem">Test secure Checkout</button></form></main>');return;
+   res.writeHead(200,{"content-type":"text/html","cache-control":"no-store"}).end('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>iSunTVMall Sandbox acceptance</title><main style="max-width:600px;margin:4rem auto;padding:2rem;font:18px system-ui;color:#454a3b;background:#faf9f6"><h1>Stripe Sandbox</h1><p>Isolated test fixture. No real payment or shipment.</p><p>Variant test fixture · see secure Checkout for exact total</p><form action="/checkout" method="post"><button style="padding:1rem">Test secure Checkout</button></form></main>');return;
   }
   if(req.method==="POST"&&url.pathname==="/checkout"){
    const attempt=randomUUID();
-   const result=await createCheckoutSession({checkoutAttemptId:attempt,items:[{productId:fixtureProduct,quantity:1}]},url.origin,createHash("sha256").update(`sandbox:${attempt}`).digest("hex"));
+   const result=await createCheckoutSession({checkoutAttemptId:attempt,items:fixtureVariants.length?fixtureVariants.map(variantId=>({productId:fixtureProduct,variantId,quantity:1})):[{productId:fixtureProduct,quantity:1}]},url.origin,createHash("sha256").update(`sandbox:${attempt}`).digest("hex"));
    if(!result.url)throw Error("Missing Checkout URL");
    res.writeHead(303,{Location:result.url}).end();return;
   }

@@ -5,6 +5,7 @@ import {shopifyStageSchema} from '@/lib/batch/shopify-stage';
 import {getSupabaseAdmin} from '@/lib/supabase/admin';
 import {permissionAllowed} from '@/lib/staff/permissions';
 import {BatchError} from '@/lib/batch/contracts';
+import sourceCatalogue from '@/lib/data/suntvmall-catalogue.json';
 export async function POST(request:Request) {
  try {
   requireBatchOrigin(request); const staff=await requireBatchStaff(request);
@@ -22,7 +23,9 @@ export async function GET(request:Request) {
   const params=new URL(request.url).searchParams, batch=params.get('batch'), page=params.get('page')||'0';
   if(batch && (!zodUuid(batch)||!/^\d{1,5}$/.test(page)))throw new BatchError('INVALID_INPUT',422);
   const result=batch ? await getSupabaseAdmin().rpc('shopify_staged_products',{p_actor:staff.id,p_batch:batch,p_page:Number(page)}) : await getSupabaseAdmin().rpc('shopify_staged_batches',{p_actor:staff.id});
-  if(result.error)throw result.error; return batchResponse({ok:true,items:result.data});
+  if(result.error)throw result.error;
+  const items=batch && Array.isArray(result.data)?result.data.map(item=>{const existing=sourceCatalogue.products.find(p=>p.sourceHandle===item.handle);return {...item,...(existing?{existingProductId:existing.id,existingSku:existing.sku}:{})};}):result.data;
+  return batchResponse({ok:true,items});
  } catch(error) {return batchFailure(error);}
 }
 function zodUuid(value:string) {return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);}

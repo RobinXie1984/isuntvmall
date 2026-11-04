@@ -1,7 +1,8 @@
 // Test transport only. No production secrets, no SSH forwarding or Studio -> iMac control.
 import {createServer} from 'node:http';
 import {spawn} from 'node:child_process';
-const remote='/Users/headlessnick/RobinOS2/12_ventures/isuntvmall/candidates/20261102-stripe-sandbox/source/scripts/stripe-sandbox/studio-rest.py';
+const remote=process.env.STRIPE_FIXTURE_REMOTE||'/Users/headlessnick/RobinOS2/12_ventures/isuntvmall/candidates/20261102-stripe-sandbox/source/scripts/stripe-sandbox/studio-rest.py';
+if(!/^\/Users\/headlessnick\/RobinOS2\/12_ventures\/isuntvmall\/candidates\/[a-zA-Z0-9_-]+\/(source\/)?scripts\/stripe-sandbox\/studio-rest.py$/.test(remote))throw Error('Invalid fixture path');
 createServer(async(req,res)=>{
  if(!req.url.startsWith('/rest/v1/')){res.writeHead(404).end();return;}
  const chunks=[];let size=0;

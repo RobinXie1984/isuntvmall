@@ -1,0 +1,1501 @@
+{
+  "sourceCsvSha256": "43f7dfc5fe1e750a0ad148fdf993c114e1ced2e1b75862cfc69aae34418b2a48",
+  "sourceCatalogueDate": "2026-11-03",
+  "counts": {
+    "existing": 141,
+    "new": 10,
+    "conflict": 0
+  },
+  "rows": [
+    {
+      "handle": "25a18-1",
+      "variantCount": 40,
+      "imageCount": 27,
+      "status": "existing",
+      "existingProductId": "f1f9da66-a580-5a39-b1be-14539c59dd4b",
+      "existingSku": "SUNTV-15489433764083",
+      "existingSlug": "suntv-25a18-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a38-2",
+      "variantCount": 24,
+      "imageCount": 6,
+      "status": "existing",
+      "existingProductId": "8e6dda5d-1311-5db4-9b88-effe05766ab5",
+      "existingSku": "SUNTV-15489433731315",
+      "existingSlug": "suntv-23a38-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "24d09-1",
+      "variantCount": 24,
+      "imageCount": 8,
+      "status": "existing",
+      "existingProductId": "b8e8741b-7ae5-57e3-a2a7-a196738a741a",
+      "existingSku": "SUNTV-15489433665779",
+      "existingSlug": "suntv-24d09-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23d12-1",
+      "variantCount": 32,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "6315e8f1-0a09-5ccc-a52b-731e127d506c",
+      "existingSku": "SUNTV-15489433567475",
+      "existingSlug": "suntv-23d12-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25p02-2",
+      "variantCount": 16,
+      "imageCount": 20,
+      "status": "existing",
+      "existingProductId": "ad9f609b-6a0a-5b76-aa47-1166a5842ab0",
+      "existingSku": "SUNTV-15489433534707",
+      "existingSlug": "suntv-25p02-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "9a57-9",
+      "variantCount": 16,
+      "imageCount": 19,
+      "status": "existing",
+      "existingProductId": "bbb87eba-9156-599d-adad-30573dcd0e72",
+      "existingSku": "SUNTV-15489433501939",
+      "existingSlug": "suntv-9a57-9",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a12-1",
+      "variantCount": 32,
+      "imageCount": 16,
+      "status": "existing",
+      "existingProductId": "527c302d-6474-5f8f-b72b-3f5d18fee307",
+      "existingSku": "SUNTV-15489433403635",
+      "existingSlug": "suntv-23a12-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a38-1",
+      "variantCount": 32,
+      "imageCount": 4,
+      "status": "existing",
+      "existingProductId": "ee6fd795-061c-58cf-8629-8d4d1cab653e",
+      "existingSku": "SUNTV-15489433370867",
+      "existingSlug": "suntv-23a38-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a15h-1",
+      "variantCount": 32,
+      "imageCount": 16,
+      "status": "existing",
+      "existingProductId": "9d73601e-709a-5885-b834-7cab723d61cf",
+      "existingSku": "SUNTV-15489433272563",
+      "existingSlug": "suntv-23a15h-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a15h-2",
+      "variantCount": 32,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "8e0e26c3-09a8-5b22-93d8-563c7e932555",
+      "existingSku": "SUNTV-15489433239795",
+      "existingSlug": "suntv-23a15h-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23a35-1",
+      "variantCount": 32,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "aeb916de-a44b-5b30-acf3-5e917e33ea5c",
+      "existingSku": "SUNTV-15489433207027",
+      "existingSlug": "suntv-23a35-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25a22-1",
+      "variantCount": 24,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "7c4f0225-723a-527d-be1f-608f64bc55ff",
+      "existingSku": "SUNTV-15489433174259",
+      "existingSlug": "suntv-25a22-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "24d09-5",
+      "variantCount": 24,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "40c681be-5fa1-520f-981c-121a75c7f42c",
+      "existingSku": "SUNTV-15489433108723",
+      "existingSlug": "suntv-24d09-5",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy113",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "295209c1-737a-54e0-9725-1864463ab98f",
+      "existingSku": "SUNTV-15486720639219",
+      "existingSlug": "suntv-hy113",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy123",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "06591b77-92e5-5fcc-b8c6-9bc840168bff",
+      "existingSku": "SUNTV-15486720573683",
+      "existingSlug": "suntv-hy123",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy124",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "74fa559e-abdc-5ac5-b676-8eaf1a0a77cf",
+      "existingSku": "SUNTV-15486720540915",
+      "existingSlug": "suntv-hy124",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy115",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "7a62f40b-2b4d-5ff2-b3ab-c881dafaba65",
+      "existingSku": "SUNTV-15486720475379",
+      "existingSlug": "suntv-hy115",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy119",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "aa1aac99-763b-5fd9-b957-aef06264d800",
+      "existingSku": "SUNTV-15486720409843",
+      "existingSlug": "suntv-hy119",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy117",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "63f25add-6491-5fcd-86e2-c6e38347e120",
+      "existingSku": "SUNTV-15486720377075",
+      "existingSlug": "suntv-hy117",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy120",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "b736004a-132c-59a7-857f-bfb3c0e1170f",
+      "existingSku": "SUNTV-15486720344307",
+      "existingSlug": "suntv-hy120",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy121",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "9227d941-65c7-50e4-8922-83e85f3a1b3b",
+      "existingSku": "SUNTV-15486720311539",
+      "existingSlug": "suntv-hy121",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy114",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "86060141-0f7a-5ea8-bc03-8d9a72e4e60f",
+      "existingSku": "SUNTV-15486720246003",
+      "existingSlug": "suntv-hy114",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy122",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "7585c1a1-7bd3-5989-b1fc-a1baa25b6454",
+      "existingSku": "SUNTV-15486720213235",
+      "existingSlug": "suntv-hy122",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy116",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "94cc6463-3ac5-5609-9e0d-8c2a87f0e72b",
+      "existingSku": "SUNTV-15486720180467",
+      "existingSlug": "suntv-hy116",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy118",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "388afbd0-d8b5-5c96-b0e9-29ff112f81f6",
+      "existingSku": "SUNTV-15486720147699",
+      "existingSlug": "suntv-hy118",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy83",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "d47d55ee-c63e-59c0-bf1d-8d5fb99c8ceb",
+      "existingSku": "SUNTV-15486720082163",
+      "existingSlug": "suntv-hy83",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy80",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "e2911c65-7bf7-56d0-a105-81b79c2871c9",
+      "existingSku": "SUNTV-15486720049395",
+      "existingSlug": "suntv-hy80",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy87",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "b3c91ba9-d296-56ae-93ea-b044e3ed7c90",
+      "existingSku": "SUNTV-15486720016627",
+      "existingSlug": "suntv-hy87",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy92",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "48460bdf-210d-5fa1-aba6-d84aed7e0735",
+      "existingSku": "SUNTV-15486719983859",
+      "existingSlug": "suntv-hy92",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy85",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "0e5fd157-f220-5d48-bff0-b0bb2b5373d4",
+      "existingSku": "SUNTV-15486719885555",
+      "existingSlug": "suntv-hy85",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy90",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "f29450dd-fdbb-58dc-a7d3-e02f1259fc67",
+      "existingSku": "SUNTV-15486719852787",
+      "existingSlug": "suntv-hy90",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy88",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "6f5925fd-dd65-51a0-94b2-dd854c0634c9",
+      "existingSku": "SUNTV-15486719820019",
+      "existingSlug": "suntv-hy88",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy93",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "e8ef78d2-dfec-51c4-9608-f8d75f6e5816",
+      "existingSku": "SUNTV-15486719787251",
+      "existingSlug": "suntv-hy93",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy82",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "03219f7b-7ced-5f04-9f77-13e056a46171",
+      "existingSku": "SUNTV-15486719721715",
+      "existingSlug": "suntv-hy82",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy68",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "d910e6db-2ef4-557f-b484-2a6372d060d2",
+      "existingSku": "SUNTV-15486719688947",
+      "existingSlug": "suntv-hy68",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy67",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "4864a5df-6d4e-5c4a-b53f-db531d61618a",
+      "existingSku": "SUNTV-15486719656179",
+      "existingSlug": "suntv-hy67",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy84",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "9ce888ef-2254-540e-b4f7-9ab992af7840",
+      "existingSku": "SUNTV-15486719590643",
+      "existingSlug": "suntv-hy84",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy66",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "183b380d-9cad-5a2e-a5f6-59347887c077",
+      "existingSku": "SUNTV-15486719557875",
+      "existingSlug": "suntv-hy66",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy91",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "65260050-7a0f-5863-901f-027b9cb383f8",
+      "existingSku": "SUNTV-15486719525107",
+      "existingSlug": "suntv-hy91",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy89",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "09f8b092-2eae-5cdb-8dde-6be93705324a",
+      "existingSku": "SUNTV-15486719459571",
+      "existingSlug": "suntv-hy89",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy86",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "28788834-d11c-539a-a797-262cb430d1b4",
+      "existingSku": "SUNTV-15486719394035",
+      "existingSlug": "suntv-hy86",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy81",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "773b6dcf-5ed3-5666-9126-429780b57bb9",
+      "existingSku": "SUNTV-15486719361267",
+      "existingSlug": "suntv-hy81",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy180",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "7fc2cefa-6f51-5975-b53d-739e31c47911",
+      "existingSku": "SUNTV-15486719328499",
+      "existingSlug": "suntv-hy180",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy179",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "16404ba9-9b4b-595a-a1dc-48cd3fcf632a",
+      "existingSku": "SUNTV-15486719262963",
+      "existingSlug": "suntv-hy179",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy178",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "65b4b001-fffe-54b4-9766-cb16c46dda4d",
+      "existingSku": "SUNTV-15486719230195",
+      "existingSlug": "suntv-hy178",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy77",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "19014a62-15b5-5be0-9b4a-539c4e24b5ae",
+      "existingSku": "SUNTV-15486719164659",
+      "existingSlug": "suntv-hy77",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy177",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "c095e312-38a9-5373-9bb4-047ebbecf4fa",
+      "existingSku": "SUNTV-15486719131891",
+      "existingSlug": "suntv-hy177",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy108",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "de61e161-3d2a-56be-8ed4-d1d152ef4cf3",
+      "existingSku": "SUNTV-15486719066355",
+      "existingSlug": "suntv-hy108",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy109",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "804a4005-9d38-5c0a-b8ef-f8857700f501",
+      "existingSku": "SUNTV-15486719033587",
+      "existingSlug": "suntv-hy109",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy107",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "fa523ed5-5bfc-56e8-98b0-208a5f14f42d",
+      "existingSku": "SUNTV-15486719000819",
+      "existingSlug": "suntv-hy107",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy110",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "049b7caf-7c29-5db0-801b-fb7352e49eff",
+      "existingSku": "SUNTV-15486718935283",
+      "existingSlug": "suntv-hy110",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy100",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "dfeaa4cd-950a-5cc9-a97b-a24b5b029397",
+      "existingSku": "SUNTV-15486718902515",
+      "existingSlug": "suntv-hy100",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy105",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "fd602f5a-7b33-5d82-bfd4-af31ff55b84a",
+      "existingSku": "SUNTV-15486718869747",
+      "existingSlug": "suntv-hy105",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy106",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "49826a89-2007-5cd2-9390-2170507dab37",
+      "existingSku": "SUNTV-15486718836979",
+      "existingSlug": "suntv-hy106",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy104",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "a5a4ebde-418b-565c-a64f-f016d292cf3d",
+      "existingSku": "SUNTV-15486718771443",
+      "existingSlug": "suntv-hy104",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy94",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "80a3d6aa-7daa-527d-b72c-9ff0a9f3a9d0",
+      "existingSku": "SUNTV-15486718738675",
+      "existingSlug": "suntv-hy94",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy96",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "64b2862f-5eeb-5042-9b06-ae5b2c5931ca",
+      "existingSku": "SUNTV-15486718705907",
+      "existingSlug": "suntv-hy96",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy102",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "2b430e99-c355-5bd5-81fd-5c7c18730998",
+      "existingSku": "SUNTV-15486718640371",
+      "existingSlug": "suntv-hy102",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy101",
+      "variantCount": 1,
+      "imageCount": 4,
+      "status": "existing",
+      "existingProductId": "ba74ef20-3154-50fb-b68a-f6c7592b0278",
+      "existingSku": "SUNTV-15486718574835",
+      "existingSlug": "suntv-hy101",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy97",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "b5ab64d5-1f03-58b4-84f8-b6362bd269f1",
+      "existingSku": "SUNTV-15486718542067",
+      "existingSlug": "suntv-hy97",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy73",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "0a8053e1-9dff-592e-9421-2792bf103211",
+      "existingSku": "SUNTV-15486718509299",
+      "existingSlug": "suntv-hy73",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy70",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "bf2a6a3e-f7ff-5bed-bd23-5c0dbac788ea",
+      "existingSku": "SUNTV-15486718476531",
+      "existingSlug": "suntv-hy70",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy72",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "19ef57e6-d95f-5a86-80f7-0b37a7c349a6",
+      "existingSku": "SUNTV-15486718443763",
+      "existingSlug": "suntv-hy72",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy71",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "b04a2510-ed18-5482-ba6e-dae22d333cb2",
+      "existingSku": "SUNTV-15486718410995",
+      "existingSlug": "suntv-hy71",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy98",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "c4d9b24c-c419-5d25-b79e-918c11ed089a",
+      "existingSku": "SUNTV-15486718345459",
+      "existingSlug": "suntv-hy98",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "hy103",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "ce1e9cf4-e562-5a8d-be74-13773a973a2f",
+      "existingSku": "SUNTV-15486718312691",
+      "existingSlug": "suntv-hy103",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b28-l26058",
+      "variantCount": 4,
+      "imageCount": 11,
+      "status": "existing",
+      "existingProductId": "7449bcc5-547b-539b-a013-eefae977dbe4",
+      "existingSku": "SUNTV-15427630629107",
+      "existingSlug": "suntv-honayin-b28-l26058",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b27-l26071",
+      "variantCount": 3,
+      "imageCount": 10,
+      "status": "existing",
+      "existingProductId": "52839e8a-78c8-5b80-95e7-343ba4c9841c",
+      "existingSku": "SUNTV-15427630563571",
+      "existingSlug": "suntv-honayin-b27-l26071",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b25-l2530",
+      "variantCount": 4,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "90e0963f-b4b4-5b90-bb60-c93c3af14b7e",
+      "existingSku": "SUNTV-15427630530803",
+      "existingSlug": "suntv-honayin-b25-l2530",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b18-l51021",
+      "variantCount": 3,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "e4044d34-6558-58d8-bcfa-d7ff5246f86b",
+      "existingSku": "SUNTV-15427630498035",
+      "existingSlug": "suntv-honayin-b18-l51021",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b15-l26050",
+      "variantCount": 2,
+      "imageCount": 12,
+      "status": "existing",
+      "existingProductId": "b6277dbc-c26a-55cb-91c4-74834490b52a",
+      "existingSku": "SUNTV-15427630465267",
+      "existingSlug": "suntv-honayin-b15-l26050",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b13-l26022",
+      "variantCount": 2,
+      "imageCount": 10,
+      "status": "existing",
+      "existingProductId": "1a9064c3-1f51-5ada-aa75-6cc621cdf1c7",
+      "existingSku": "SUNTV-15427630432499",
+      "existingSlug": "suntv-honayin-b13-l26022",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b06-l26060",
+      "variantCount": 3,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "f95ccd7e-a925-5234-a766-f1bfb2cf104b",
+      "existingSku": "SUNTV-15427630399731",
+      "existingSlug": "suntv-honayin-b06-l26060",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b05-l2414",
+      "variantCount": 4,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "796483b5-89d1-5d77-b1f5-2c49109530bc",
+      "existingSku": "SUNTV-15427630366963",
+      "existingSlug": "suntv-honayin-b05-l2414",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-b02-l2528",
+      "variantCount": 3,
+      "imageCount": 18,
+      "status": "existing",
+      "existingProductId": "c0559cc2-ed9a-5b07-afca-b213c3560d2b",
+      "existingSku": "SUNTV-15427630334195",
+      "existingSlug": "suntv-honayin-b02-l2528",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c09-26041",
+      "variantCount": 2,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "febca8af-ebef-592c-85ee-46bd3a733f31",
+      "existingSku": "SUNTV-15427630301427",
+      "existingSlug": "suntv-honayin-c09-26041",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c08-l9258",
+      "variantCount": 2,
+      "imageCount": 4,
+      "status": "existing",
+      "existingProductId": "6396252e-e817-5779-b41a-45ac3d81716f",
+      "existingSku": "SUNTV-15427630268659",
+      "existingSlug": "suntv-honayin-c08-l9258",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c07-26090",
+      "variantCount": 2,
+      "imageCount": 6,
+      "status": "existing",
+      "existingProductId": "316bb420-6aa7-52f5-83c3-4a3526ab2536",
+      "existingSku": "SUNTV-15427630235891",
+      "existingSlug": "suntv-honayin-c07-26090",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c06-26092",
+      "variantCount": 2,
+      "imageCount": 4,
+      "status": "existing",
+      "existingProductId": "cdab69e0-c810-5b4b-bebc-249110a4c681",
+      "existingSku": "SUNTV-15427630203123",
+      "existingSlug": "suntv-honayin-c06-26092",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c05-26074",
+      "variantCount": 2,
+      "imageCount": 7,
+      "status": "existing",
+      "existingProductId": "6eec6a79-82bc-54aa-84cc-e897e787921a",
+      "existingSku": "SUNTV-15427630137587",
+      "existingSlug": "suntv-honayin-c05-26074",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c04-26084",
+      "variantCount": 4,
+      "imageCount": 7,
+      "status": "existing",
+      "existingProductId": "21645d36-7038-574a-8edb-1575930978e0",
+      "existingSku": "SUNTV-15427630072051",
+      "existingSlug": "suntv-honayin-c04-26084",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c03-26089",
+      "variantCount": 2,
+      "imageCount": 5,
+      "status": "existing",
+      "existingProductId": "c0067d9f-07d0-5583-8858-0c25866a500e",
+      "existingSku": "SUNTV-15427630039283",
+      "existingSlug": "suntv-honayin-c03-26089",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c02-26034",
+      "variantCount": 2,
+      "imageCount": 5,
+      "status": "existing",
+      "existingProductId": "dbef4d0d-bb41-5ac0-9abf-6c2e3ee94f0a",
+      "existingSku": "SUNTV-15427629973747",
+      "existingSlug": "suntv-honayin-c02-26034",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "honayin-c01-l26096",
+      "variantCount": 2,
+      "imageCount": 6,
+      "status": "existing",
+      "existingProductId": "7e16b881-cad2-51f3-9d6f-95de2db19327",
+      "existingSku": "SUNTV-15427629940979",
+      "existingSlug": "suntv-honayin-c01-l26096",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gtcq-005",
+      "variantCount": 4,
+      "imageCount": 13,
+      "status": "existing",
+      "existingProductId": "813d9a8b-59e3-5a5e-8a2b-91b55c2ee5c0",
+      "existingSku": "SUNTV-10294575005939",
+      "existingSlug": "suntv-gtcq-005",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gtcq-004",
+      "variantCount": 4,
+      "imageCount": 16,
+      "status": "existing",
+      "existingProductId": "836fc6e7-c465-50c7-a0c2-b9b854341740",
+      "existingSku": "SUNTV-10294574973171",
+      "existingSlug": "suntv-gtcq-004",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gtcq-003",
+      "variantCount": 7,
+      "imageCount": 34,
+      "status": "existing",
+      "existingProductId": "1322eb68-9378-5767-a856-23300a7fba2e",
+      "existingSku": "SUNTV-10294574940403",
+      "existingSlug": "suntv-gtcq-003",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gtcq-002",
+      "variantCount": 13,
+      "imageCount": 120,
+      "status": "existing",
+      "existingProductId": "d2769608-4af7-517d-8ce2-109862d0cd44",
+      "existingSku": "SUNTV-10294574907635",
+      "existingSlug": "suntv-gtcq-002",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gtcq-001",
+      "variantCount": 17,
+      "imageCount": 136,
+      "status": "existing",
+      "existingProductId": "b6c8e970-2c6f-552f-8bad-791013098baf",
+      "existingSku": "SUNTV-10294574842099",
+      "existingSlug": "suntv-gtcq-001",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-17",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "6a478e31-b277-5c82-bb26-9238861e7d0d",
+      "existingSku": "SUNTV-10182427443443",
+      "existingSlug": "suntv-allura20260918-17",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-16",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "b1dbd1bf-d521-528b-86d6-5f34dea4901a",
+      "existingSku": "SUNTV-10182427377907",
+      "existingSlug": "suntv-allura20260918-16",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-15",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "cb8e17c9-5be4-5e29-b6f4-ea5f6e60b4ec",
+      "existingSku": "SUNTV-10182427279603",
+      "existingSlug": "suntv-allura20260918-15",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-14",
+      "variantCount": 1,
+      "imageCount": 3,
+      "status": "existing",
+      "existingProductId": "2e26b465-e138-54d4-8a9b-f1976e865774",
+      "existingSku": "SUNTV-10182427214067",
+      "existingSlug": "suntv-allura20260918-14",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-13",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "5c3cf6d8-6b9a-58a6-88b1-d75a5fc963b8",
+      "existingSku": "SUNTV-10182427082995",
+      "existingSlug": "suntv-allura20260918-13",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-12",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "2bdac741-66c2-58c1-b64b-e92c02a74632",
+      "existingSku": "SUNTV-10182427050227",
+      "existingSlug": "suntv-allura20260918-12",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-11",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "6fd763d8-7349-5272-b791-aacf951d7013",
+      "existingSku": "SUNTV-10182426984691",
+      "existingSlug": "suntv-allura20260918-11",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-10",
+      "variantCount": 1,
+      "imageCount": 4,
+      "status": "existing",
+      "existingProductId": "6e04f910-dd05-5f4a-bee5-db865b2687f9",
+      "existingSku": "SUNTV-10182426919155",
+      "existingSlug": "suntv-allura20260918-10",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-09",
+      "variantCount": 1,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "48232f85-2a71-53fe-be45-9494281cffd8",
+      "existingSku": "SUNTV-10182426886387",
+      "existingSlug": "suntv-allura20260918-09",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-08",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "801f6909-389d-5737-96b8-11f3c81815fa",
+      "existingSku": "SUNTV-10182426788083",
+      "existingSlug": "suntv-allura20260918-08",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-07",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "7913e973-33f2-5090-a25d-f558593fff71",
+      "existingSku": "SUNTV-10182426722547",
+      "existingSlug": "suntv-allura20260918-07",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-06",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "2670912d-edec-51a1-8f64-afc68a08529e",
+      "existingSku": "SUNTV-10182426624243",
+      "existingSlug": "suntv-allura20260918-06",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-05",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "5f748367-09e8-5257-8c71-09d10c000dd0",
+      "existingSku": "SUNTV-10182426525939",
+      "existingSlug": "suntv-allura20260918-05",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-04",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "a5e5bb86-5d7a-5702-abc9-6e5c29fc9056",
+      "existingSku": "SUNTV-10182426427635",
+      "existingSlug": "suntv-allura20260918-04",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "allura20260918-01",
+      "variantCount": 3,
+      "imageCount": 2,
+      "status": "existing",
+      "existingProductId": "62ebe538-e010-546f-892d-a300050e64ed",
+      "existingSku": "SUNTV-10182426329331",
+      "existingSlug": "suntv-allura20260918-01",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "22d58a-1",
+      "variantCount": 32,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "213c4a2f-353f-568f-a7ab-a9e3251186a7",
+      "existingSku": "SUNTV-10178912518387",
+      "existingSlug": "suntv-22d58a-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "21a23h-3",
+      "variantCount": 16,
+      "imageCount": 11,
+      "status": "existing",
+      "existingProductId": "391f93c5-5d2a-55cf-b958-a441d4d5d6b8",
+      "existingSku": "SUNTV-10178912452851",
+      "existingSlug": "suntv-21a23h-3",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "2020a1-7",
+      "variantCount": 32,
+      "imageCount": 16,
+      "status": "existing",
+      "existingProductId": "971350b9-040a-505d-914d-fc4ca551d18e",
+      "existingSku": "SUNTV-10178912387315",
+      "existingSlug": "suntv-2020a1-7",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "2020a1-8",
+      "variantCount": 24,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "57931466-1c6a-5b33-b012-fae6dbd45c15",
+      "existingSku": "SUNTV-10178912321779",
+      "existingSlug": "suntv-2020a1-8",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "2020a1-6",
+      "variantCount": 40,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "2bf920a4-3b02-5dc2-b423-f6e500a7d761",
+      "existingSku": "SUNTV-10178912289011",
+      "existingSlug": "suntv-2020a1-6",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "9p65s-2",
+      "variantCount": 72,
+      "imageCount": 21,
+      "status": "existing",
+      "existingProductId": "82e775ac-1b6b-55fc-a91d-8d1682f8faf5",
+      "existingSku": "SUNTV-10178912223475",
+      "existingSlug": "suntv-9p65s-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23p20-2",
+      "variantCount": 24,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "cbd20209-1767-5d64-b8f6-8503ea442a3b",
+      "existingSku": "SUNTV-10178912157939",
+      "existingSlug": "suntv-23p20-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25p01-2",
+      "variantCount": 40,
+      "imageCount": 14,
+      "status": "existing",
+      "existingProductId": "841a88ce-ad39-5b6b-8607-66f6d7f040cc",
+      "existingSku": "SUNTV-10178912125171",
+      "existingSlug": "suntv-25p01-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "26p02-1",
+      "variantCount": 32,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "36829109-6bb2-5276-8a30-d8bf32e58b24",
+      "existingSku": "SUNTV-10178912059635",
+      "existingSlug": "suntv-26p02-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25a06-1",
+      "variantCount": 32,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "181800f7-125a-58ca-8b93-a5850d2e4e71",
+      "existingSku": "SUNTV-10178911994099",
+      "existingSlug": "suntv-25a06-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25p01-5",
+      "variantCount": 40,
+      "imageCount": 19,
+      "status": "existing",
+      "existingProductId": "f69d875a-e7cc-55b8-8787-e1f022ae2dde",
+      "existingSku": "SUNTV-10178911928563",
+      "existingSlug": "suntv-25p01-5",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25p08-1",
+      "variantCount": 32,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "3d7038c3-740b-54dd-9c8d-ce120c6a4b22",
+      "existingSku": "SUNTV-10178911895795",
+      "existingSlug": "suntv-25p08-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "25a21-1",
+      "variantCount": 40,
+      "imageCount": 19,
+      "status": "existing",
+      "existingProductId": "4e4a0a9e-2fbb-55f6-90d8-d5faf8ef73c3",
+      "existingSku": "SUNTV-10178911830259",
+      "existingSlug": "suntv-25a21-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23p20-8",
+      "variantCount": 8,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "bcf136b7-85fd-59ca-8f50-482d46d3e182",
+      "existingSku": "SUNTV-10178911797491",
+      "existingSlug": "suntv-23p20-8",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "23p20-7",
+      "variantCount": 24,
+      "imageCount": 17,
+      "status": "existing",
+      "existingProductId": "d6511047-011d-57b4-a238-3a3eaa2dcf09",
+      "existingSku": "SUNTV-10178911731955",
+      "existingSlug": "suntv-23p20-7",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "20p18-3",
+      "variantCount": 32,
+      "imageCount": 15,
+      "status": "existing",
+      "existingProductId": "9315504a-6d60-5d9e-8578-d608c3dfdd4d",
+      "existingSku": "SUNTV-10178911699187",
+      "existingSlug": "suntv-20p18-3",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "20p18-1",
+      "variantCount": 104,
+      "imageCount": 27,
+      "status": "existing",
+      "existingProductId": "d95d1133-3ecb-5abd-a37d-74b83c16fb01",
+      "existingSku": "SUNTV-10178911666419",
+      "existingSlug": "suntv-20p18-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "20p18-2",
+      "variantCount": 24,
+      "imageCount": 27,
+      "status": "existing",
+      "existingProductId": "3f1d2309-3d63-5aed-9256-d38111ab512d",
+      "existingSku": "SUNTV-10178911633651",
+      "existingSlug": "suntv-20p18-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-11",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "3abb2e82-1a7c-53c3-8ae1-7a3fc62c8f58",
+      "existingSku": "SUNTV-10087024558323",
+      "existingSlug": "suntv-gytg202609-11",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-10",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "de43bec7-f0b5-5b3e-a0ee-31f9c626b964",
+      "existingSku": "SUNTV-10087024492787",
+      "existingSlug": "suntv-gytg202609-10",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-9",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "6228af78-d640-5ee3-8500-94f0ffaed5dd",
+      "existingSku": "SUNTV-10087024427251",
+      "existingSlug": "suntv-gytg202609-9",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-8",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "19b77a4e-9745-5be7-98d1-64407c69b206",
+      "existingSku": "SUNTV-10087024361715",
+      "existingSlug": "suntv-gytg202609-8",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-7",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "4e841f7b-3ca1-59b5-8111-78a836bb9d58",
+      "existingSku": "SUNTV-10087024328947",
+      "existingSlug": "suntv-gytg202609-7",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-6",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "4d5dfb0f-e0b0-5da2-9aa8-02cc79f9621d",
+      "existingSku": "SUNTV-10087024263411",
+      "existingSlug": "suntv-gytg202609-6",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-5",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "f47f7af4-5821-5277-96ea-5dfc948215f9",
+      "existingSku": "SUNTV-10087024197875",
+      "existingSlug": "suntv-gytg202609-5",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-4",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "39c5e14d-a106-5c52-9fb1-39a5c0e52377",
+      "existingSku": "SUNTV-10087024132339",
+      "existingSlug": "suntv-gytg202609-4",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-3",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "f1cece4a-cc42-5929-b9f0-9dd35e69576b",
+      "existingSku": "SUNTV-10087024066803",
+      "existingSlug": "suntv-gytg202609-3",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-2",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "7e62facc-4bad-5c89-8d76-80b1cd15f0f7",
+      "existingSku": "SUNTV-10087023968499",
+      "existingSlug": "suntv-gytg202609-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "gytg202609-1",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-9",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-8",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-7",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-6",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-5",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-4",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-3",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-2",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mj202609-1",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "new",
+      "existingProductId": null,
+      "reason": "private-draft-only"
+    },
+    {
+      "handle": "mdxy-9",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "09ba5049-808a-5748-ad9d-3ebd3a7a02bf",
+      "existingSku": "SUNTV-9964216189171",
+      "existingSlug": "suntv-mdxy-9",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-8",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "6b5d5dd9-2925-5ec2-afbf-ff07afc5e25e",
+      "existingSku": "SUNTV-9964216123635",
+      "existingSlug": "suntv-mdxy-8",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-7",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "7d3e80aa-e649-528d-ba46-62ce584049e9",
+      "existingSku": "SUNTV-9964216090867",
+      "existingSlug": "suntv-mdxy-7",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-6",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "2d6a1eba-1e46-58be-bd24-8620b01ace8f",
+      "existingSku": "SUNTV-9964216025331",
+      "existingSlug": "suntv-mdxy-6",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-5",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "c531339f-6718-5580-bd75-0c4e373bc08b",
+      "existingSku": "SUNTV-9964215959795",
+      "existingSlug": "suntv-mdxy-5",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-4",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "4ef1ae10-9581-566b-bc9e-876bdfb14423",
+      "existingSku": "SUNTV-9964215927027",
+      "existingSlug": "suntv-mdxy-4",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-3",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "89776bcf-2b08-5926-8d3a-cb8508b4d8d7",
+      "existingSku": "SUNTV-9964215828723",
+      "existingSlug": "suntv-mdxy-3",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-2",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "3150490e-5716-565a-be9b-63fdf9d0dcb7",
+      "existingSku": "SUNTV-9964215763187",
+      "existingSlug": "suntv-mdxy-2",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    },
+    {
+      "handle": "mdxy-1",
+      "variantCount": 1,
+      "imageCount": 1,
+      "status": "existing",
+      "existingProductId": "b9fade73-436a-5f75-98ad-00973e71254d",
+      "existingSku": "SUNTV-9964215730419",
+      "existingSlug": "suntv-mdxy-1",
+      "reason": "preserve-existing-listing-until-reviewed-cutover"
+    }
+  ]
+}

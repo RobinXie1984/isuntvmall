@@ -95,3 +95,5 @@ The current native-variant draft candidate remains incomplete and undeployed. Va
 ### Shopify migration candidate (4 November 2026)
 
 The in-progress variant, approved-image and reservation work is documented in [the migration status](docs/SHOPIFY-MIGRATION-WORK-IN-PROGRESS.md). It has not been deployed; variant checkout remains disabled pending the release checks described there.
+
+Follow-up acceptance on 4 November: exact-handle reconciliation found 141 existing products and 10 new items. An isolated mixed-variant Stripe test payment for HK$30, cancellation, signed payment confirmation, correct stock consumption and duplicate-event replay passed. Evidence is in `evidence/20261104-variant-migration`. Production cutover remains pending; see the migration status for remaining work.
