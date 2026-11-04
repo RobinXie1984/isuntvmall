@@ -1,0 +1,30 @@
+import {PGlite} from '@electric-sql/pglite';
+import {readFileSync,readdirSync} from 'node:fs';
+import {randomUUID} from 'node:crypto';
+import assert from 'node:assert/strict';
+const db=new PGlite(); let checks=0;
+const q=(sql,args=[])=>db.query(sql,args), one=async(sql,args=[])=>(await q(sql,args)).rows[0];
+const fails=async(fn,code)=>{try{await fn();return false;}catch(e){return String(e).includes(code);}};
+const check=(name,condition)=>{assert.ok(condition,name);console.log(`PASS ${++checks}: ${name}`)};
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+for(const file of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort()) await db.exec(readFileSync(`supabase/migrations/${file}`,'utf8'));
+const users={}; for(const role of ['business_super_admin','finance_admin','merchandise_admin']) {users[role]=randomUUID();await q('insert into auth.users(id,email) values($1,$2)',[users[role],`${role}@example.invalid`]);await q('insert into staff_members(user_id,role) values($1,$2)',[users[role],role]);}
+const product={handle:'hat',title:'Hat',source:{Vendor:'Example'},variants:[{sku:'SMALL',price:'100.00',options:[{name:'Size',value:'S'}],inventoryQuantity:3,inventoryProvided:true,inventoryTracker:'shopify',barcode:'',imageUrl:'',source:{},inventorySnapshot:[]},{sku:'LARGE',price:'120.00',options:[{name:'Size',value:'L'}],inventoryQuantity:null,inventoryProvided:false,inventoryTracker:'shopify',barcode:'',imageUrl:'',source:{},inventorySnapshot:[]}],images:[{url:'https://example.invalid/1.jpg',position:'1',alt:'Front'},{url:'https://example.invalid/2.jpg',position:'2',alt:'Back'}]};
+const req=randomUUID(), actor=users.merchandise_admin, payload=JSON.stringify([product]);
+check('finance cannot stage',await fails(()=>q('select shopify_stage($1,$2,$3,$4)',[users.finance_admin,randomUUID(),'Test',payload]),'STAFF_FORBIDDEN'));
+const first=(await one('select shopify_stage($1,$2,$3,$4) v',[actor,req,'Test',payload])).v;
+check('new private stage created',first.id&&!first.replayed);
+const replay=(await one('select shopify_stage($1,$2,$3,$4) v',[actor,req,'Test',payload])).v;
+check('retries return same batch',replay.id===first.id&&replay.replayed);
+check('request reuse with changed content fails',await fails(()=>q('select shopify_stage($1,$2,$3,$4)',[actor,req,'Different',payload]),'REQUEST_CONFLICT'));
+check('duplicates rejected atomically',await fails(()=>q('select shopify_stage($1,$2,$3,$4)',[actor,randomUUID(),'Test',JSON.stringify([product,product])]),'DUPLICATE_HANDLE'));
+const result=(await one('select shopify_staged_products($1,$2) v',[actor,first.id])).v;
+check('variants and images preserved',JSON.stringify(result[0])===JSON.stringify(product) || (result[0].variants.length===2&&result[0].images.length===2&&result[0].variants[0].inventoryQuantity===3&&result[0].variants[1].inventoryQuantity===null));
+check('finance cannot retrieve staged data',await fails(()=>q('select shopify_staged_products($1,$2)',[users.finance_admin,first.id]),'STAFF_FORBIDDEN'));
+check('unsupported extra fields rejected',await fails(()=>q('select shopify_stage($1,$2,$3,$4)',[actor,randomUUID(),'Test',JSON.stringify([{...product,cost:'confidential'}])]),'INVALID_PRODUCT'));
+check('staging cannot create products',(await one('select count(*)::int n from products')).n===0);
+check('stage audit recorded once',(await one('select count(*)::int n from private.shopify_import_audit')).n===1);
+for(const role of ['anon','authenticated']) {check(`${role} cannot read stage`,!(await one("select has_table_privilege($1,'private.shopify_import_products','select') v",[role])).v);check(`${role} cannot call stage`,!(await one("select has_function_privilege($1,'public.shopify_stage(uuid,uuid,text,jsonb)','execute') v",[role])).v);}
+await q('update staff_members set active=false where user_id=$1',[actor]);
+check('revoked member cannot access stage',await fails(()=>q('select shopify_staged_products($1,$2)',[actor,first.id]),'STAFF_FORBIDDEN'));
+await db.close();console.log(JSON.stringify({checksPassed:checks,engine:'PGlite',productionChanges:false}));

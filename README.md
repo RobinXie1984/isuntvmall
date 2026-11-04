@@ -85,3 +85,7 @@ The named KOL workflow supports own-room drafts, requests, approved product pins
 ## Source boundaries
 
 This repository contains application source and synthetic examples only. SHOPLINE served as a workflow reference; this application does not depend on private SHOPLINE admin APIs. No private business archive, customer export, account credentials or third-party stream ownership is conveyed by this source release.
+
+## 2026-11-04: Shopify migration continuation
+
+A private staging and inventory-snapshot candidate is under development; it is not deployed or a complete import. See [work in progress](docs/SHOPIFY-MIGRATION-WORK-IN-PROGRESS.md) for verified coverage and outstanding work. The existing MUJI approval gate and checkout hold remain unchanged.
