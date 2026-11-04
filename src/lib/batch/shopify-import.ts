@@ -2,7 +2,9 @@ import Papa from 'papaparse';
 import { draftProductSchema, type DraftProduct } from './contracts';
 
 type Row = Record<string, string>;
-export type ShopifyPreviewItem = { handle: string; title: string; variantCount: number; imageCount: number; imageName?: string; reason?: 'variants'|'no-image'|'sku'|'price'|'name'|'ambiguous-image'|'duplicate-sku'|'conflicting-product'; draft?: DraftProduct };
+export type ShopifySourceVariant = { sku: string; price: string; options: {name:string; value:string}[]; inventoryQuantity: number | null; inventoryProvided: boolean; inventoryTracker: string; barcode: string; imageUrl: string };
+export type ShopifySourceImage = { url:string; position:string; alt:string };
+export type ShopifyPreviewItem = { handle: string; title: string; variantCount: number; imageCount: number; imageName?: string; reason?: 'variants'|'no-image'|'sku'|'price'|'name'|'ambiguous-image'|'duplicate-sku'|'conflicting-product'; draft?: DraftProduct; sourceVariants: ShopifySourceVariant[]; sourceImages: ShopifySourceImage[]; sourceRows: Row[] };
 export type ShopifyPreview = { rows: number; items: ShopifyPreviewItem[] };
 const value = (row: Row, ...keys: string[]) => keys.map(k => (row[k] || '').trim()).find(Boolean) || '';
 function imageFilename(url: string): string | undefined {
@@ -20,7 +22,14 @@ export function previewShopifyCsv(text: string): ShopifyPreview {
     const variants=rows.filter(r=>value(r,'Variant Price','Price') || value(r,'Variant SKU','SKU'));
     const imageRows=rows.map(r=>({url:value(r,'Image Src','Product image URL'), position:Number(value(r,'Image Position','Image position'))||Number.MAX_SAFE_INTEGER})).filter(x=>x.url).sort((a,b)=>a.position-b.position);
     const imageCount=new Set(imageRows.map(x=>x.url)).size;const imageName=imageFilename(imageRows[0]?.url||'');
-    const out:ShopifyPreviewItem={handle,title,variantCount:variants.length,imageCount,imageName};
+    const sourceVariants=variants.map(v=>{
+      const rawQuantity=value(v,'Variant Inventory Qty','Inventory quantity');
+      const quantity=/^-?\d+$/.test(rawQuantity) && Number.isSafeInteger(Number(rawQuantity)) ? Number(rawQuantity) : null;
+      return {sku:value(v,'Variant SKU','SKU'),price:value(v,'Variant Price','Price'),options:[1,2,3].map(n=>({name:value(head,`Option${n} Name`,`Option${n} name`),value:value(v,`Option${n} Value`,`Option${n} value`)})).filter(o=>o.name||o.value),inventoryQuantity:quantity,inventoryProvided:rawQuantity!=='',inventoryTracker:value(v,'Variant Inventory Tracker','Inventory tracker'),barcode:value(v,'Variant Barcodes','Variant Barcode','Barcode'),imageUrl:value(v,'Variant Image','Variant image URL')};
+    });
+    const sourceImages=rows.map(r=>({url:value(r,'Image Src','Product image URL'),position:value(r,'Image Position','Image position'),alt:value(r,'Image Alt Text','Image alt text')})).filter(i=>i.url);
+    // Preserve every source cell in memory for an explicit local review export.
+    const out:ShopifyPreviewItem={handle,title,variantCount:variants.length,imageCount,imageName,sourceVariants,sourceImages,sourceRows:rows};
     if(!title){out.reason='name';items.push(out);continue;}
     if(new Set(rows.map(r=>value(r,'Title')).filter(Boolean)).size>1){out.reason='conflicting-product';items.push(out);continue;}
     if(variants.length!==1){out.reason='variants';items.push(out);continue;}
@@ -40,4 +49,9 @@ export function matchShopifyFiles(preview:ShopifyPreview,filenames:string[]):Map
  const eligible=new Map(preview.items.filter(i=>i.draft&&i.imageName).map(i=>[i.imageName!,i.draft!]));const result=new Map<string,DraftProduct>();
  for(const name of filenames){const draft=eligible.get(name);if(!draft||result.has(name))throw new Error('SHOPIFY_IMAGE_MISMATCH');result.set(name,draft);}
  return result;
+}
+
+/** A local review package, not an import or authority to publish. */
+export function shopifyReviewPackage(preview: ShopifyPreview): string {
+  return JSON.stringify({format:'isuntvmall-shopify-review-v1', notice:'Review only. No products, images or inventory were imported. Source values are unverified.', products:preview.items.map(({handle,title,sourceVariants,sourceImages,sourceRows,reason})=>({handle,title,variants:sourceVariants,images:sourceImages,sourceRows,reason:reason ?? null}))},null,2);
 }

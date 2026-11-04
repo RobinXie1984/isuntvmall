@@ -6,6 +6,12 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 
 The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
 
+## 4 November 2026 — migration data review
+
+The Shopify preview also groups and displays each product’s variant SKUs, option values, source prices, image count and supplied stock quantities. Missing stock is shown as unknown, not zero. “Save review file” exports a local JSON review package containing each original CSV record and all fields, variant rows and image references; the file may contain confidential supplier costs or other private source data. This package is not a database import and does not authorize publication. The supplied `suntvmall_products_export_1.csv` contains no variant quantity column; separate verified inventory data is needed to migrate its stock.
+
+**Remaining gap:** The platform still has no general native product-variant inventory, variant-aware cart, reservation or settlement implementation. Multi-variant products and their photos cannot yet be migrated or sold as native Mall products. The single-variant preparation path below is unchanged. Do not deploy or advertise the review package as a completed Shopify migration.
+
 ## 4 November 2026 — Shopify CSV preparation
 
 Merchandise staff can preview a Shopify product CSV locally in `/admin/batches`. Both the current Shopify export headings (`Handle`, `Variant SKU`, `Variant Price`, `Image Src`) and the newer product-template headings (`URL handle`, `SKU`, `Price`, `Product image URL`) are recognized. Rows are grouped by product handle; the preview reports product, variant and image counts and clearly identifies unsupported or ambiguous products. No CSV or remote image URL is sent or fetched merely to preview it.
