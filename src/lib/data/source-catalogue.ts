@@ -7,6 +7,7 @@ export function isSourceProductId(id: string) { return byId.has(id); }
 export function enrichSourceProduct(product: Product, overrides?: unknown): Product {
   const entry = byId.get(product.id);
   if (!sourceCatalogueEnabled() || !entry || entry.sku !== product.sku) return product;
+  if(product.nativeCatalogueEnabled)return {...product,localizedCopy:{title:entry.title,description:entry.description}};
   const sourceListing: SourceListing = {
     photoCrop: product.images[0]?.sourceUrl.endsWith("/"+entry.reviewedImageName) ? crops[entry.sourceId] : undefined,
     handle: entry.sourceHandle, snapshotAt: catalogue.snapshotAt,

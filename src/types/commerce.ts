@@ -22,6 +22,8 @@ export interface SourceListing {
 export interface NativeVariant { labels?:Partial<CatalogueCopy>; id:string; sku:string; options:{name:string;value:string}[]; priceAmount:number; stockQty:number|null; active:boolean; priceIsPlaceholder:boolean; imageIds:string[] }
 
 export interface Product {
+  nativeCatalogueEnabled?: boolean;
+  localizedCopy?: {title:CatalogueCopy;description:CatalogueCopy};
   nativeVariants?: NativeVariant[];
   sourceListing?: SourceListing;
   isDemo?: boolean;

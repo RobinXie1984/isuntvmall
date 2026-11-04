@@ -14,6 +14,7 @@ export function sourcePriceDisclosure(variant: Variant): PriceDisclosure {
 export function productPriceDisclosure(product: Product): PriceDisclosure | null {
   if (product.isDemo) return "demo";
   if (!validAmount(product.priceAmount)) return "unverified";
+  if(product.nativeCatalogueEnabled && product.nativeVariants?.length && product.nativeVariants.every(v=>!v.priceIsPlaceholder&&validAmount(v.priceAmount)))return null;
   const listing = product.sourceListing;
   if (!listing) return product.sku.startsWith("SUNTV-") ? "unverified" : null;
   // Preserve colleague edits, but do not attribute a conflicting card price to the source.

@@ -97,3 +97,11 @@ The current native-variant draft candidate remains incomplete and undeployed. Va
 The in-progress variant, approved-image and reservation work is documented in [the migration status](docs/SHOPIFY-MIGRATION-WORK-IN-PROGRESS.md). It has not been deployed; variant checkout remains disabled pending the release checks described there.
 
 Follow-up acceptance on 4 November: exact-handle reconciliation found 141 existing products and 10 new items. An isolated mixed-variant Stripe test payment for HK$30, cancellation, signed payment confirmation, correct stock consumption and duplicate-event replay passed. Evidence is in `evidence/20261104-variant-migration`. Production cutover remains pending; see the migration status for remaining work.
+
+## 4 November 2026 — deployed migration workflow
+
+The migration workspace and handbook are live at `/admin/batches` and `/admin/help#shopify-migration`. The supplied Shopify export was staged through the real Business Super Admin session. All 151 products and 1,200 variants are prepared privately: 141 retain their existing product identities and 10 are new drafts. The 240 original product records, 173 images and existing order were preserved; their catalogue checksum matched before and after preparation. Source drafts remain drafts. Multiple originals can be added to a product using its MUJI image-review link; only reviewed published outputs can be associated with a variant.
+
+The supplied product CSV has no inventory quantities. All 1,200 new variant records therefore retain unknown stock, inactive status and demo HK$999.99 until business review. Source prices, options, image references and supported source attributes are retained privately. The inventory CSV parser accepts Shopify's separate all-states export and retains exact option/location observations; it does not invent stock or automatically approve prices or photos.
+
+The existing checkout handoff remains active. Native variant Checkout, reservations, signed payment confirmation, cancellation and recovery are implemented and tested with real Stripe Sandbox Checkout against an isolated database. Native publishing remains disabled until a separate production sales activation; no new real charge was made. The latest tested Worker is recorded in `docs/SHOPIFY-MIGRATION-RELEASE-20261104.md`.

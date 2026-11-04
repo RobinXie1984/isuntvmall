@@ -155,6 +155,7 @@ const checked = result => { if (result.error) throw Error(result.error.message);
 /** Preserve pending colleague edits, approval state, supplier information and visible image IDs. */
 export async function applyExistingMetadata(db, actor, current, previous, next) {
   if (current.sku !== previous.sku || current.id !== previous.id || next.id !== previous.id || next.sku !== previous.sku) throw Error('SOURCE_IDENTITY_CONFLICT');
+  if (current.nativeCatalogueEnabled) return { status: 'held', reason: 'NATIVE_CATALOGUE_MIGRATED' };
   if (current.draftState === 'draft') return { status: 'held', reason: 'COLLEAGUE_DRAFT' };
   const payload = { ...current.payload };
   if (![previous.priceAmount, next.priceAmount].includes(payload.priceAmount)) return { status: 'held', reason: 'COLLEAGUE_PRICE_EDIT' };

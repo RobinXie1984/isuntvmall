@@ -97,6 +97,53 @@ await q("select release_checkout($1,'cancel_confirmed')",[order]);
 
 
 
+const existingId=randomUUID();
+await q("insert into products(id,sku,slug,title,price_amount,stock_qty,status,is_demo) values($1,'SUNTV-123','suntv-hat','Original colleague title',5000,7,'published',false)",[existingId]);
+check('finance cannot reconcile existing product',await fails(()=>q('select shopify_reconcile_existing($1,$2,$3,$4,$5,$6)',[users.finance_admin,first.id,'hat',existingId,'SUNTV-123','suntv-hat']),'STAFF_FORBIDDEN'));
+check('reconciliation rejects mismatched product identity',await fails(()=>q('select shopify_reconcile_existing($1,$2,$3,$4,$5,$6)',[actor,first.id,'hat',existingId,'SUNTV-456','suntv-hat']),'SOURCE_IDENTITY_CONFLICT'));
+// The first handle already has a new draft: a reconciliation must not repoint it.
+check('reconciliation cannot repoint an existing draft',await fails(()=>q('select shopify_reconcile_existing($1,$2,$3,$4,$5,$6)',[actor,first.id,'hat',existingId,'SUNTV-123','suntv-hat']),'SOURCE_CONFLICT'));
+const existingSource={...product,handle:'existing-hat'};
+await q("update products set slug='suntv-existing-hat' where id=$1",[existingId]);
+const sourceBatch=(await one('select shopify_stage($1,$2,$3,$4) v',[actor,randomUUID(),'Existing source',JSON.stringify([existingSource])])).v;
+const original=await one('select to_jsonb(p) snapshot from products p where id=$1',[existingId]);
+const match=(await one('select shopify_reconcile_existing($1,$2,$3,$4,$5,$6) v',[actor,sourceBatch.id,'existing-hat',existingId,'SUNTV-123','suntv-existing-hat'])).v;
+check('existing reconciliation retains the original product id',match.id===existingId);
+check('existing public product is unchanged during preparation',JSON.stringify((await one('select to_jsonb(p) snapshot from products p where id=$1',[existingId])).snapshot)===JSON.stringify(original.snapshot));
+check('existing variants begin inactive with unknown stock',(await one('select count(*)::int n from product_variants where product_id=$1 and not active and stock_qty is null and price_is_placeholder',[existingId])).n===2);
+const pending=(await one('select id from product_variants where product_id=$1 order by source_index limit 1',[existingId])).id;
+await q('select shopify_variant_adjust($1,$2,1,2,2800,$3)',[actor,pending,'Verified count and proposed price']);
+check('existing listing variants can be prepared without changing the public price',(await one('select price_amount from products where id=$1',[existingId])).price_amount===5000);
+check('ordinary edits cannot enable native checkout',await fails(()=>q('update products set native_catalogue_enabled=true where id=$1',[existingId]),'VARIANT_REVIEW_REQUIRED'));
+// Exercise the complete existing-product cutover against isolated fixture media.
+const sourceMedia={...media,targetProductId:existingId,sku:'SUNTV-123',title:'Original colleague title',priceAmount:5000,stockQty:7,isDemo:false};
+const sourceMediaBatch=(await one('select batch_create($1,$2,$3,$4,$5,$6) id',[actor,'Existing image','muji',JSON.stringify(style),JSON.stringify([{filename:'existing.jpg',mime:'image/jpeg',byte_size:100,product_data:sourceMedia}]),randomUUID()])).id;
+const sourceItem=(await one('select id from media_batch_items where batch_id=$1',[sourceMediaBatch])).id;
+await q('select batch_finalize($1,$2,1)',[actor,sourceItem]);let sourceClaim=await one('select * from batch_claim(1)');const sourceHash='d'.repeat(64),sourcePath=`${sourceMediaBatch}/${sourceItem}/r1-${sourceHash}.webp`;
+await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[sourceItem,sourceClaim.lease_token,'batch-processed',sourcePath,sourceHash]);
+await q("select batch_processed($1,1,$2,$3,$4,$5,repeat('e',64),'sharp-0.35.4/v1')",[sourceItem,sourceClaim.lease_token,'a'.repeat(64),sourceHash,sourcePath]);
+await q("select batch_review_visual($1,$2,1,'approve','',$3)",[users.business_super_admin,sourceItem,JSON.stringify(visual)]);sourceClaim=await one('select * from batch_claim(1)');const sourcePublicPath=`batch/${sourceItem}/r1-${sourceHash}.webp`;
+await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[sourceItem,sourceClaim.lease_token,'product-images',sourcePublicPath,sourceHash]);
+await q('select batch_publish($1,1,$2,$3,$4,$5)',[sourceItem,sourceClaim.lease_token,`https://example.supabase.co/storage/v1/object/public/product-images/${sourcePublicPath}`,sourcePublicPath,sourceHash]);
+const existingImage=(await one('select id from product_images where product_id=$1',[existingId])).id;
+await q('select shopify_link_variant_image($1,$2,$3)',[users.business_super_admin,pending,existingImage]);
+await q('select shopify_variant_approve_price($1,$2,2,$3)',[users.business_super_admin,pending,'https://example.invalid invoice checked']);
+await q('select shopify_variant_set_labels($1,$2,3,$3)',[actor,pending,JSON.stringify(labels)]);
+await q('select shopify_variant_prepare($1,$2,4)',[users.business_super_admin,pending]);
+await q("update products set category='Home & Living',title_zh='現有商品',description='Existing product',description_zh='現有商品說明' where id=$1",[existingId]);
+const existingRevision=(await one('select catalog_revision from products where id=$1',[existingId])).catalog_revision;
+const existingCount=(await one('select count(*)::int n from products')).n;
+await q('select shopify_publish_native($1,$2,$3,$4,$5)',[users.business_super_admin,existingId,existingRevision,JSON.stringify([{id:pending,revision:5}]),'Source inventory, prices and approved image reviewed']);
+const cutover=await one('select * from products where id=$1',[existingId]);
+check('reviewed existing cutover keeps identity, slug and colleague title',cutover.id===existingId&&cutover.slug==='suntv-existing-hat'&&cutover.title==='Original colleague title');
+check('reviewed cutover enables only the reviewed variant price',cutover.native_catalogue_enabled&&cutover.price_amount===2800&&cutover.stock_qty===7);
+check('existing cutover creates no duplicate catalogue product',(await one('select count(*)::int n from products')).n===existingCount);
+const sourceDraftId=randomUUID(),draftSource={...product,handle:'source-draft'};
+await q("insert into products(id,sku,slug,title,price_amount,currency,status,is_demo) values($1,'SUNTV-789','suntv-source-draft','Unpublished source',99999,'hkd','draft',true)",[sourceDraftId]);
+const draftSourceBatch=(await one('select shopify_stage($1,$2,$3,$4) v',[actor,randomUUID(),'Unpublished source',JSON.stringify([draftSource])])).v;
+await q('select shopify_reconcile_existing($1,$2,$3,$4,$5,$6)',[actor,draftSourceBatch.id,'source-draft',sourceDraftId,'SUNTV-789','suntv-source-draft']);
+check('source drafts reconcile without being published',(await one('select status,is_demo from products where id=$1',[sourceDraftId])).status==='draft');
+check('source draft variants retain the unknown-stock demo gate',(await one('select count(*)::int n from product_variants where product_id=$1 and not active and stock_qty is null and price_is_placeholder',[sourceDraftId])).n===2);
 for(const role of ['anon','authenticated']) {check(`${role} cannot read stage`,!(await one("select has_table_privilege($1,'private.shopify_import_products','select') v",[role])).v);check(`${role} cannot call stage`,!(await one("select has_function_privilege($1,'public.shopify_stage(uuid,uuid,text,jsonb)','execute') v",[role])).v);}
 await q('update staff_members set active=false where user_id=$1',[actor]);
 check('revoked member cannot access stage',await fails(()=>q('select shopify_staged_products($1,$2)',[actor,first.id]),'STAFF_FORBIDDEN'));

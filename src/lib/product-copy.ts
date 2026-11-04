@@ -2,16 +2,18 @@ import type { Product } from "@/types/commerce";
 import { localize as translateSample, type Locale } from "@/lib/i18n";
 
 type Localize = (value: string) => string;
-type ProductText = Pick<Product, "title" | "titleZh" | "description" | "descriptionZh" | "sourceListing">;
+type ProductText = Pick<Product, "title" | "titleZh" | "description" | "descriptionZh" | "sourceListing" | "localizedCopy">;
 
 // Merchant translations take precedence in the chosen language. Products that
 // predate these optional fields retain the exact sample dictionary fallback.
-export function productTitle(product: Pick<ProductText, "title" | "titleZh" | "sourceListing">, locale: Locale, localize: Localize = value => translateSample(value, locale)): string {
+export function productTitle(product: Pick<ProductText, "title" | "titleZh" | "sourceListing" | "localizedCopy">, locale: Locale, localize: Localize = value => translateSample(value, locale)): string {
+  if(product.localizedCopy && product.title===product.localizedCopy.title.en && product.titleZh===product.localizedCopy.title["zh-Hant"])return product.localizedCopy.title[locale];
   if (product.sourceListing && product.title === product.sourceListing.title.en && product.titleZh === product.sourceListing.title["zh-Hant"]) return product.sourceListing.title[locale];
   return locale === "zh-Hant" && product.titleZh?.trim() ? product.titleZh : localize(product.title);
 }
 
-export function productDescription(product: Pick<ProductText, "description" | "descriptionZh" | "sourceListing">, locale: Locale, localize: Localize = value => translateSample(value, locale)): string {
+export function productDescription(product: Pick<ProductText, "description" | "descriptionZh" | "sourceListing" | "localizedCopy">, locale: Locale, localize: Localize = value => translateSample(value, locale)): string {
+  if(product.localizedCopy && product.description===product.localizedCopy.description.en && product.descriptionZh===product.localizedCopy.description["zh-Hant"])return product.localizedCopy.description[locale];
   if (product.sourceListing && product.description === product.sourceListing.description.en && product.descriptionZh === product.sourceListing.description["zh-Hant"]) return product.sourceListing.description[locale];
   return locale === "zh-Hant" && product.descriptionZh?.trim() ? product.descriptionZh : localize(product.description);
 }

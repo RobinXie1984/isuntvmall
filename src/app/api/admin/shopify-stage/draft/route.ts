@@ -13,8 +13,8 @@ export async function POST(request:Request){
   const input=inputSchema.parse(await readBatchJson(request,2048));
   // The public source catalogue also contains products outside the database.
   // Hold matching handles for an explicit migration rather than duplicating them.
-  if(sourceCatalogue.products.some(product=>product.sourceHandle===input.handle))throw new BatchError('EXISTING_PRODUCT_CONFLICT',409);
-  const {data,error}=await getSupabaseAdmin().rpc('shopify_create_draft',{p_actor:staff.id,p_batch:input.batch,p_handle:input.handle});
+  const existing=sourceCatalogue.products.find(product=>product.sourceHandle===input.handle);
+  const {data,error}=await getSupabaseAdmin().rpc(existing?'shopify_reconcile_existing':'shopify_create_draft',{p_actor:staff.id,p_batch:input.batch,p_handle:input.handle,...(existing?{p_product:existing.id,p_sku:existing.sku,p_slug:existing.slug}:{})});
   if(error)throw error;return batchResponse({ok:true,...data},201);
  }catch(error){return batchFailure(error)}
 }

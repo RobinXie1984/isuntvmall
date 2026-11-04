@@ -1,7 +1,9 @@
 -- Draft-only variant foundation. No source photo or source price is published.
 begin;
+alter table public.products add column native_catalogue_enabled boolean not null default false;
 create table private.shopify_native_products (
  source_handle text primary key,
+ existing_product_revision integer,
  product_id uuid not null unique references public.products(id),
  source_batch_id uuid not null references private.shopify_import_batches(id),
  created_by uuid not null references auth.users(id),
@@ -86,7 +88,7 @@ begin
  select * into v from public.product_variants where id=p_variant for update;
  if not found then raise exception 'VARIANT_NOT_FOUND';end if;
  if v.revision<>p_revision then raise exception 'STALE_REVISION';end if;
- if not exists(select 1 from private.shopify_native_products s join public.products p on p.id=s.product_id where p.id=v.product_id and p.status='draft') then raise exception 'VARIANT_EDIT_FORBIDDEN';end if;
+ if not exists(select 1 from private.shopify_native_products s join public.products p on p.id=s.product_id where p.id=v.product_id and (p.status='draft' or (s.existing_product_revision is not null and not p.native_catalogue_enabled))) then raise exception 'VARIANT_EDIT_FORBIDDEN';end if;
  update public.product_variants set stock_qty=p_stock,proposed_price_amount=p_proposed_price,price_amount=case when p_proposed_price is distinct from v.proposed_price_amount then 99999 else price_amount end,price_is_placeholder=case when p_proposed_price is distinct from v.proposed_price_amount then true else price_is_placeholder end,active=case when p_proposed_price is distinct from v.proposed_price_amount or p_stock is null then false else active end,revision=revision+1 where id=v.id;
  insert into private.shopify_native_audit(product_id,actor_id,action,detail) values(v.product_id,p_actor,'variant_adjusted',jsonb_build_object('variant',v.id,'beforeStock',v.stock_qty,'afterStock',p_stock,'beforeProposedPrice',v.proposed_price_amount,'afterProposedPrice',p_proposed_price,'reason',trim(p_reason)));
  return jsonb_build_object('id',v.id,'revision',v.revision+1,'priceIsPlaceholder',true);

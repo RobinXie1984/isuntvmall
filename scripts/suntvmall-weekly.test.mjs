@@ -67,6 +67,7 @@ describe('weekly source sync and photo gate', () => {
     expect(calls[0][1].p_payload).toMatchObject({ title: 'Colleague title', priceAmount: 1234, visibleImageIds: ['approved-image'], status: 'published' });
     expect(calls.map(c=>c[0])).toEqual(['merchandise_save','merchandise_publish']);
     calls.length = 0; expect((await applyExistingMetadata(db,'actor',{...current,draftState:'draft'},entry,entry)).status).toBe('held'); expect(calls).toEqual([]);
+    expect(await applyExistingMetadata(db,'actor',{...current,nativeCatalogueEnabled:true},entry,entry)).toEqual({status:'held',reason:'NATIVE_CATALOGUE_MIGRATED'});expect(calls).toEqual([]);
   });
 
   it('requires a review for every changed amount and cannot silently drop a hold on the next run',()=>{

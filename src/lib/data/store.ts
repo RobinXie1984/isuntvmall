@@ -38,13 +38,14 @@ function mapImage(row: RecordValue): ProductImage {
 }
 
 function mapNativeVariants(row:RecordValue):NativeVariant[] {
- if(!Array.isArray(row.product_variants))return [];
+ if((isSourceProductId(String(row.id)) && row.native_catalogue_enabled!==true)||!Array.isArray(row.product_variants))return [];
  return (row.product_variants as RecordValue[]).filter(v=>v.active===true).map(v=>({labels:(v.option_labels && typeof v.option_labels==='object' ? v.option_labels : {}) as NativeVariant['labels'],id:String(v.id),sku:String(v.sku||''),options:Array.isArray(v.option_values)?v.option_values.filter((o):o is {name:string;value:string}=>Boolean(o)&&typeof o.name==='string'&&typeof o.value==='string'):[],priceAmount:Number(v.price_amount),stockQty:typeof v.stock_qty==='number'?v.stock_qty:null,active:v.active===true,priceIsPlaceholder:v.price_is_placeholder!==false,imageIds:Array.isArray(v.product_variant_images)?(v.product_variant_images as RecordValue[]).map(i=>String(i.image_id)):[]}));
 }
 function mapProduct(row: RecordValue): Product {
   const images = Array.isArray(row.product_images) ? row.product_images.filter((image: { is_visible?: boolean }) => image.is_visible !== false) : [];
   return enrichSourceProduct({
     id: String(row.id),
+    nativeCatalogueEnabled: row.native_catalogue_enabled===true,
     isDemo: Boolean(row.is_demo),
     sku: String(row.sku),
     slug: String(row.slug),
@@ -95,7 +96,7 @@ export async function getProductsByIds(ids: string[]) {
     .in("id", ids)
     .eq("status", "published");
   if (error) throw new Error(`Unable to load checkout products: ${error.message}`);
-  return (data as RecordValue[]).map(mapProduct).filter(publicProduct).filter(product => !isSourceProductId(product.id));
+  return (data as RecordValue[]).map(mapProduct).filter(publicProduct).filter(product => !isSourceProductId(product.id)||product.nativeCatalogueEnabled);
 }
 
 export async function getProductBySlug(slug: string) {

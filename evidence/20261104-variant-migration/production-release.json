@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-04",
+  "worker": "c3bbdc15-1a9a-4e7c-b14b-81a1d002f467",
+  "previousWorker": "7233fc51-4441-40ca-a050-1ffce205c1e9",
+  "schemaThrough": "20261104082940",
+  "originalProductCount": 240,
+  "currentProductCount": 250,
+  "existingSourceProducts": 141,
+  "originalSourceStatus": {
+    "published": 75,
+    "draft": 66
+  },
+  "newPrivateDrafts": 10,
+  "preparedProductCount": 151,
+  "variantCount": 1200,
+  "inactiveUnknownStockDemoVariants": 1200,
+  "originalProductDigestBefore": "4fa48846a532fa3f8dc4d4ac0a7c56c1",
+  "originalProductDigestAfter": "4fa48846a532fa3f8dc4d4ac0a7c56c1",
+  "imagesBefore": 173,
+  "imagesAfter": 173,
+  "ordersBefore": 1,
+  "ordersAfter": 1,
+  "nativePublishingEnabled": false,
+  "newRealTransactions": 0,
+  "applicationTests": 578,
+  "stagingDatabaseChecks": 60,
+  "variantReservationChecks": 14,
+  "legacyReservationChecks": 40,
+  "unauthenticatedPrivateStageHTTP": 401,
+  "browser": "Chrome",
+  "verifiedMobileCSSWidth": 390,
+  "verifiedMobileDocumentWidth": 390,
+  "verifiedDesktopCSSWidth": 1216,
+  "verifiedLocales": [
+    "ja",
+    "zh-Hans",
+    "zh-Hant",
+    "en"
+  ],
+  "physicalPhoneTest": false,
+  "liveRollbackExecuted": false
+}
