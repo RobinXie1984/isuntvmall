@@ -2,7 +2,7 @@
 
 ## Deployed outcome
 
-Worker: `c3bbdc15-1a9a-4e7c-b14b-81a1d002f467`. Production schema through `20261104082940`. Login: https://www.isuntvmall.com/admin/login. Workspace: https://www.isuntvmall.com/admin/batches. Handbook: https://www.isuntvmall.com/admin/help#shopify-migration.
+Worker: `c3bbdc15-1a9a-4e7c-b14b-81a1d002f467`. Production schema through `20261104082940`. The older `20261102111637` payment-function migration was recorded as superseded after verifying that the installed variant-aware processor includes it; the older function was not re-applied. Login: https://www.isuntvmall.com/admin/login. Workspace: https://www.isuntvmall.com/admin/batches. Handbook: https://www.isuntvmall.com/admin/help#shopify-migration.
 
 The real Business Super Admin session saved the supplied product CSV as a private stage. Exact-handle reconciliation prepared 141 existing records plus 10 new private drafts, with 1,200 inactive variants. Existing source IDs and slugs were retained. The existing 240 records have identical catalogue digest `4fa48846a532fa3f8dc4d4ac0a7c56c1` before and after preparation (excluding the new false native-catalogue flag); 173 images and the existing order were unchanged. Of the 141 source records, 66 were drafts and 75 published; their states were preserved. The first bulk preparation rolled back on the draft-status restriction, which was then fixed by a new tracked migration and tested before retry.
 

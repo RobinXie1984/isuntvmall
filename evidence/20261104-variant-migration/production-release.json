@@ -38,5 +38,6 @@
     "en"
   ],
   "physicalPhoneTest": false,
-  "liveRollbackExecuted": false
+  "liveRollbackExecuted": false,
+  "supersededPaymentMigrationRecorded": "20261102111637"
 }
