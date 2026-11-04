@@ -10,13 +10,13 @@ The reusable template now includes validated brand profiles, inventory adjustmen
 
 The deployed native preparation release supersedes the historical gaps below: see [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md). The current follow-up adds private source-price/translation preparation, product-specific MUJI review links and review filters. See [review preparation, staff steps and access status](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md). Source-listed proposals never approve prices or images. All-states inventory is a separate export; missing or malformed counts remain unknown. Native sales activation is still held.
 
-## 4 November 2026 — migration data review
+## Historical note — early 4 November 2026 migration data review
 
 The Shopify preview also groups and displays each product’s variant SKUs, option values, source prices, image count and supplied stock quantities. Missing stock is shown as unknown, not zero. “Save review file” exports a local JSON review package containing each original CSV record and all fields, variant rows and image references; the file may contain confidential supplier costs or other private source data. This package is not a database import and does not authorize publication. The supplied `suntvmall_products_export_1.csv` contains no variant quantity column; separate verified inventory data is needed to migrate its stock.
 
-**Remaining gap:** The platform still has no general native product-variant inventory, variant-aware cart, reservation or settlement implementation. Multi-variant products and their photos cannot yet be migrated or sold as native Mall products. The single-variant preparation path below is unchanged. Do not deploy or advertise the review package as a completed Shopify migration.
+**Earlier gap, superseded by the deployed migration release above:** At that stage the platform had no general native product-variant inventory, variant-aware cart, reservation or settlement implementation. Multi-variant products and their photos cannot yet be migrated or sold as native Mall products. The single-variant preparation path below is unchanged. Do not deploy or advertise the review package as a completed Shopify migration.
 
-## 4 November 2026 — Shopify CSV preparation
+## Historical note — early 4 November 2026 single-image CSV preparation
 
 Merchandise staff can preview a Shopify product CSV locally in `/admin/batches`. Both the current Shopify export headings (`Handle`, `Variant SKU`, `Variant Price`, `Image Src`) and the newer product-template headings (`URL handle`, `SKU`, `Price`, `Product image URL`) are recognized. Rows are grouped by product handle; the preview reports product, variant and image counts and clearly identifies unsupported or ambiguous products. No CSV or remote image URL is sent or fetched merely to preview it.
 

@@ -29,5 +29,9 @@
   "finalOwnerInteractiveAcceptance": "PENDING_SESSION_RENEWAL",
   "nativeSalesActivated": false,
   "newPayments": 0,
-  "photosApproved": 0
+  "photosApproved": 0,
+  "productsWithVerifiedPrivatePhotoPreparationNotes": 11,
+  "visuallyInspectedOriginalPreviewPairs": 12,
+  "exactHashPropagationProducts": 4,
+  "finalInteractiveBlocker": "Mac locked and one-hour staff session expired"
 }
