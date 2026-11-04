@@ -19,7 +19,7 @@ interface Policy { payment: PaymentIdentity; storeId: string; siteUrl: string; p
 interface ReservedOrder {
  id: string; status: string; currency: string; subtotal_amount: number; reservation_expires_at: string;
  stripe_checkout_session_id: string | null; checkout_policy: Policy;
- order_items: Array<{ id:string;product_id:string;sku:string;title:string;unit_amount:number;quantity:number }>;
+ order_items: Array<{ id:string;product_id:string;sku:string;title:string;unit_amount:number;quantity:number;variant_id?:string|null;variant_options?:{name:string;value:string}[] }>;
 }
 function policy(requestOrigin: string, payment: PaymentIdentity): Policy {
  const supported = new Set(["HK","SG","MY","US","GB","AU","CA","CN","TW","JP","KR","NZ","TH","PH","VN","ID","DE","FR","IT","ES","NL"]);
@@ -50,16 +50,16 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  checkoutGate();
  if(!clientHash||!/^[a-f0-9]{64}$/.test(clientHash))throw new CheckoutError("CHECKOUT_VERIFICATION_REQUIRED","Verification is required.",422);
  const parsed=checkoutInputSchema.parse(input);
- if(parsed.items.some(i=>i.variantId))throw new CheckoutError("VARIANT_CHECKOUT_NOT_READY","This item is not yet available for checkout.",409);
+ if(parsed.items.some(i=>i.variantId) && process.env.VARIANT_CHECKOUT_ENABLED!=="true")throw new CheckoutError("VARIANT_CHECKOUT_NOT_READY","This item is not yet available for checkout.",409);
  const pilot=getStoreProfile().checkoutPilot;
  if(pilot && (parsed.items.some(i=>i.productId!==pilot.productId) || parsed.items.reduce((n,i)=>n+i.quantity,0)>pilot.maxQuantity))throw new CheckoutError("PRODUCT_UNAVAILABLE","Only the authorised collection item can be purchased.");
- const normalized=parsed.items.map(i=>({product_id:i.productId,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
+ const normalized=parsed.items.map(i=>({product_id:i.productId,variant_id:i.variantId ?? null,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));
  const fingerprint=createHash("sha256").update(JSON.stringify(normalized)).digest("hex");
  const identity=await verifyPaymentIdentity();
  const supabase=getSupabaseAdmin();
  const {data:orderId,error:reserveError}=await supabase.rpc("reserve_checkout",{p_attempt:parsed.checkoutAttemptId,p_fingerprint:fingerprint,p_lines:normalized,p_policy:policy(requestOrigin,identity),p_client_hash:clientHash});
  if(reserveError || !orderId)throw rpcError(reserveError?.message ?? "Reservation failed");
- const {data,error}=await supabase.from("orders").select("id,status,currency,subtotal_amount,reservation_expires_at,stripe_checkout_session_id,checkout_policy,order_items(id,product_id,sku,title,unit_amount,quantity)").eq("id",orderId).single();
+ const {data,error}=await supabase.from("orders").select("id,status,currency,subtotal_amount,reservation_expires_at,stripe_checkout_session_id,checkout_policy,order_items(id,product_id,variant_id,variant_options,sku,title,unit_amount,quantity)").eq("id",orderId).single();
  if(error || !data)throw retryError();
  const order=data as ReservedOrder;
  const frozen=frozenPaymentIdentity(order.checkout_policy);
@@ -90,7 +90,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
   ...(p.fulfilment==="collection"?{}:{phone_number_collection:{enabled:true},shipping_address_collection:{allowed_countries:p.countries}}),
   ...(p.shippingRate?{shipping_options:[{shipping_rate:p.shippingRate}]}:{}),automatic_tax:{enabled:p.automaticTax},
   allow_promotion_codes:false,client_reference_id:order.id,metadata:{order_id:order.id,checkout_attempt_id:parsed.checkoutAttemptId},expires_at:expiresAt,
-  line_items:order.order_items.sort((a,b)=>a.id.localeCompare(b.id)).map(i=>({quantity:i.quantity,price_data:{currency:order.currency,unit_amount:i.unit_amount,product_data:{name:i.title,metadata:{product_id:i.product_id,sku:i.sku}}}})),
+  line_items:order.order_items.sort((a,b)=>a.id.localeCompare(b.id)).map(i=>({quantity:i.quantity,price_data:{currency:order.currency,unit_amount:i.unit_amount,product_data:{name:i.title.slice(0,250),metadata:{product_id:i.product_id,sku:i.sku.slice(0,500),...(i.variant_id?{variant_id:i.variant_id}:{})}}}})),
   success_url:`${p.siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,cancel_url:`${p.siteUrl}/cart?checkout=cancelled&attempt=${parsed.checkoutAttemptId}`,
  };
  let session:Stripe.Checkout.Session;

@@ -12,4 +12,5 @@ describe('draft creation endpoint',()=>{
  it('requires an authenticated merchandise role',async()=>{m.allowed.mockReturnValue(false);expect((await POST(req({batch:id,handle:'hat'}))).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();});
  it('rejects extra fields and ignores any attempted actor override',async()=>{expect((await POST(req({batch:id,handle:'hat',actor:id}))).status).toBe(422);expect(m.rpc).not.toHaveBeenCalled();});
  it('passes server-derived identity',async()=>{expect((await POST(req({batch:id,handle:'hat'}))).status).toBe(201);expect(m.rpc).toHaveBeenCalledWith('shopify_create_draft',{p_actor:id,p_batch:id,p_handle:'hat'});});
+ it('holds a handle already present in the public source catalogue',async()=>{expect((await POST(req({batch:id,handle:'honayin-b28-l26058'}))).status).toBe(409);expect(m.rpc).not.toHaveBeenCalled();});
 });

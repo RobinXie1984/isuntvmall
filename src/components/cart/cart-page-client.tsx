@@ -26,10 +26,10 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
   const [paymentPending, setPaymentPending] = useState(false);
   const [confirmationUrl, setConfirmationUrl] = useState<string | null>(null);
   const rows = useMemo(
-    () => items.map((item) => ({ item, product: products.find((product) => product.id === item.productId) })),
+    () => items.map((item) => {const product=products.find((product) => product.id === item.productId);const variant=item.variantId?product?.nativeVariants?.find(v=>v.id===item.variantId):undefined;return {item,product,variant,unavailable:!product || (Boolean(item.variantId) && !variant) || (!item.variantId && Boolean(product?.nativeVariants?.length))};}),
     [items, products],
   );
-  const subtotal = rows.reduce((sum, row) => sum + (row.product?.priceAmount ?? 0) * row.item.quantity, 0);
+  const subtotal = rows.reduce((sum, row) => sum + (row.variant?.priceAmount ?? row.product?.priceAmount ?? 0) * row.item.quantity, 0);
   const currency = rows[0]?.product?.currency ?? "hkd";
   const pilot = getStoreProfile().checkoutPilot;
   const collectionOnly = Boolean(pilot && rows.length && rows.every(row => row.product?.id === pilot.productId));
@@ -113,16 +113,16 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
           <div><span className="eyebrow">{t("YOUR CART", "購物袋")}</span><Heading>{t("Your bag", "我的購物袋")}</Heading></div>
           <span className="muted">{t(`${items.reduce((sum, item) => sum + item.quantity, 0)} items`, `${items.reduce((sum, item) => sum + item.quantity, 0)} 件`, `${items.reduce((sum, item) => sum + item.quantity, 0)}点`)}</span>
         </div>
-        {rows.filter(row => !row.product).map(({item}) => <article className="notice warning" key={cartLineKey(item)}>
+        {rows.filter(row => row.unavailable).map(({item}) => <article className="notice warning" key={cartLineKey(item)}>
           <p>{t("Product unavailable", "商品已無法選購")}</p><button type="button" className="text-button" onClick={() => removeItem(cartLineKey(item))}>{t("Remove unavailable item", "移除商品")}</button>
         </article>)}
-        {rows.map(({ item, product }) => product && (
+        {rows.map(({ item, product, variant, unavailable }) => product && !unavailable && (
           <article className="cart-line" key={cartLineKey(item)}>
-            <img src={productImage(product)} alt={productImageAlt(product, locale, localize)} />
+            <img src={(variant && product.images.find(image=>variant.imageIds.includes(image.id))?.sourceUrl) || productImage(product)} alt={productImageAlt(product, locale, localize)} />
             <div className="cart-line-copy">
               <span className="product-category">{localize(product.category)}</span>
               {compact ? <strong>{productTitle(product, locale, localize)}</strong> : <Link href={`/product/${product.slug}`}>{productTitle(product, locale, localize)}</Link>}
-              <span>{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</span>
+              <span>{formatLocalizedMoney(variant?.priceAmount ?? product.priceAmount, product.currency, locale)}</span>{variant && <small>{variant.labels?.[locale]||t('Option unavailable','規格資料未齊','種類情報がありません')}</small>}{variant?.priceIsPlaceholder && <small>{t("Demo price","示範價格","デモ価格")}</small>}
               {productPriceDisclosure(product) && <small>{t(...priceDisclosureCopy[productPriceDisclosure(product)!])}</small>}
               <small className="attribution">{item.source ? t(`From: ${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `來自：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`, `紹介元：${localize(sessions.find(s=>s.id===item.source?.liveSessionId)?.hostName ?? t("Room unavailable", "直播間無法使用"))}`) : t("Direct selection", "直接選購")}</small>
               <div className="quantity-control" aria-label={t(`${productTitle(product, locale, localize)} quantity`, `${productTitle(product, locale, localize)}數量`, `${productTitle(product, locale, localize)}の数量`)}>
@@ -132,7 +132,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
                 <button className="text-button" type="button" onClick={() => removeItem(cartLineKey(item))}>{t("Remove", "移除")}</button>
               </div>
             </div>
-            <strong>{formatLocalizedMoney(product.priceAmount * item.quantity, product.currency, locale)}</strong>
+            <strong>{formatLocalizedMoney((variant?.priceAmount ?? product.priceAmount) * item.quantity, product.currency, locale)}</strong>
           </article>
         ))}
       </div>
@@ -148,7 +148,7 @@ export function CartPageClient({ products, checkoutReady, sessions, compact = fa
         {!checkoutReady && <p className="notice warning">{localize(CHECKOUT_HOLD_REASON)}</p>}
         {error && <p className="form-error" role="alert">{error}</p>}
         {checkoutReady&&challengeAttempt&&turnstileSiteKey&&<CheckoutVerification key={`${challengeAttempt}-${challengeRevision}`} attemptId={challengeAttempt} siteKey={turnstileSiteKey} onToken={token=>setProof(token?{attemptId:challengeAttempt,token}:null)}/>}
-        <button className="button button-block" type="button" disabled={busy || !checkoutReady || paymentPending || rows.some(row => !row.product)} onClick={checkout}>
+        <button className="button button-block" type="button" disabled={busy || !checkoutReady || paymentPending || rows.some(row => row.unavailable || Boolean(row.variant && (row.variant.priceIsPlaceholder || row.variant.stockQty===null || row.variant.stockQty<row.item.quantity)))} onClick={checkout}>
           {busy ? t("Processing…", "處理中…") : t("Checkout", "結帳")}
         </button>
         <p className="secure-note">{t("Your selections are saved in this browser.", "所選商品儲存在目前瀏覽器。")}</p>

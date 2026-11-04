@@ -37,6 +37,14 @@ const edited=await one('select stock_qty,price_amount,price_is_placeholder,propo
 check('count is private to draft and does not remove placeholder',edited.stock_qty===3&&edited.price_amount===99999&&edited.price_is_placeholder&&edited.proposed_price_amount===2800&&edited.revision===2);
 check('stale variant revisions rejected',await fails(()=>q('select shopify_variant_adjust($1,$2,1,5,2800,$3)',[actor,variant,'retry']),'STALE_REVISION'));
 check('variant edits are audited',(await one("select count(*)::int n from private.shopify_native_audit where product_id=$1 and action='variant_adjusted'",[draft.id])).n===1);
+check('merchandise role cannot approve prices',await fails(()=>q('select shopify_variant_approve_price($1,$2,2,$3)',[actor,variant,'https://example.invalid verified price']),'STAFF_FORBIDDEN'));
+await q('select shopify_variant_approve_price($1,$2,2,$3)',[users.business_super_admin,variant,'https://example.invalid verified price']);
+check('business review records proposed price',(await one('select price_is_placeholder,price_amount from product_variants where id=$1',[variant])).price_amount===2800);
+await q('select shopify_variant_adjust($1,$2,3,3,3000,$3)',[actor,variant,'price changed']);
+check('changing proposed price restores demo status',(await one('select price_is_placeholder,price_amount from product_variants where id=$1',[variant])).price_is_placeholder===true&&(await one('select price_amount from product_variants where id=$1',[variant])).price_amount===99999);
+await q('select shopify_variant_adjust($1,$2,4,3,1999,$3)',[actor,variant,'source generic']);
+check('unverified generic HK$19.99 cannot be approved',await fails(()=>q('select shopify_variant_approve_price($1,$2,5,$3)',[users.business_super_admin,variant,'https://example.invalid generic amount']),'PRICE_REVIEW_REQUIRED'));
+
 
 check('draft cannot be published before complete variant workflow',await fails(()=>q("update products set status='published' where id=$1",[draft.id]),'VARIANT_MIGRATION_NOT_READY'));
 const style=JSON.parse(readFileSync('style/muji/tokens.json','utf8'));
@@ -54,6 +62,39 @@ await q("select batch_review_visual($1,$2,1,'approve','',$3)",[users.business_su
 const publicPath=`batch/${item}/r1-${hash}.webp`;await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_token,'product-images',publicPath,hash]);
 await q('select batch_publish($1,1,$2,$3,$4,$5)',[item,claim.lease_token,`https://example.supabase.co/storage/v1/object/public/product-images/${publicPath}`,publicPath,hash]);
 check('reviewed media can attach to the unpublished native draft',(await one('select count(*)::int n from product_images where product_id=$1',[draft.id])).n===1&&(await one('select status from products where id=$1',[draft.id])).status==='draft');
+const imageId=(await one('select id from product_images where product_id=$1',[draft.id])).id;
+check('merchandise admin cannot map image to variant',await fails(()=>q('select shopify_link_variant_image($1,$2,$3)',[actor,variant,imageId]),'STAFF_FORBIDDEN'));
+check('unapproved or mismatched image cannot be linked',await fails(()=>q('select shopify_link_variant_image($1,$2,$3)',[users.business_super_admin,variant,randomUUID()]),'IMAGE_NOT_APPROVED'));
+await q('select shopify_link_variant_image($1,$2,$3)',[users.business_super_admin,variant,imageId]);
+check('business admin links exactly the approved output',(await one('select count(*)::int n from product_variant_images where variant_id=$1 and image_id=$2',[variant,imageId])).n===1);
+check('mapping retry is idempotent',(await one('select shopify_link_variant_image($1,$2,$3) v',[users.business_super_admin,variant,imageId])).v.replayed===true);
+check('unreviewed price blocks preparation',await fails(()=>q('select shopify_variant_prepare($1,$2,5)',[users.business_super_admin,variant]),'VARIANT_REVIEW_INCOMPLETE'));
+await q('select shopify_variant_adjust($1,$2,5,3,2800,$3)',[actor,variant,'correct price']);await q('select shopify_variant_approve_price($1,$2,6,$3)',[users.business_super_admin,variant,'https://example.invalid invoice checked']);
+check('merchandise admin cannot prepare a variant',await fails(()=>q('select shopify_variant_prepare($1,$2,7)',[actor,variant]),'STAFF_FORBIDDEN'));
+check('missing translations block readiness',await fails(()=>q('select shopify_variant_prepare($1,$2,7)',[users.business_super_admin,variant]),'VARIANT_REVIEW_INCOMPLETE'));
+const labels={'en':'Small','zh-Hant':'小號','zh-Hans':'小号','ja':'小'};await q('select shopify_variant_set_labels($1,$2,7,$3)',[actor,variant,JSON.stringify(labels)]);
+await q('select shopify_variant_prepare($1,$2,8)',[users.business_super_admin,variant]);
+check('business can prepare variant after stock, image and price review',(await one('select active from product_variants where id=$1',[variant])).active===true);
+await q("update products set title_zh='測試帽',description='Hat details',description_zh='商品介紹',category='Fashion' where id=$1",[draft.id]);
+const catalogRevision=(await one('select catalog_revision from products where id=$1',[draft.id])).catalog_revision;
+const revisions=JSON.stringify([{id:variant,revision:9}]);
+check('merchandise admin cannot publish native products',await fails(()=>q('select shopify_publish_native($1,$2,$3,$4,$5)',[actor,draft.id,catalogRevision,revisions,'Stock and images reviewed']),'STAFF_FORBIDDEN'));
+check('stale variant review prevents product publication',await fails(()=>q('select shopify_publish_native($1,$2,$3,$4,$5)',[users.business_super_admin,draft.id,catalogRevision,'[]','Stock and images reviewed']),'STALE_REVISION'));
+await q('select shopify_publish_native($1,$2,$3,$4,$5)',[users.business_super_admin,draft.id,catalogRevision,revisions,'Stock and images reviewed']);
+const published=await one('select status,is_demo,price_amount from products where id=$1',[draft.id]);check('explicit business approval publishes only reviewed variant',published.status==='published'&&!published.is_demo&&published.price_amount===2800);
+check('release authorization is cleared',(await one('select count(*)::int n from private.shopify_release_authorizations')).n===0);
+check('ordinary product price edits cannot bypass variant review',await fails(()=>q('update products set price_amount=5 where id=$1',[draft.id]),'VARIANT_PRICE_REVIEW_REQUIRED'));
+await q('update private.checkout_admission_policy set enabled=true where singleton');
+const order=(await one('select reserve_checkout($1,$2,$3,$4,$5) id',[randomUUID(),'a'.repeat(64),JSON.stringify([{product_id:draft.id,variant_id:variant,quantity:2}]),'{}','b'.repeat(64)])).id;
+check('stock adjustment cannot undercut held variants',await fails(()=>q('select shopify_variant_stock_adjust($1,$2,9,1,$3)',[actor,variant,'counted']),'STOCK_BELOW_RESERVATIONS'));
+check('finance cannot adjust live variant stock',await fails(()=>q('select shopify_variant_stock_adjust($1,$2,9,4,$3)',[users.finance_admin,variant,'counted']),'STOCK_FORBIDDEN'));
+await q('select shopify_variant_stock_adjust($1,$2,9,4,$3)',[actor,variant,'counted']);
+check('live stock update preserves holds and price',(await one('select stock_qty from product_variants where id=$1',[variant])).stock_qty===4&&(await one('select quantity from inventory_reservations where order_id=$1',[order])).quantity===2);
+await q("select release_checkout($1,'cancel_confirmed')",[order]);
+
+
+
+
 
 
 for(const role of ['anon','authenticated']) {check(`${role} cannot read stage`,!(await one("select has_table_privilege($1,'private.shopify_import_products','select') v",[role])).v);check(`${role} cannot call stage`,!(await one("select has_function_privilege($1,'public.shopify_stage(uuid,uuid,text,jsonb)','execute') v",[role])).v);}

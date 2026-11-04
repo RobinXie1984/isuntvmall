@@ -5,7 +5,7 @@ import { hasProductImage } from "@/lib/product-image";
 import { demoKols, demoProducts, getDemoLiveSessions } from "@/lib/data/demo";
 import { hasSupabaseConfig } from "@/lib/env";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
-import type { Kol, LiveSession, Order, Product, ProductImage } from "@/types/commerce";
+import type { Kol, LiveSession, Order, Product, ProductImage, NativeVariant } from "@/types/commerce";
 
 import { supplierDemoProducts } from "./supplier-demo";
 import { expandedProducts } from "./expanded-catalogue";
@@ -37,6 +37,10 @@ function mapImage(row: RecordValue): ProductImage {
   };
 }
 
+function mapNativeVariants(row:RecordValue):NativeVariant[] {
+ if(!Array.isArray(row.product_variants))return [];
+ return (row.product_variants as RecordValue[]).filter(v=>v.active===true).map(v=>({labels:(v.option_labels && typeof v.option_labels==='object' ? v.option_labels : {}) as NativeVariant['labels'],id:String(v.id),sku:String(v.sku||''),options:Array.isArray(v.option_values)?v.option_values.filter((o):o is {name:string;value:string}=>Boolean(o)&&typeof o.name==='string'&&typeof o.value==='string'):[],priceAmount:Number(v.price_amount),stockQty:typeof v.stock_qty==='number'?v.stock_qty:null,active:v.active===true,priceIsPlaceholder:v.price_is_placeholder!==false,imageIds:Array.isArray(v.product_variant_images)?(v.product_variant_images as RecordValue[]).map(i=>String(i.image_id)):[]}));
+}
 function mapProduct(row: RecordValue): Product {
   const images = Array.isArray(row.product_images) ? row.product_images.filter((image: { is_visible?: boolean }) => image.is_visible !== false) : [];
   return enrichSourceProduct({
@@ -55,6 +59,7 @@ function mapProduct(row: RecordValue): Product {
     status: row.status as Product["status"],
     featured: Boolean(row.featured),
     createdAt: String(row.created_at),
+    nativeVariants: mapNativeVariants(row),
     images: (images as RecordValue[]).sort((a, b) => Number(a.position) - Number(b.position)).map(mapImage),
   }, row.source_price_overrides);
 }
@@ -68,7 +73,7 @@ export async function getProducts(options: { includeDrafts?: boolean } = {}) {
   // Explicit pages avoid silently truncating a multi-batch catalogue at the
   // provider's default row limit. Public shop rendering is paginated separately.
   for (let offset = 0; ; offset += 500) {
-    let query = getSupabaseAdmin().from("products").select("*, product_images(*)")
+    let query = getSupabaseAdmin().from("products").select("*, product_images(*), product_variants(*, product_variant_images(image_id))")
       .order("featured", { ascending: false }).order("created_at", { ascending: false }).order("id");
     if (!options.includeDrafts) query = query.eq("status", "published");
     const { data, error } = await query.range(offset, offset + 499);
@@ -86,7 +91,7 @@ export async function getProductsByIds(ids: string[]) {
   if (!hasSupabaseConfig()) return sampleProducts().filter((product) => ids.includes(product.id));
   const { data, error } = await getSupabaseAdmin()
     .from("products")
-    .select("*, product_images(*)")
+    .select("*, product_images(*), product_variants(*, product_variant_images(image_id))")
     .in("id", ids)
     .eq("status", "published");
   if (error) throw new Error(`Unable to load checkout products: ${error.message}`);
@@ -97,7 +102,7 @@ export async function getProductBySlug(slug: string) {
   const sample = supplierCollectionEnabled() ? supplierDemoProducts.find(product => product.slug === slug) : undefined;
   if (sample) return publicProduct(sample) ? sample : null;
   if (!hasSupabaseConfig()) return sampleProducts().find(product => product.slug === slug && product.status === "published") ?? null;
-  const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*)").eq("slug", slug).eq("status", "published").maybeSingle();
+  const { data, error } = await getSupabaseAdmin().from("products").select("*, product_images(*), product_variants(*, product_variant_images(image_id))").eq("slug", slug).eq("status", "published").maybeSingle();
   if (error) throw new Error("Unable to load product.");
   const product = data ? mapProduct(data as RecordValue) : null;
   return product && publicProduct(product) ? product : null;
@@ -143,7 +148,7 @@ export async function getLiveSessions(options: { includeAll?: boolean } = {}) {
 
   let query = getSupabaseAdmin()
     .from("live_sessions")
-    .select("*, kols(*), live_products(position, products(*, product_images(*)))")
+    .select("*, kols(*), live_products(position, products(*, product_images(*), product_variants(*, product_variant_images(image_id))))")
     .order("starts_at", { ascending: true });
   const publicStatuses = getStoreProfile().catalogueMode === "merchant" ? ["live", "scheduled", "ended"] : ["live", "scheduled", "ended", "preview"];
   if (!options.includeAll) query = query.eq("is_public", true).in("status", publicStatuses);

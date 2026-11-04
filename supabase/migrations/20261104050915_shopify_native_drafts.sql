@@ -57,7 +57,7 @@ begin
  -- Do not silently create duplicates of pre-existing source SKUs.
  if exists(select 1 from jsonb_array_elements(entry->'variants') a join public.products p on p.sku=a->>'sku' where coalesce(a->>'sku','')<>'') then raise exception 'EXISTING_PRODUCT_CONFLICT';end if;
  v_source=md5(p_handle);v_slug='shopify-draft-'||v_source;v_sku='SHOPIFY-DRAFT-'||v_source;
- if exists(select 1 from public.products where slug=v_slug or sku=v_sku) then raise exception 'EXISTING_PRODUCT_CONFLICT';end if;
+ if exists(select 1 from public.products where slug in (v_slug,'suntv-'||p_handle) or sku=v_sku) then raise exception 'EXISTING_PRODUCT_CONFLICT';end if;
  insert into public.products(sku,slug,title,description,title_zh,description_zh,price_amount,currency,stock_qty,category,status,is_demo)
  values(v_sku,v_slug,entry->>'title','',null,null,99999,'hkd',0,'General','draft',true) returning id into v_id;
  insert into private.shopify_native_products(source_handle,product_id,source_batch_id,created_by) values(p_handle,v_id,p_batch,p_actor);
@@ -72,7 +72,7 @@ declare result jsonb;
 begin
  perform private.merchandise_require_actor(p_actor);
  if not exists(select 1 from private.shopify_native_products where product_id=p_product) then raise exception 'PRODUCT_NOT_FOUND';end if;
- select coalesce(jsonb_agg(jsonb_build_object('id',v.id,'sku',v.sku,'options',v.option_values,'stockQty',v.stock_qty,'proposedPriceAmount',v.proposed_price_amount,'priceAmount',v.price_amount,'priceIsPlaceholder',v.price_is_placeholder,'revision',v.revision) order by v.source_index),'[]') into result from public.product_variants v where v.product_id=p_product;
+ select coalesce(jsonb_agg(jsonb_build_object('id',v.id,'sku',v.sku,'options',v.option_values,'stockQty',v.stock_qty,'proposedPriceAmount',v.proposed_price_amount,'priceAmount',v.price_amount,'priceIsPlaceholder',v.price_is_placeholder,'active',v.active,'revision',v.revision) order by v.source_index),'[]') into result from public.product_variants v where v.product_id=p_product;
  return result;
 end;$$;
 revoke all on function public.shopify_variant_list(uuid,uuid) from public,anon,authenticated;
@@ -81,12 +81,13 @@ create function public.shopify_variant_adjust(p_actor uuid,p_variant uuid,p_revi
 declare v public.product_variants;
 begin
  perform private.merchandise_require_actor(p_actor);
+ perform pg_catalog.pg_advisory_xact_lock(73219023);
  if p_variant is null or p_revision is null or p_revision<1 or (p_stock is not null and p_stock not between 0 and 1000000) or (p_proposed_price is not null and p_proposed_price not between 1 and 100000000) or coalesce(length(trim(p_reason)),0) not between 1 and 1000 then raise exception 'INVALID_INPUT';end if;
  select * into v from public.product_variants where id=p_variant for update;
  if not found then raise exception 'VARIANT_NOT_FOUND';end if;
  if v.revision<>p_revision then raise exception 'STALE_REVISION';end if;
  if not exists(select 1 from private.shopify_native_products s join public.products p on p.id=s.product_id where p.id=v.product_id and p.status='draft') then raise exception 'VARIANT_EDIT_FORBIDDEN';end if;
- update public.product_variants set stock_qty=p_stock,proposed_price_amount=p_proposed_price,revision=revision+1 where id=v.id;
+ update public.product_variants set stock_qty=p_stock,proposed_price_amount=p_proposed_price,price_amount=case when p_proposed_price is distinct from v.proposed_price_amount then 99999 else price_amount end,price_is_placeholder=case when p_proposed_price is distinct from v.proposed_price_amount then true else price_is_placeholder end,active=case when p_proposed_price is distinct from v.proposed_price_amount or p_stock is null then false else active end,revision=revision+1 where id=v.id;
  insert into private.shopify_native_audit(product_id,actor_id,action,detail) values(v.product_id,p_actor,'variant_adjusted',jsonb_build_object('variant',v.id,'beforeStock',v.stock_qty,'afterStock',p_stock,'beforeProposedPrice',v.proposed_price_amount,'afterProposedPrice',p_proposed_price,'reason',trim(p_reason)));
  return jsonb_build_object('id',v.id,'revision',v.revision+1,'priceIsPlaceholder',true);
 end;$$;

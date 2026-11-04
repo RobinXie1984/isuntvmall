@@ -19,7 +19,10 @@ export interface SourceListing {
   variants: { id: string; priceAmount: number; priceIsPlaceholder?: boolean; priceIsReviewed?: boolean; available: boolean; options: CatalogueCopy[] }[];
 }
 
+export interface NativeVariant { labels?:Partial<CatalogueCopy>; id:string; sku:string; options:{name:string;value:string}[]; priceAmount:number; stockQty:number|null; active:boolean; priceIsPlaceholder:boolean; imageIds:string[] }
+
 export interface Product {
+  nativeVariants?: NativeVariant[];
   sourceListing?: SourceListing;
   isDemo?: boolean;
   id: string;
