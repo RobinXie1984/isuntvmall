@@ -13,6 +13,7 @@ describe("multi-room cart and release boundaries",()=>{
   expect(parseStoredCart([null,{...line,quantity:-1},{...line,source:{kolId:s.kol!.id}},line])).toEqual([line]);
  });
  it("preserves attribution through JSON persistence",()=>expect(parseStoredCart(JSON.parse(JSON.stringify([line])))).toEqual([line]));
+ it("keeps variant choices separate and retains them through direct attribution",()=>{const a={productId:line.productId,variantId:"11111111-1111-4111-8111-111111111111",quantity:1};const b={...a,variantId:"22222222-2222-4222-8222-222222222222"};expect(cartLineKey(a)).not.toBe(cartLineKey(b));expect(parseStoredCart([a,b])).toEqual([a,b]);expect(validateAttribution([a],[])).toEqual([a]);});
  it("bounds duplicate stored quantities",()=>expect(parseStoredCart([line,{...line,quantity:10}])[0].quantity).toBe(10));
  it("accepts selectors only with a valid attempt UUID",()=>{expect(checkoutInputSchema.safeParse({checkoutAttemptId:"11111111-1111-4111-8111-111111111111",items:[line]}).success).toBe(true);expect(checkoutInputSchema.safeParse({items:[line]}).success).toBe(false);});
  it("refuses browser-supplied price or partial attribution",()=>{

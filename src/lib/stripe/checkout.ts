@@ -50,6 +50,7 @@ export async function createCheckoutSession(input: unknown, requestOrigin: strin
  checkoutGate();
  if(!clientHash||!/^[a-f0-9]{64}$/.test(clientHash))throw new CheckoutError("CHECKOUT_VERIFICATION_REQUIRED","Verification is required.",422);
  const parsed=checkoutInputSchema.parse(input);
+ if(parsed.items.some(i=>i.variantId))throw new CheckoutError("VARIANT_CHECKOUT_NOT_READY","This item is not yet available for checkout.",409);
  const pilot=getStoreProfile().checkoutPilot;
  if(pilot && (parsed.items.some(i=>i.productId!==pilot.productId) || parsed.items.reduce((n,i)=>n+i.quantity,0)>pilot.maxQuantity))throw new CheckoutError("PRODUCT_UNAVAILABLE","Only the authorised collection item can be purchased.");
  const normalized=parsed.items.map(i=>({product_id:i.productId,quantity:i.quantity,live_session_id:i.source?.liveSessionId ?? null,kol_id:i.source?.kolId ?? null})).sort((a,b)=>JSON.stringify(a).localeCompare(JSON.stringify(b)));

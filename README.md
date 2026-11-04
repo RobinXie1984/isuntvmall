@@ -89,3 +89,5 @@ This repository contains application source and synthetic examples only. SHOPLIN
 ## 2026-11-04: Shopify migration continuation
 
 A private staging and inventory-snapshot candidate is under development; it is not deployed or a complete import. See [work in progress](docs/SHOPIFY-MIGRATION-WORK-IN-PROGRESS.md) for verified coverage and outstanding work. The existing MUJI approval gate and checkout hold remain unchanged.
+
+The current native-variant draft candidate remains incomplete and undeployed. Variant checkout is intentionally refused; see the migration work-in-progress record before attempting release.

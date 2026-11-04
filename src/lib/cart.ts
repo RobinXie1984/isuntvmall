@@ -2,10 +2,10 @@ import { z } from "zod";
 import type { CartLine, LiveSession } from "@/types/commerce";
 
 const sourceSchema = z.object({ liveSessionId: z.uuid(), kolId: z.uuid() }).strict();
-export const cartLineSchema = z.object({ productId: z.uuid(), quantity: z.number().int().min(1).max(10), source: sourceSchema.optional() }).strict();
+export const cartLineSchema = z.object({ productId: z.uuid(), variantId: z.uuid().optional(), quantity: z.number().int().min(1).max(10), source: sourceSchema.optional() }).strict();
 export const checkoutInputSchema = z.object({ checkoutAttemptId: z.uuid(), items: z.array(cartLineSchema).min(1).max(20) }).strict();
-export function cartLineKey(line: Pick<CartLine, "productId" | "source">) {
- return [line.productId, line.source?.liveSessionId ?? "direct", line.source?.kolId ?? "direct"].join(":");
+export function cartLineKey(line: Pick<CartLine, "productId" | "source" | "variantId">) {
+ return [line.productId, line.source?.liveSessionId ?? "direct", line.source?.kolId ?? "direct", ...(line.variantId ? [line.variantId] : [])].join(":");
 }
 export function parseStoredCart(value: unknown): CartLine[] {
  if (!Array.isArray(value)) return [];
@@ -21,7 +21,7 @@ export function parseStoredCart(value: unknown): CartLine[] {
 // are selectors, never proof of KOL affiliation or entitlement to commission.
 export function validateAttribution(lines: CartLine[], sessions: LiveSession[]): CartLine[] {
  return lines.map(line => {
-  if(!line.source) return { productId:line.productId, quantity:line.quantity };
+  if(!line.source) return { productId:line.productId, quantity:line.quantity, ...(line.variantId ? {variantId:line.variantId} : {}) };
   const session=sessions.find(s=>s.id===line.source?.liveSessionId);
   if(!session || session.status === "preview" || !session.kol || session.kol.status!=="active" || session.kol.id!==line.source.kolId || !session.products.some(p=>p.id===line.productId && p.status==="published")) {
    throw new Error("This product is no longer available from the selected host. Return to the room and select it again.");

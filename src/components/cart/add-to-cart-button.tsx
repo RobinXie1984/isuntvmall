@@ -5,7 +5,7 @@ import type { CartSource } from "@/types/commerce";
 import { useEffect, useRef, useState } from "react";
 import { useCart, type AddItemResult } from "@/components/cart/cart-provider";
 
-export function AddToCartButton({ productId, disabled = false, compact = false, source }: { productId: string; source?: CartSource; disabled?: boolean; compact?: boolean }) {
+export function AddToCartButton({ productId, disabled = false, compact = false, source, variantId }: { productId: string; source?: CartSource; variantId?: string; disabled?: boolean; compact?: boolean }) {
   const { addItem } = useCart();
   const { t } = useLocale();
   const [result, setResult] = useState<AddItemResult | null>(null);
@@ -29,7 +29,7 @@ export function AddToCartButton({ productId, disabled = false, compact = false, 
       aria-label={disabled ? t("Sold out", "售罄") : label}
       title={disabled ? t("Sold out", "售罄") : label}
       onClick={() => {
-        const nextResult = addItem(productId, 1, source);
+        const nextResult = addItem(productId, 1, source, variantId);
         setResult(nextResult);
         if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
         feedbackTimer.current = setTimeout(() => setResult(null), nextResult === "added" ? 1200 : 3000);

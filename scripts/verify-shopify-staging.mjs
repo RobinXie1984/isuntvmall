@@ -24,6 +24,38 @@ check('finance cannot retrieve staged data',await fails(()=>q('select shopify_st
 check('unsupported extra fields rejected',await fails(()=>q('select shopify_stage($1,$2,$3,$4)',[actor,randomUUID(),'Test',JSON.stringify([{...product,cost:'confidential'}])]),'INVALID_PRODUCT'));
 check('staging cannot create products',(await one('select count(*)::int n from products')).n===0);
 check('stage audit recorded once',(await one('select count(*)::int n from private.shopify_import_audit')).n===1);
+check('finance cannot create product drafts',await fails(()=>q('select shopify_create_draft($1,$2,$3)',[users.finance_admin,first.id,'hat']),'STAFF_FORBIDDEN'));
+const draft=(await one('select shopify_create_draft($1,$2,$3) v',[actor,first.id,'hat'])).v;
+check('native draft created with all variants',draft.variants===2&&!draft.replayed);
+check('repeat creation does not overwrite colleague work',(await one('select shopify_create_draft($1,$2,$3) v',[actor,first.id,'hat'])).v.replayed===true);
+check('variants have unknown stock and placeholder price',(await one('select count(*)::int n from product_variants where product_id=$1 and stock_qty is null and price_is_placeholder and not active',[draft.id])).n===2);
+check('draft has no published image',(await one('select count(*)::int n from product_images where product_id=$1',[draft.id])).n===0);
+const variant=(await one('select id from product_variants where product_id=$1 order by source_index limit 1',[draft.id])).id;
+check('finance cannot change variant stock',await fails(()=>q('select shopify_variant_adjust($1,$2,1,3,2800,$3)',[users.finance_admin,variant,'count']),'STAFF_FORBIDDEN'));
+await q('select shopify_variant_adjust($1,$2,1,3,2800,$3)',[actor,variant,'physical count']);
+const edited=await one('select stock_qty,price_amount,price_is_placeholder,proposed_price_amount,revision from product_variants where id=$1',[variant]);
+check('count is private to draft and does not remove placeholder',edited.stock_qty===3&&edited.price_amount===99999&&edited.price_is_placeholder&&edited.proposed_price_amount===2800&&edited.revision===2);
+check('stale variant revisions rejected',await fails(()=>q('select shopify_variant_adjust($1,$2,1,5,2800,$3)',[actor,variant,'retry']),'STALE_REVISION'));
+check('variant edits are audited',(await one("select count(*)::int n from private.shopify_native_audit where product_id=$1 and action='variant_adjusted'",[draft.id])).n===1);
+
+check('draft cannot be published before complete variant workflow',await fails(()=>q("update products set status='published' where id=$1",[draft.id]),'VARIANT_MIGRATION_NOT_READY'));
+const style=JSON.parse(readFileSync('style/muji/tokens.json','utf8'));
+const draftProduct=await one('select sku,title from products where id=$1',[draft.id]);
+const media={targetProductId:draft.id,sku:draftProduct.sku,title:draftProduct.title,titleZh:'測試',description:'Test',descriptionZh:'測試',category:'General',priceAmount:99999,currency:'hkd',stockQty:0,isDemo:true};
+const mediaBatch=(await one('select batch_create($1,$2,$3,$4,$5,$6) id',[actor,'Private image','muji',JSON.stringify(style),JSON.stringify([{filename:'hat.jpg',mime:'image/jpeg',byte_size:100,product_data:media}]),randomUUID()])).id;
+const item=(await one('select id from media_batch_items where batch_id=$1',[mediaBatch])).id;
+await q('select batch_finalize($1,$2,1)',[actor,item]);let claim=await one('select * from batch_claim(1)');
+const hash='b'.repeat(64),path=`${mediaBatch}/${item}/r1-${hash}.webp`;
+await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_token,'batch-processed',path,hash]);
+await q("select batch_processed($1,1,$2,$3,$4,$5,repeat('c',64),'sharp-0.35.4/v1')",[item,claim.lease_token,'a'.repeat(64),hash,path]);
+const visual={version:'muji-v1',calmBackground:true,cleanComposition:true,faithfulAppearance:true,noPromotionalText:true};
+check('merchandise admin cannot approve its own image',await fails(()=>q("select batch_review_visual($1,$2,1,'approve','',$3)",[actor,item,JSON.stringify(visual)]),'STAFF_FORBIDDEN'));
+await q("select batch_review_visual($1,$2,1,'approve','',$3)",[users.business_super_admin,item,JSON.stringify(visual)]);claim=await one('select * from batch_claim(1)');
+const publicPath=`batch/${item}/r1-${hash}.webp`;await q('select batch_reserve_object($1,1,$2,$3,$4,100,$5)',[item,claim.lease_token,'product-images',publicPath,hash]);
+await q('select batch_publish($1,1,$2,$3,$4,$5)',[item,claim.lease_token,`https://example.supabase.co/storage/v1/object/public/product-images/${publicPath}`,publicPath,hash]);
+check('reviewed media can attach to the unpublished native draft',(await one('select count(*)::int n from product_images where product_id=$1',[draft.id])).n===1&&(await one('select status from products where id=$1',[draft.id])).status==='draft');
+
+
 for(const role of ['anon','authenticated']) {check(`${role} cannot read stage`,!(await one("select has_table_privilege($1,'private.shopify_import_products','select') v",[role])).v);check(`${role} cannot call stage`,!(await one("select has_function_privilege($1,'public.shopify_stage(uuid,uuid,text,jsonb)','execute') v",[role])).v);}
 await q('update staff_members set active=false where user_id=$1',[actor]);
 check('revoked member cannot access stage',await fails(()=>q('select shopify_staged_products($1,$2)',[actor,first.id]),'STAFF_FORBIDDEN'));

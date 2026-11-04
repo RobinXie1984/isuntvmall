@@ -94,6 +94,7 @@ export interface Order {
 }
 
 export interface CartLine {
+  variantId?: string;
   source?: CartSource;
   productId: string;
   quantity: number;

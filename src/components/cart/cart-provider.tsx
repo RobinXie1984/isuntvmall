@@ -10,14 +10,14 @@ const STORAGE_KEY = storeStorageKeys().cart;
 
 export type AddItemResult = "added" | "bag-limit" | "quantity-limit" | "invalid";
 
-export function addCartLine(current: CartLine[], productId: string, quantity = 1, source?: CartSource): { items: CartLine[]; result: AddItemResult } {
+export function addCartLine(current: CartLine[], productId: string, quantity = 1, source?: CartSource, variantId?: string): { items: CartLine[]; result: AddItemResult } {
   if (!Number.isInteger(quantity) || quantity < 1) return { items: current, result: "invalid" };
-  const key = cartLineKey({ productId, source });
+  const key = cartLineKey({ productId, source, variantId });
   const existing = current.find(item => cartLineKey(item) === key);
   if ((existing?.quantity ?? 0) + quantity > 10) return { items: current, result: "quantity-limit" };
   if (existing) return { items: current.map(item => cartLineKey(item) === key ? { ...item, quantity: item.quantity + quantity } : item), result: "added" };
   if (current.length >= 20) return { items: current, result: "bag-limit" };
-  return { items: [...current, { productId, quantity, ...(source ? { source } : {}) }], result: "added" };
+  return { items: [...current, { productId, quantity, ...(source ? { source } : {}), ...(variantId ? {variantId} : {}) }], result: "added" };
 }
 
 interface CartContextValue {
@@ -26,7 +26,7 @@ interface CartContextValue {
   getCheckoutAttempt: () => CheckoutAttempt;
   clearCheckoutAttempt: () => void;
   itemCount: number;
-  addItem: (productId: string, quantity?: number, source?: CartSource) => AddItemResult;
+  addItem: (productId: string, quantity?: number, source?: CartSource, variantId?: string) => AddItemResult;
   setQuantity: (productId: string, quantity: number) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
@@ -61,8 +61,8 @@ export function CartProvider({ children, turnstileSiteKey="" }: { children: Reac
     if (ready) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch { /* Storage unavailable: cart remains usable for this visit. */ } }
   }, [items, ready]);
 
-  const addItem = useCallback((productId: string, quantity = 1, source?: CartSource): AddItemResult => {
-    const next = addCartLine(itemsRef.current, productId, quantity, source);
+  const addItem = useCallback((productId: string, quantity = 1, source?: CartSource, variantId?: string): AddItemResult => {
+    const next = addCartLine(itemsRef.current, productId, quantity, source, variantId);
     if (next.result === "added") commitItems(next.items);
     return next.result;
   }, [commitItems]);
