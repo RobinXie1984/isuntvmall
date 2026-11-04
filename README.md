@@ -6,6 +6,14 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 
 The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
 
+## 4 November 2026 — Shopify CSV preparation
+
+Merchandise staff can preview a Shopify product CSV locally in `/admin/batches`. Both the current Shopify export headings (`Handle`, `Variant SKU`, `Variant Price`, `Image Src`) and the newer product-template headings (`URL handle`, `SKU`, `Price`, `Product image URL`) are recognized. Rows are grouped by product handle; the preview reports product, variant and image counts and clearly identifies unsupported or ambiguous products. No CSV or remote image URL is sent or fetched merely to preview it.
+
+The current private batch engine can prepare **one chosen primary image per new single-variant product**, using an exactly matching local JPEG/PNG/WebP filename. It does not import multiple variants, additional photos, source descriptions, categories, inventory, tax, shipping, supplier or publication status. A SKU must satisfy the existing ASCII SKU contract. Conflicting filenames or SKUs are held. The CSV remains on the operator's device; preserve it separately. Enter complete English and Traditional Chinese product details and review category, source data and stock before requesting approval. New imported values are deliberately marked demo, stock is zero, and the unverified generic HK$19.99 price remains HK$999.99 as a demo price. Existing SKUs are not overwritten. Review original and processed images under the existing MUJI checklist; approval remains restricted to authorized staff. Photo URLs are not downloaded or published automatically.
+
+Testing against the three locally supplied SunTVMall files found 151 products in the full export: 62 eligible for the single-image preparation path, 55 multi-variant products held and 34 held for incompatible SKU values. These are preview counts, not imports. Native multi-variant product and inventory import, additional images per new product, and full Shopify field fidelity remain future work. Do not interpret the older dated paragraphs below as current live-payment status; the one-item live pilot was completed and new checkout remains held, as described in `docs/stripe/FAN-COLLECTION-PILOT.md`.
+
 ## Experience
 
 - Multiple creator rooms, each with its own featured products.
