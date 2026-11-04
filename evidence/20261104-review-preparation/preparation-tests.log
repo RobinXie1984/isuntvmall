@@ -1,0 +1,21 @@
+PASS 1: finance cannot prepare suggestions
+PASS 2: verified suggestions applied
+PASS 3: preparation never approves price, stock or readiness
+PASS 4: exact translated labels retained
+PASS 5: retry is idempotent
+PASS 6: retry does not increment revision
+PASS 7: generic price cannot be prepared as verified
+PASS 8: wrong options cannot be matched
+PASS 9: repeated variant ids rejected
+PASS 10: identical retry detects a subsequent colleague edit
+PASS 11: colleague change is held
+PASS 12: a later run cannot wash away the conflict
+PASS 13: colleague price retained
+PASS 14: finance cannot read prepared references
+PASS 15: anon cannot read private preparations
+PASS 16: authenticated cannot read private preparations
+PASS 17: source stock copy sets the exact available quantity
+PASS 18: source stock copy preserves demo labels, price proposal and readiness
+PASS 19: stale bulk stock retry is rejected
+PASS 20: source stock copy leaves a traceable operation record
+{"checksPassed":20,"productionChanges":false}

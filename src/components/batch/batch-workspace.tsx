@@ -30,7 +30,7 @@ async function api(path: string, options?: RequestInit) {
 }
 function post(path: string, body: unknown) { return api(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }); }
 
-export function BatchWorkspace({ preview = false, role, email, targetProduct }: { preview?: boolean; role: BatchRole; email?: string; targetProduct?: DraftProduct }) {
+export function BatchWorkspace({ preview = false, role, email, targetProduct, initialBatch, initialNativeProductId }: { preview?: boolean; role: BatchRole; email?: string; targetProduct?: DraftProduct; initialBatch?:string;initialNativeProductId?:string }) {
   const { t, locale } = useLocale();
   const router = useRouter();
   const canReview = role === "super_admin" || role === "business_super_admin" || role === "admin";
@@ -39,10 +39,10 @@ export function BatchWorkspace({ preview = false, role, email, targetProduct }: 
   const [shopify, setShopify] = useState<ShopifyPreview | null>(null); const [shopifyInvalid, setShopifyInvalid] = useState(false);
   const [inventory,setInventory]=useState<ReturnType<typeof matchShopifyInventory>|null>(null);
   const [stagedNotice,setStagedNotice]=useState(""); const stageRequest=useRef<string|null>(null);
-  const [nativeDraftId,setNativeDraftId]=useState<string|null>(null);
+  const [nativeDraftId,setNativeDraftId]=useState<string|null>(initialNativeProductId||null);
   const [stagedBatches,setStagedBatches]=useState<{id:string;title:string;productCount:number}[]>([]); const [stagedItems,setStagedItems]=useState<{handle:string;title:string;existingProductId?:string;existingSku?:string;variants:{sku:string;price:string;inventoryQuantity:number|null}[];images:unknown[]}[]>([]); const [stagePage,setStagePage]=useState(0); const [stageId,setStageId]=useState<string|null>(null);
   const [batches, setBatches] = useState<MediaBatch[]>([]); const [batchPage, setBatchPage] = useState(0); const [batchCount, setBatchCount] = useState(0);
-  const [selected, setSelected] = useState<string | null>(null); const [detail, setDetail] = useState<Detail | null>(null); const [page, setPage] = useState(0);
+  const [selected, setSelected] = useState<string | null>(initialBatch||null); const [detail, setDetail] = useState<Detail | null>(null); const [page, setPage] = useState(0);
   const [chosen, setChosen] = useState<string[]>([]); const [busy, setBusy] = useState(false); const [notice, setNotice] = useState(""); const [progress, setProgress] = useState({ done: 0, total: 0, failed: 0 });
   const pause = useRef(false); const requestId = useRef<string | null>(null); const csvRead = useRef(0); const inventoryRead = useRef(0);
   const activeStyle = getStylePreset(detail?.batch.style_id || styleId)!;

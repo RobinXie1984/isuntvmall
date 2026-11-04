@@ -2,9 +2,13 @@
 
 A livestream commerce showroom with independent host rooms, per-room product selections, and a shared shopping bag that retains each line's host and stream context.
 
-**Current release: broadcasts and MUJI visual review (8 October 2026), on the white-label V1 demonstration.** Hosts, catalog and stock are illustrative. This version accepts no orders or payments. A server-side release gate prevents payment-session creation even if payment credentials are supplied. See the [release evidence, admin instructions and remaining playback/access checks](docs/BROADCASTS-AND-VISUAL-RELEASE-20261008.md).
+**Current release: Shopify migration preparation and merchandise review (4 November 2026).** Existing SunTVMall listings retain their current checkout. Imported native variants remain inactive, demo-priced and stock-unknown until verified business review; native sales activation remains disabled. The separately authorized one-fan Stripe pilot is retained. See the [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md), [current review preparation](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md) and [fan payment boundary](docs/stripe/FAN-COLLECTION-PILOT.md). The dated sections below retain historical implementation notes and are superseded by these release records.
 
 The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
+
+## 4 November 2026 — current migration review follow-up
+
+The deployed native preparation release supersedes the historical gaps below: see [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md). The current follow-up adds private source-price/translation preparation, product-specific MUJI review links and review filters. See [review preparation, staff steps and access status](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md). Source-listed proposals never approve prices or images. All-states inventory is a separate export; missing or malformed counts remain unknown. Native sales activation is still held.
 
 ## 4 November 2026 — migration data review
 

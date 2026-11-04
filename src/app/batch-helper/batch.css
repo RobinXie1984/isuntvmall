@@ -8,3 +8,7 @@
 .batch-visual-checks legend { font-size: .85rem; padding: 0 .35rem; }
 .batch-visual-checks .batch-select { display: flex; align-items: flex-start; gap: .55rem; margin: .75rem 0; line-height: 1.5; font-size: .82rem; }
 .batch-visual-checks input { flex: 0 0 auto; margin-top: .2rem; }
+
+.batch-source-stock{min-width:0;margin:24px 0;padding:20px 24px;border:1px solid var(--line);background:#fafaf7}.batch-source-stock legend{padding:0 8px;font-size:14px;font-weight:400}.batch-source-stock p{font-size:12px;line-height:1.8;color:var(--muted)}.batch-source-stock .batch-select{padding:12px 0;line-height:1.6}.batch-source-stock button{border:1px solid var(--line);background:white;color:var(--ink);padding:10px 14px;font:inherit;font-size:12px;cursor:pointer}
+
+.batch-source-stock table{width:100%;table-layout:fixed;border-collapse:collapse;margin:14px 0;font-size:12px}.batch-source-stock th,.batch-source-stock td{padding:10px 6px;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.batch-source-stock th:last-child,.batch-source-stock td:last-child{width:20%}.batch-source-stock legend{max-width:100%}

@@ -1,0 +1,61 @@
+PASS 1: finance cannot stage
+PASS 2: new private stage created
+PASS 3: retries return same batch
+PASS 4: request reuse with changed content fails
+PASS 5: duplicates rejected atomically
+PASS 6: variants and images preserved
+PASS 7: finance cannot retrieve staged data
+PASS 8: unsupported extra fields rejected
+PASS 9: staging cannot create products
+PASS 10: stage audit recorded once
+PASS 11: finance cannot create product drafts
+PASS 12: native draft created with all variants
+PASS 13: repeat creation does not overwrite colleague work
+PASS 14: variants have unknown stock and placeholder price
+PASS 15: draft has no published image
+PASS 16: finance cannot change variant stock
+PASS 17: count is private to draft and does not remove placeholder
+PASS 18: stale variant revisions rejected
+PASS 19: variant edits are audited
+PASS 20: merchandise role cannot approve prices
+PASS 21: business review records proposed price
+PASS 22: changing proposed price restores demo status
+PASS 23: unverified generic HK$19.99 cannot be approved
+PASS 24: draft cannot be published before complete variant workflow
+PASS 25: merchandise admin cannot approve its own image
+PASS 26: reviewed media can attach to the unpublished native draft
+PASS 27: merchandise admin cannot map image to variant
+PASS 28: unapproved or mismatched image cannot be linked
+PASS 29: business admin links exactly the approved output
+PASS 30: mapping retry is idempotent
+PASS 31: unreviewed price blocks preparation
+PASS 32: merchandise admin cannot prepare a variant
+PASS 33: missing translations block readiness
+PASS 34: business can prepare variant after stock, image and price review
+PASS 35: merchandise admin cannot publish native products
+PASS 36: stale variant review prevents product publication
+PASS 37: explicit business approval publishes only reviewed variant
+PASS 38: release authorization is cleared
+PASS 39: ordinary product price edits cannot bypass variant review
+PASS 40: stock adjustment cannot undercut held variants
+PASS 41: finance cannot adjust live variant stock
+PASS 42: live stock update preserves holds and price
+PASS 43: finance cannot reconcile existing product
+PASS 44: reconciliation rejects mismatched product identity
+PASS 45: reconciliation cannot repoint an existing draft
+PASS 46: existing reconciliation retains the original product id
+PASS 47: existing public product is unchanged during preparation
+PASS 48: existing variants begin inactive with unknown stock
+PASS 49: existing listing variants can be prepared without changing the public price
+PASS 50: ordinary edits cannot enable native checkout
+PASS 51: reviewed existing cutover keeps identity, slug and colleague title
+PASS 52: reviewed cutover enables only the reviewed variant price
+PASS 53: existing cutover creates no duplicate catalogue product
+PASS 54: source drafts reconcile without being published
+PASS 55: source draft variants retain the unknown-stock demo gate
+PASS 56: anon cannot read stage
+PASS 57: anon cannot call stage
+PASS 58: authenticated cannot read stage
+PASS 59: authenticated cannot call stage
+PASS 60: revoked member cannot access stage
+{"checksPassed":60,"engine":"PGlite","productionChanges":false}

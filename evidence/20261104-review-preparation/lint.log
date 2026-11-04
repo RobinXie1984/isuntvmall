@@ -1,0 +1,10 @@
+
+> isuntvmall@0.1.0 lint
+> eslint .
+
+
+/Users/robin/Developer/RobinOS/10_isuntvmall-review-20261104/scripts/stripe-sandbox/receipt.mjs
+  13:9  warning  'checkout_policy' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+

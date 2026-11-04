@@ -1,0 +1,12 @@
+import {beforeEach,expect,it,vi} from 'vitest';
+vi.mock('server-only',()=>({}));
+const m=vi.hoisted(()=>({staff:vi.fn(),allowed:vi.fn(),rpc:vi.fn(),from:vi.fn(),select:vi.fn(),contains:vi.fn(),in:vi.fn(),limit:vi.fn()}));
+vi.mock('@/lib/batch/auth',()=>({requireBatchStaff:m.staff,requireBatchOrigin:vi.fn()}));
+vi.mock('@/lib/staff/permissions',()=>({permissionAllowed:m.allowed}));
+vi.mock('@/lib/supabase/admin',()=>({getSupabaseAdmin:()=>({rpc:m.rpc,from:m.from})}));
+import {GET} from '@/app/api/admin/shopify-stage/images/route';
+const id='11111111-1111-4111-8111-111111111111',request=()=>new Request('https://example.test/api/admin/shopify-stage/images?product='+id);
+beforeEach(()=>{vi.clearAllMocks();m.staff.mockResolvedValue({id,role:'merchandise_admin'});m.allowed.mockReturnValue(true);m.rpc.mockResolvedValue({data:[],error:null});const query={select:m.select,contains:m.contains,in:m.in,limit:m.limit};m.from.mockReturnValue(query);for(const fn of [m.select,m.contains,m.in])fn.mockReturnValue(query);m.limit.mockResolvedValue({data:[{batch_id:'a',status:'review'},{batch_id:'a',status:'queued'},{batch_id:'b',status:'failed'}],error:null});});
+it('does not query media for staff lacking merchandise rights',async()=>{m.allowed.mockReturnValue(false);expect((await GET(request())).status).toBe(403);expect(m.from).not.toHaveBeenCalled();expect(m.rpc).not.toHaveBeenCalled();});
+it('groups only product-specific pending batches and uses private response headers',async()=>{const response=await GET(request());expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toContain('no-store');expect((await response.json()).pendingBatches).toEqual([{id:'a',count:2},{id:'b',count:1}]);expect(m.contains).toHaveBeenCalledWith('product_data',{targetProductId:id});expect(m.in).toHaveBeenCalledWith('status',expect.not.arrayContaining(['approved','published']));});
+it('fails closed when private media lookup fails',async()=>{m.limit.mockResolvedValue({data:null,error:{code:'DATABASE_DOWN'}});expect((await GET(request())).status).toBe(409);});
