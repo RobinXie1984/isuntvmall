@@ -18,4 +18,6 @@ describe("merchandise API",()=>{
  it("rejects path slugs and unsupported SEO languages",async()=>{expect((await POST(request({...body,payload:{...body.payload,slug:"../admin"}}))).status).toBe(422);expect((await POST(request({...body,payload:{...body.payload,seo:{xx:{title:"Bad"}}}}))).status).toBe(422);expect(m.rpc).not.toHaveBeenCalled();});
  it("returns an actionable conflict for reserved historical URLs",async()=>{m.rpc.mockResolvedValue({error:{message:"SLUG_CONFLICT"}});const r=await POST(request(body));expect(r.status).toBe(409);expect(await r.json()).toEqual({ok:false,code:"SLUG_CONFLICT"});});
 
+ it("normalises nullable legacy copy before editor save",async()=>{m.rpc.mockResolvedValue({data:{items:[{id,payload:{...body.payload,titleZh:null,descriptionZh:null}}],count:1,categories:[]},error:null});const r=await GET(new Request("https://shop.example/api/admin/merchandise"));expect(r.status).toBe(200);const value=await r.json();expect(value.items[0].payload.titleZh).toBe("");expect(value.items[0].payload.descriptionZh).toBe("");expect(value.items[0].payload.priceAmount).toBe(body.payload.priceAmount);});
+
 });
