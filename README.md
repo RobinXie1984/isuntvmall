@@ -6,6 +6,10 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 
 The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
 
+## 5 November 2026 — SEO/GEO Foundation v1 candidate
+
+The existing merchandise editor, product server rendering and approval workflow now have a tested SEO candidate: editable four-language metadata, name-derived slugs, permanent historical URL redirects, honest Product/Offer markup, canonical/hreflang, sitemap and robots controls. Production remains unchanged pending Robin’s explicit approval. See [the before/after report, evidence and release/rollback procedure](docs/seo/FOUNDATION-V1-20261105.md). No search ranking or GEO outcome is claimed.
+
 ## 5 November 2026 — final staff admin acceptance
 
 The final signed-in owner-browser check is complete. Valerie and Xinyang have active, email-confirmed accounts with verified authenticators; their actual backend memberships pass the read boundaries and Finance is denied. The variant workspace, one-location stock preview, private image pagination, demo-price safeguards and in-admin manuals are verified. Sixty focused role/workflow tests pass. See [final acceptance and colleague starting points](docs/ADMIN-ACCEPTANCE-20261105.md). Merchandise approvals remain with the colleagues; no stock, prices, images, access or payments were changed. Existing deployed application code is unchanged, so this documentation update needs no runtime redeployment.

@@ -1,0 +1,171 @@
+{
+  "checkedAt": "2026-11-05T02:54:10.965Z",
+  "cases": [
+    {
+      "path": "/product/everyday-stone-cup",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "en",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://www.isuntvmall.com/product/everyday-stone-cup",
+        "price": "28.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/everyday-stone-cup?locale=zh-Hant",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hant",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://www.isuntvmall.com/product/everyday-stone-cup?locale=zh-Hant",
+        "price": "28.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/everyday-stone-cup?locale=zh-Hans",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hans",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://www.isuntvmall.com/product/everyday-stone-cup",
+        "price": "28.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/everyday-stone-cup?locale=ja",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "ja",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://www.isuntvmall.com/product/everyday-stone-cup",
+        "price": "28.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "en",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=zh-Hant",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hant",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=zh-Hans",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hans",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=ja",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "ja",
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gytg202609-8",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "en",
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=zh-Hant",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hant",
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=zh-Hans",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "zh-Hans",
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=ja",
+      "status": 200,
+      "metadataInInitialHead": true,
+      "canonicalCount": 1,
+      "jsonLdCount": 1,
+      "htmlLang": "ja",
+      "offer": null
+    },
+    {
+      "path": "/product/stone-cup?locale=zh-Hant&room=existing-room",
+      "status": 301,
+      "location": "/product/everyday-stone-cup?locale=zh-Hant&room=existing-room"
+    }
+  ],
+  "sitemapUrlsReturning200": 17,
+  "privateUrlsExcluded": true,
+  "cookieIndependentProductLocale": true,
+  "privatePagesNoindex": true,
+  "environment": "vinext local candidate with disposable PGlite/PostgREST fixture; no production writes"
+}

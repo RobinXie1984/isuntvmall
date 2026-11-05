@@ -1,0 +1,131 @@
+
+> isuntvmall@0.1.0 build:vinext
+> vinext build
+
+
+  vinext build  (Vite 8.3.0)
+
+(node:86780) ExperimentalWarning: glob is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[1/5] analyze client references...
+transforming...
+✓ 837 modules transformed.
+rendering chunks...
+Using secrets defined in .dev.vars
+✓ built in 802ms
+[2/5] analyze server references...
+transforming...
+✓ 340 modules transformed.
+rendering chunks...
+✓ built in 246ms
+[3/5] build rsc environment...
+transforming...
+✓ 829 modules transformed.
+rendering chunks...
+Using secrets defined in .dev.vars
+computing gzip size...
+✓ built in 748ms
+[4/5] build client environment...
+transforming...
+✓ 333 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 523ms
+[5/5] build ssr environment...
+transforming...
+✓ 340 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 382ms
+[0m
+  Route (app)
+  ┌ ƒ /                                
+  ├ ? /admin                           
+  ├ ? /admin/analytics                 
+  ├ ƒ /admin/batches                   
+  ├ ? /admin/batches/login             
+  ├ ƒ /admin/broadcasts                
+  ├ ƒ /admin/channel                   
+  ├ ? /admin/finance                   
+  ├ ? /admin/help                      
+  ├ ? /admin/inventory                 
+  ├ ? /admin/invite                    
+  ├ ? /admin/kols                      
+  ├ ? /admin/live                      
+  ├ ƒ /admin/login                     
+  ├ ƒ /admin/mfa                       
+  ├ ? /admin/orders                    
+  ├ ? /admin/overview                  
+  ├ ? /admin/prices                    
+  ├ ? /admin/products                  
+  ├ ? /admin/settings                  
+  ├ ƒ /admin/team                      
+  ├ λ /api/admin/batches               
+  ├ λ /api/admin/batches/:id           
+  ├ λ /api/admin/batches/items/:id     
+  ├ λ /api/admin/batches/session       
+  ├ λ /api/admin/broadcasts            
+  ├ λ /api/admin/checkout-policy       
+  ├ λ /api/admin/finance               
+  ├ λ /api/admin/inventory             
+  ├ λ /api/admin/invite/accept         
+  ├ λ /api/admin/invite/session        
+  ├ λ /api/admin/kols                  
+  ├ λ /api/admin/live                  
+  ├ λ /api/admin/live/:id              
+  ├ λ /api/admin/merchandise           
+  ├ λ /api/admin/mfa                   
+  ├ λ /api/admin/orders                
+  ├ λ /api/admin/orders/:id            
+  ├ λ /api/admin/overview              
+  ├ λ /api/admin/prices                
+  ├ λ /api/admin/products              
+  ├ λ /api/admin/products/import       
+  ├ λ /api/admin/session               
+  ├ λ /api/admin/shopify-stage         
+  ├ λ /api/admin/shopify-stage/draft   
+  ├ λ /api/admin/shopify-stage/images  
+  ├ λ /api/admin/shopify-stage/labels  
+  ├ λ /api/admin/shopify-stage/prepare 
+  ├ λ /api/admin/shopify-stage/price   
+  ├ λ /api/admin/shopify-stage/publish 
+  ├ λ /api/admin/shopify-stage/stock   
+  ├ λ /api/admin/shopify-stage/variants
+  ├ λ /api/admin/team                  
+  ├ λ /api/admin/team/invite           
+  ├ λ /api/admin/upload                
+  ├ λ /api/channel                     
+  ├ λ /api/checkout                    
+  ├ λ /api/checkout/cancel             
+  ├ λ /api/live/:id                    
+  ├ λ /api/stripe/webhook              
+  ├ ? /batch-helper                    
+  ├ ƒ /cart                            
+  ├ ƒ /channel                         
+  ├ ƒ /collections                     
+  ├ ? /contact                         
+  ├ λ /icon.svg                        
+  ├ ƒ /live                            
+  ├ ƒ /live/:slug                      
+  ├ ? /privacy                         
+  ├ ƒ /product/:slug                   
+  ├ ? /purchase-information            
+  ├ λ /robots.txt                      
+  ├ ƒ /shop                            
+  ├ λ /site.webmanifest                
+  ├ λ /sitemap.xml                     
+  ├ ? /studio                          
+  ├ ƒ /styles                          
+  ├ ƒ /success                         
+  ├ ? /terms                           
+  ├ ƒ /watch                           
+  └ ƒ /watch/:id                       
+
+  λ API  ƒ Dynamic  ? Unknown
+
+  ? Some routes could not be classified. vinext currently uses static analysis
+    and cannot detect dynamic API usage (headers(), cookies(), etc.) at build time.
+    Automatic classification will be improved in a future release.
+
+  Build complete. Run `vinext start` to start the production server.
+

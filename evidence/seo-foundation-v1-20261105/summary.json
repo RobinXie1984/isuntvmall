@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-11-05T02:51:47.691084+00:00",
+  "productionDatabaseChanged": false,
+  "applicationTests": 613,
+  "seoDatabaseChecks": 23,
+  "migrationRegressionChecks": 60,
+  "variantCheckoutChecks": 14,
+  "legacyReservationChecks": 40,
+  "rawHtmlProductLanguageCases": 12,
+  "permanentRedirectStatus": 301,
+  "sitemapFixtureUrlsReturning200": 17,
+  "metadataInInitialHead": true,
+  "googleCodeModeValidItems": 2,
+  "googleJsonLdIdenticalToFinal": true,
+  "googleOptionalWarnings": [
+    "aggregateRating",
+    "review",
+    "shippingDetails",
+    "hasMerchantReturnPolicy"
+  ],
+  "googleFinalFullHtmlResubmission": "UNKNOWN",
+  "googleFinalFullHtmlResubmissionReason": "Google returned Something went wrong twice; successful initial test used byte-identical JSON-LD.",
+  "publicUrlGoogleTest": "UNKNOWN",
+  "newPayments": 0,
+  "newServiceCredentials": 0,
+  "actualColleagueSessionsImpersonated": false,
+  "databaseEngine": "PGlite; managed production migration remains unapplied",
+  "productionDeployed": false,
+  "productionApprovalRequired": true,
+  "publicUrlGoogleTestReason": "Production is unchanged pending approval; no candidate public URL exists."
+}

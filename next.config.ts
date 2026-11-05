@@ -3,6 +3,8 @@ import { loadStoreProfile } from "./config/store-profile-loader.mjs";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Keep metadata in the initial HTML head for search and AI crawlers.
+  htmlLimitedBots: /.*/,
   env: { NEXT_PUBLIC_STORE_PROFILE: JSON.stringify(loadStoreProfile()) },
   experimental: {
     typedEnv: true,

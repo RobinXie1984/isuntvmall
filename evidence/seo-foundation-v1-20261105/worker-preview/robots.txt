@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /success
+Disallow: /studio
+Disallow: /batch-helper
+Sitemap: https://www.isuntvmall.com/sitemap.xml

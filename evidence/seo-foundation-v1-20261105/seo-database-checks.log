@@ -1,0 +1,24 @@
+PASS 1: new product gets a human-readable name slug
+PASS 2: automatic duplicate names get unique suffix
+PASS 3: existing editor returns defaults for SEO and slug
+PASS 4: draft SEO does not change public URL
+PASS 5: merchandise cannot approve URL changes
+PASS 6: business approval persists SEO and brand
+PASS 7: public slug changes without changing identity
+PASS 8: old and new URL claims bind the same product
+PASS 9: all aliases resolve to current product without chains
+PASS 10: old slug cannot be stolen by another product
+PASS 11: static showroom URLs cannot be claimed
+PASS 12: failed collision rolls back the whole write
+PASS 13: finance cannot save SEO
+PASS 14: stale revision rejected
+PASS 15: older clients cannot erase SEO or slug
+PASS 16: older editors receive only legacy payload keys
+PASS 17: SEO audit records actor and approved history
+PASS 18: anon has no alias table access
+PASS 19: anon has no SEO write RPC
+PASS 20: authenticated has no alias table access
+PASS 21: authenticated has no SEO write RPC
+PASS 22: existing server role can use the wrapped editor RPC
+PASS 23: prices, stock and approved image identity preserved
+{"checksPassed":23,"productionChanges":false}

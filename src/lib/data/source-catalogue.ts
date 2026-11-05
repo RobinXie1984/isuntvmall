@@ -7,14 +7,14 @@ export function isSourceProductId(id: string) { return byId.has(id); }
 export function enrichSourceProduct(product: Product, overrides?: unknown): Product {
   const entry = byId.get(product.id);
   if (!sourceCatalogueEnabled() || !entry || entry.sku !== product.sku) return product;
-  if(product.nativeCatalogueEnabled)return {...product,localizedCopy:{title:entry.title,description:entry.description}};
+  if(product.nativeCatalogueEnabled)return {...product,brand:product.brand?.trim()||entry.brand,localizedCopy:{title:entry.title,description:entry.description}};
   const sourceListing: SourceListing = {
     photoCrop: product.images[0]?.sourceUrl.endsWith("/"+entry.reviewedImageName) ? crops[entry.sourceId] : undefined,
     handle: entry.sourceHandle, snapshotAt: catalogue.snapshotAt,
     options: entry.options, variants: reviewedVariants(entry, overrides),
     title: entry.title, description: entry.description,
   };
-  return { ...product, priceAmount: (product.priceAmount === entry.priceAmount || (overrides && typeof overrides === "object" && entry.variants.some(v => Object.hasOwn(overrides,v.id)))) ? Math.min(...sourceListing.variants.map(v => v.priceAmount)) : product.priceAmount, sourceListing };
+  return { ...product, brand:product.brand?.trim()||entry.brand, priceAmount: (product.priceAmount === entry.priceAmount || (overrides && typeof overrides === "object" && entry.variants.some(v => Object.hasOwn(overrides,v.id)))) ? Math.min(...sourceListing.variants.map(v => v.priceAmount)) : product.priceAmount, sourceListing };
 }
 export function sourcePurchaseUrl(handle: string, variantId: string): string {
   if (!/^[a-z0-9-]+$/.test(handle) || !/^\d+$/.test(variantId)) throw new Error('Invalid source option');

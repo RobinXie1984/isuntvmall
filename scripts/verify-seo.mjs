@@ -1,0 +1,32 @@
+import {PGlite} from '@electric-sql/pglite';import {readFileSync,readdirSync} from 'node:fs';import {randomUUID} from 'node:crypto';import assert from 'node:assert/strict';
+const db=new PGlite(),q=(s,a=[])=>db.query(s,a),one=async(s,a=[])=>(await q(s,a)).rows[0];let checks=0;const check=(s,ok)=>{assert(ok,s);console.log(`PASS ${++checks}: ${s}`)};const fails=async(fn,code)=>{try{await fn();return false}catch(e){return String(e).includes(code)}};
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+for(const f of readdirSync('supabase/migrations').filter(f=>f.endsWith('.sql')).sort())await db.exec(readFileSync('supabase/migrations/'+f,'utf8'));
+const users={};for(const role of ['business_super_admin','merchandise_admin','finance_admin']){const id=randomUUID();users[role]=id;await q('insert into auth.users(id) values($1)',[id]);await q('insert into staff_members(user_id,role) values($1,$2)',[id,role]);}
+const a=users.merchandise_admin,b=users.business_super_admin,id=randomUUID(),image=randomUUID();
+await q("insert into products(id,sku,slug,title,description,category,price_amount,stock_qty,is_demo,status) values($1,'SEO-CUP','','Stone cup','A real stone cup','Home',2800,3,false,'published')",[id]);
+await q("insert into product_images(id,product_id,source_url,position) values($1,$2,'/fixture/cup.jpg',0)",[image,id]);
+check('new product gets a human-readable name slug',(await one('select slug from products where id=$1',[id])).slug==='stone-cup');
+const second=randomUUID();await q("insert into products(id,sku,slug,title,price_amount) values($1,'SEO-CUP-2','','Stone cup',2800)",[second]);check('automatic duplicate names get unique suffix',(await one('select slug from products where id=$1',[second])).slug==='stone-cup-2');
+const list=(await one('select merchandise_list($1,0,$2) v',[a,'SEO-CUP'])).v;const item=list.items.find(i=>i.id===id);check('existing editor returns defaults for SEO and slug',item.seoSlug==='stone-cup'&&JSON.stringify(item.seo)==='{}'&&!Object.hasOwn(item.payload,'seo'));
+const payload={...item.payload,slug:'everyday-stone-cup',brand:'Fixture pottery',seo:{en:{title:'Everyday stone cup',description:'A considered ceramic cup.'}}};
+await q('select merchandise_save($1,$2,0,1,$3,$4)',[a,id,JSON.stringify(payload),'{}']);
+check('draft SEO does not change public URL',(await one('select slug from products where id=$1',[id])).slug==='stone-cup');
+check('merchandise cannot approve URL changes',await fails(()=>q('select merchandise_publish($1,$2,1)',[a,id]),'STAFF_FORBIDDEN'));
+await q('select merchandise_publish($1,$2,1)',[b,id]);let p=await one('select * from products where id=$1',[id]);check('business approval persists SEO and brand',p.seo.en.title==='Everyday stone cup'&&p.brand==='Fixture pottery');check('public slug changes without changing identity',p.id===id&&p.slug==='everyday-stone-cup');check('old and new URL claims bind the same product',(await one('select count(*)::int n from product_url_aliases where product_id=$1',[id])).n===2);
+const current=(await one('select merchandise_list($1,0,$2) v',[a,'SEO-CUP'])).v.items.find(i=>i.id===id);
+await q('select merchandise_save($1,$2,1,$3,$4,$5)',[a,id,current.baseRevision,JSON.stringify({...payload,slug:'stone-cup-final'}),'{}']);await q('select merchandise_publish($1,$2,2)',[b,id]);
+check('all aliases resolve to current product without chains',(await one("select count(*)::int n from product_url_aliases a join products p on p.id=a.product_id where a.product_id=$1 and p.slug='stone-cup-final'",[id])).n===3);
+check('old slug cannot be stolen by another product',await fails(()=>q('update products set slug=$1 where id=$2',['stone-cup',second]),'SLUG_CONFLICT'));
+check('static showroom URLs cannot be claimed',await fails(()=>q('update products set slug=$1 where id=$2',['supplier-cer-f001',second]),'SLUG_CONFLICT'));
+check('failed collision rolls back the whole write',(await one('select slug from products where id=$1',[second])).slug==='stone-cup-2');
+check('finance cannot save SEO',await fails(()=>q('select merchandise_save($1,$2,2,3,$3,$4)',[users.finance_admin,id,JSON.stringify(payload),'{}']),'STAFF_FORBIDDEN'));
+check('stale revision rejected',await fails(()=>q('select merchandise_save($1,$2,1,1,$3,$4)',[a,id,JSON.stringify(payload),'{}']),'STALE_REVISION'));
+const it=(await one('select merchandise_list($1,0,$2) v',[a,'SEO-CUP'])).v.items.find(i=>i.id===id),legacy={...it.payload};delete legacy.slug;delete legacy.seo;delete legacy.brand;
+await q('select merchandise_save($1,$2,2,$3,$4,$5)',[a,id,it.baseRevision,JSON.stringify(legacy),'{}']);const saved=await one('select payload from private.merchandise_drafts where product_id=$1',[id]);check('older clients cannot erase SEO or slug',saved.payload.slug==='stone-cup-final'&&saved.payload.seo.en.title==='Everyday stone cup');
+check('older editors receive only legacy payload keys',!Object.hasOwn(it.payload,'seo')&&!Object.hasOwn(it.payload,'slug')&&!Object.hasOwn(it.payload,'brand'));
+check('SEO audit records actor and approved history',(await one("select count(*)::int n from private.merchandise_audit where product_id=$1 and action='seo_published' and actor_id=$2",[id,b])).n===2);
+for(const role of ['anon','authenticated']){check(role+' has no alias table access',!(await one("select has_table_privilege($1,'public.product_url_aliases','select') v",[role])).v);check(role+' has no SEO write RPC',!(await one("select has_function_privilege($1,'public.merchandise_save(uuid,uuid,integer,integer,jsonb,jsonb)','execute') v",[role])).v);}
+await db.exec('set role service_role');check('existing server role can use the wrapped editor RPC',(await one('select merchandise_list($1,0,$2) v',[a,'SEO-CUP'])).v.items.length===2);await db.exec('reset role');
+check('prices, stock and approved image identity preserved',p.price_amount===2800&&p.stock_qty===3&&(await one('select id from product_images where product_id=$1',[id])).id===image);
+await db.close();console.log(JSON.stringify({checksPassed:checks,productionChanges:false}));

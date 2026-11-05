@@ -19,7 +19,7 @@ export function LocaleProvider({ initialLocale, children }: { initialLocale: Loc
     setLocale: (locale) => {
       if (locale === initialLocale || parseLocale(locale) !== locale) return;
       document.cookie = `${LOCALE_COOKIE}=${locale}; Path=/; Max-Age=31536000; SameSite=Lax${window.location.protocol === "https:" ? "; Secure" : ""}`;
-      window.location.reload();
+      if(window.location.pathname.startsWith("/product/")){const url=new URL(window.location.href);if(locale==="en")url.searchParams.delete("locale");else url.searchParams.set("locale",locale);window.location.assign(url.href);}else window.location.reload();
     },
   }), [initialLocale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;

@@ -1,0 +1,15 @@
+PASS 1: variant selection required
+PASS 2: cannot attach a variant to another product
+PASS 3: mixed cart has independent holds
+PASS 4: mixed price and variant options frozen
+PASS 5: last variant cannot be reserved again
+PASS 6: active hold prevents variant stock reduction
+PASS 7: verified payment consumes correct variants and standard stock
+PASS 8: duplicate webhook is idempotent
+PASS 9: asynchronous failure releases the correct hold
+PASS 10: recovered checkout attaches to existing variant reservation
+PASS 11: cancel releases variant without changing stock
+PASS 12: late payment after cancel goes to review
+PASS 13: expiry frees variant hold
+PASS 14: unknown stock or placeholder price cannot be sold
+{"checksPassed":14,"engine":"PGlite","concurrentConnectionsTested":false,"liveData":false}

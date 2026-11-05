@@ -1,0 +1,20 @@
+
+> isuntvmall@0.1.0 test:run
+> vitest run
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.ts:7:25). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.1 /Users/robin/Developer/RobinOS/10_isuntvmall-seo-v1
+
+
+ Test Files  71 passed (71)
+      Tests  613 passed (613)
+   Start at  10:50:28
+   Duration  2.16s (import 40%, transform 33%, tests 24%, worker 2%)
+
+  Transform  transforming modules took 3.92s · 33% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

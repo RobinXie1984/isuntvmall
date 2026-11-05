@@ -1,0 +1,41 @@
+PASS 1: all actual migrations + seed execute in local WASM PostgreSQL
+PASS 2: last unit creates hold without reducing physical stock
+PASS 3: same attempt returns same frozen order
+PASS 4: another attempt cannot reserve last unit
+PASS 5: changed cart fingerprint cannot reuse attempt
+PASS 6: operator cannot lower physical stock below hold
+PASS 7: retry order subtotal stays frozen after catalog price edit
+PASS 8: verified paid completion consumes reserved stock
+PASS 9: same event and different event duplicate completion do not consume twice
+PASS 10: paid attempt cannot rotate into a duplicate payment
+PASS 11: release after paid does not restore sold stock
+PASS 12: unpublished room cannot receive new checkout attribution
+PASS 13: inactive host cannot receive new checkout attribution
+PASS 14: per-room attribution aggregates shared stock hold
+PASS 15: split same-SKU purchase reduces exactly total three
+PASS 16: expiry cancels order and frees hold
+PASS 17: late paid after expiry is manual review without consuming stock
+PASS 18: duplicate confirmed cancel releases once and never decrements stock
+PASS 19: late payment after cancel cannot fulfill
+PASS 20: wrong subtotal requires review without stock consumption
+PASS 21: wrong total requires review without stock consumption
+PASS 22: wrong currency requires review without stock consumption
+PASS 23: discount requires review without stock consumption
+PASS 24: missing amount requires review without stock consumption
+PASS 25: missing intent requires review without stock consumption
+PASS 26: unpaid event preserves hold
+PASS 27: refund arriving before checkout completion prevents fulfillment
+PASS 28: asynchronous paid confirmation consumes the active hold once
+PASS 29: asynchronous failure after success cannot downgrade or restore stock
+PASS 30: asynchronous failure releases pending hold
+PASS 31: late asynchronous success after release requires review
+PASS 32: different session cannot fulfill linked order
+PASS 33: refund after paid marks review without automatic restock
+PASS 34: review attempt cannot rotate into a new checkout
+PASS 35: completion cannot reverse manual review
+PASS 36: multi-product shortage transaction rolls back without orphan order
+PASS 37: unsupported JPY rejected
+PASS 38: unknown order throws and does not deduplicate the event
+PASS 39: same provider event processes after order recovery
+PASS 40: legacy fulfillment retired; reservation RPC server-only
+{"checksPassed":40,"engine":"PGlite 0.5.8 / WASM PostgreSQL","concurrentConnectionsTested":false,"liveDatabaseTouched":false,"commerceGate":"HOLD"}
