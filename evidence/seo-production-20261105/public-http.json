@@ -1,0 +1,75 @@
+{
+  "checkedAt": "2026-11-05T04:53:19.502Z",
+  "sitemapUrls": 309,
+  "allSitemapUrls200": true,
+  "exactProductLanguageCases": [
+    {
+      "path": "/product/suntv-gtcq-002",
+      "status": 200,
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=zh-Hant",
+      "status": 200,
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=zh-Hans",
+      "status": 200,
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gtcq-002?locale=ja",
+      "status": 200,
+      "offer": {
+        "@type": "Offer",
+        "url": "https://suntvmall.com/products/gtcq-002?variant=51611662876915",
+        "price": "376.00",
+        "priceCurrency": "HKD",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "path": "/product/suntv-gytg202609-8",
+      "status": 200,
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=zh-Hant",
+      "status": 200,
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=zh-Hans",
+      "status": 200,
+      "offer": null
+    },
+    {
+      "path": "/product/suntv-gytg202609-8?locale=ja",
+      "status": 200,
+      "offer": null
+    }
+  ],
+  "privateApisDenied": true,
+  "privatePagesNoindex": true,
+  "unknownProduct404": true,
+  "productionMutations": false
+}

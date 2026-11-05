@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-11-05T05:04:08.923615+00:00",
+  "productionDeployed": true,
+  "workerVersion": "1dbddd99-07ae-45fc-a21f-5c3d155d07a2",
+  "runtimeSourceCommit": "bc652d1",
+  "approvedCandidate": "ba02e29",
+  "migrationVersion": "20261105022415",
+  "applicationTestsPassed": 614,
+  "isolatedDatabaseChecksPassed": 137,
+  "managedTransactionalCreateEditApproveAndRollbackPassed": true,
+  "newProductsRetained": 0,
+  "proofAliasesRetained": 1,
+  "proofRedirectStatus": 301,
+  "proofRedirectLocation": "/product/stoneware-mug?locale=ja&room=existing-room",
+  "sitemapUrls200": 309,
+  "rawProductLanguageCases": 8,
+  "googleLiveUrlCrawled": true,
+  "googleValidItems": 2,
+  "googleResultUrl": "https://search.google.com/test/rich-results/result?id=SYGw5c5HwZK9ESt0VkFO9Q",
+  "googleOptionalWarnings": [
+    "aggregateRating",
+    "review",
+    "shippingDetails",
+    "hasMerchantReturnPolicy"
+  ],
+  "commercialChecksumsUnchanged": true,
+  "products": 250,
+  "images": 173,
+  "variants": 1200,
+  "orders": 1,
+  "staffMemberships": 9,
+  "secretsCreatedOrTransferred": false,
+  "paymentsCreated": 0,
+  "nativeSalesControlsChanged": false,
+  "healthAdvisor": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "securityAdvisor": {
+    "errors": 0,
+    "warnings": 4,
+    "info": 49
+  },
+  "performanceAdvisor": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 68
+  },
+  "rankingOrGeoOutcome": "UNKNOWN",
+  "rankingOrGeoOutcomeReason": "Foundation and rendered pages verified; search/AI visibility is not measured."
+}

@@ -1,6 +1,6 @@
 # iSunTVMall SEO/GEO Foundation v1 — 5 November 2026
 
-Status: tested release candidate; production approval required. Production Worker and database have not been changed. No SEO ranking, indexing or GEO visibility outcome is claimed.
+Status: deployed after Robin’s approval. See [production release and actual live checks](PRODUCTION-RELEASE-20261105.md). The candidate results and procedure below remain the preparation record. No SEO ranking, indexing or GEO visibility outcome is claimed.
 
 ## Before and after
 
