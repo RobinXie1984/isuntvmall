@@ -52,6 +52,10 @@ All 1,049 distinct originals also have exact existing-processor MUJI previews ar
 
 The temporary locked-Mac gate was cleared by Robin. Production schema `20261104105425` is installed, and the first preparation applied 1,200 labels without modifying commercial fields. Later reconciliation adds inventory references and correctly treats null source SKUs as blank only when the exact option vector matches. The remaining sign-offs belong in the existing merchandise/business workflow; no extra Robin login or mailbox access is needed for this export.
 
-## Release status
+## Acceptance follow-up — 5 November 2026
+
+The pending owner sign-in and interactive verification below are now complete. See [final admin acceptance](ADMIN-ACCEPTANCE-20261105.md): actual deployed variant/stock/image/price/manual screens passed; Valerie and Xinyang have active confirmed accounts and verified authenticators; fresh role-boundary checks and 60 focused tests pass. No business data or runtime changed. The following paragraph is the dated 4 November release state, not a current login blocker.
+
+## Release status — recorded 4 November 2026
 
 Production Worker: `5f4ae4e2-5a77-466d-8801-79a2016ce997`; schema: `20261104105425`. The full set of 1,200 private variant references now includes source inventory snapshots; 884 price proposals are prepared and 316 remain uncertain or source-unavailable. Business approval is still required. All 1,200 native stock quantities remain unknown until a colleague chooses the intended source location and applies it. The quantity preview is available before confirmation. Actual database read checks passed for Robin and Valerie as Business Super Admin, Xinyang as Merchandise Admin, and Finance denial for Maggie. Source, ledgers, private originals/previews and operation receipts are archived on Studio. The owner’s one-hour browser session expired during the long export; the iMac subsequently locked again, and owner sign-in renewal is pending for final interactive screen acceptance. The data preparation, deployment and backend checks do not depend on that pending sign-in.

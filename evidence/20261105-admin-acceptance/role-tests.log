@@ -1,0 +1,16 @@
+
+> isuntvmall@0.1.0 test:run
+> vitest run src/lib/staff/permissions.test.ts src/lib/staff/colleague-roles.test.ts src/lib/staff/merchandise-routes.test.ts src/lib/staff/price-review-routes.test.ts src/lib/batch/shopify-stock-review.test.ts
+
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - `__dirname` (vitest.config.ts:7:25). Use `import.meta.dirname` instead
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.1 /Users/robin/Developer/RobinOS/10_isuntvmall-review-20261104
+
+
+ Test Files  5 passed (5)
+      Tests  60 passed (60)
+   Start at  10:17:24
+   Duration  300ms (transform 56%, import 36%, tests 6%, worker 2%)
+

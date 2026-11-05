@@ -6,6 +6,10 @@ A livestream commerce showroom with independent host rooms, per-room product sel
 
 The reusable template now includes validated brand profiles, inventory adjustments, guarded Stripe refund/reconciliation operations and a disabled chain-specific USDT receiving template. Start with the [acceptance record](docs/white-label-v1/ACCEPTANCE.md), [configuration](docs/white-label-v1/CONFIGURATION.md), [handoff and service scope](docs/white-label-v1/HANDOFF.md), and [release/rollback SOP](docs/white-label-v1/RELEASE-AND-ROLLBACK.md). iSunTVMall is the first demo; a confirmed customer and its independent database/payment setup are deferred.
 
+## 5 November 2026 — final staff admin acceptance
+
+The final signed-in owner-browser check is complete. Valerie and Xinyang have active, email-confirmed accounts with verified authenticators; their actual backend memberships pass the read boundaries and Finance is denied. The variant workspace, one-location stock preview, private image pagination, demo-price safeguards and in-admin manuals are verified. Sixty focused role/workflow tests pass. See [final acceptance and colleague starting points](docs/ADMIN-ACCEPTANCE-20261105.md). Merchandise approvals remain with the colleagues; no stock, prices, images, access or payments were changed. Existing deployed application code is unchanged, so this documentation update needs no runtime redeployment.
+
 ## 4 November 2026 — current migration review follow-up
 
 The deployed native preparation release supersedes the historical gaps below: see [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md). The current follow-up adds private source-price/translation preparation, product-specific MUJI review links and review filters. See [review preparation, staff steps and access status](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md). Source-listed proposals never approve prices or images. All-states inventory is a separate export; missing or malformed counts remain unknown. Native sales activation is still held.
