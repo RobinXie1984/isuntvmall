@@ -5,6 +5,7 @@ import {shopifyStageSchema} from '@/lib/batch/shopify-stage';
 import {getSupabaseAdmin} from '@/lib/supabase/admin';
 import {permissionAllowed} from '@/lib/staff/permissions';
 import {BatchError} from '@/lib/batch/contracts';
+import {canManageMigrationTools} from '@/lib/batch/product-spreadsheet';
 import sourceCatalogue from '@/lib/data/suntvmall-catalogue.json';
 export async function POST(request:Request) {
  try {
@@ -19,7 +20,7 @@ export async function POST(request:Request) {
 export async function GET(request:Request) {
  try {
   const staff=await requireBatchStaff(request);
-  if(!permissionAllowed(staff,'merchandise.manage'))throw new BatchError('STAFF_FORBIDDEN',403);
+  if(!permissionAllowed(staff,'merchandise.manage') || !canManageMigrationTools(staff.role))throw new BatchError('STAFF_FORBIDDEN',403);
   const params=new URL(request.url).searchParams, batch=params.get('batch'), page=params.get('page')||'0';
   if(batch && (!zodUuid(batch)||!/^\d{1,5}$/.test(page)))throw new BatchError('INVALID_INPUT',422);
   const result=batch ? await getSupabaseAdmin().rpc('shopify_staged_products',{p_actor:staff.id,p_batch:batch,p_page:Number(page)}) : await getSupabaseAdmin().rpc('shopify_staged_batches',{p_actor:staff.id});

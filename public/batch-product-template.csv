@@ -1,0 +1,3 @@
+Handle,Title,Body (HTML),Vendor,Type,Option1 Name,Option1 Value,Variant SKU,Variant Price,Variant Inventory Qty,Image Src,Status
+example-product,Example product - replace before import,Add an accurate product description,Your brand,Home & living,Colour,Natural,EXAMPLE-NATURAL,999.99,0,,draft
+example-product,,,,,Colour,White,EXAMPLE-WHITE,999.99,0,,
