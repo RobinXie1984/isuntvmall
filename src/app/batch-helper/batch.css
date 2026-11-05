@@ -14,3 +14,5 @@
 .batch-source-stock table{width:100%;table-layout:fixed;border-collapse:collapse;margin:14px 0;font-size:14px}.batch-source-stock th,.batch-source-stock td{padding:10px 6px;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.batch-source-stock th:last-child,.batch-source-stock td:last-child{width:20%}.batch-source-stock legend{max-width:100%}
 
 .batch-heading h1{font-size:clamp(28px,3vw,38px)}.batch-heading{padding-bottom:20px}.batch-actions [aria-pressed="true"]{border-color:var(--sun);background:#f3f3ed}.batch-intake form{min-width:0}.batch-intake details{margin-block:16px;line-height:1.7}.batch-workspace button,.batch-workspace summary{min-height:40px}.batch-workspace p[role=status]{font-size:14px;line-height:1.7}.batch-workspace .batch-help{font-size:14px}.batch-workspace input[type=file]{font-size:14px}
+
+.batch-intake aside>.text-link{display:block;margin-block:12px}.batch-workspace>details.batch-history>summary{font-size:16px;cursor:pointer}
