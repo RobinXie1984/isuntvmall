@@ -1,5 +1,13 @@
 # iSunTVMall
 
+## Batch import — 6 November 2026
+
+The product-import entry follows the observed SunTVMall Shopify sequence: **Products → Import → choose/replace file → Upload file → preview → Import products → results**. The same dialog is available from Batch import. It accepts Shopify-format CSV or Excel `.xlsx` (first worksheet), validates before confirmation, and creates private review drafts with a stable retry receipt. No internal collection name is required. The preview includes product/SKU/image-reference counts, first-product fields and variant source prices. Back/Cancel do not import anything.
+
+Existing staging/reconciliation, variants and the MUJI worker are reused. Supported Shopify-hosted image references are queued into private image preparation after confirmation; unsupported URLs and conflicts require attention. Originals remain private and publication requires the existing review/approval. New products retain demo-price and unknown-stock safeguards. Existing public listings and colleague edits are preserved. Merchandise Admin prepares the data/photos; Business Super Admin handles formal photo review and final approval. The working instructions are at `/admin/help#batch-import`.
+
+Reference walkthrough and acceptance scope: [Shopify parity record](docs/admin-import/20261106-SHOPIFY-PARITY.md). The Shopify reference was inspected without completing an import or changing that store. Release/test results are recorded separately after verification.
+
 A livestream commerce showroom with independent host rooms, per-room product selections, and a shared shopping bag that retains each line's host and stream context.
 
 **Current release: SEO/GEO Foundation v1 (5 November 2026), retaining the Shopify migration and merchandise-review workflow.** See the [production release and live verification](docs/seo/PRODUCTION-RELEASE-20261105.md). Existing SunTVMall listings retain their current checkout. Imported native variants remain inactive, demo-priced and stock-unknown until verified business review; native sales activation remains disabled. The separately authorized one-fan Stripe pilot is retained. See the [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md), [current review preparation](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md) and [fan payment boundary](docs/stripe/FAN-COLLECTION-PILOT.md). The dated sections below retain historical implementation notes and are superseded by these release records.

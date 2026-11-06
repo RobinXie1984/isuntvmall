@@ -7,6 +7,7 @@ import {permissionAllowed} from '@/lib/staff/permissions';
 import {BatchError} from '@/lib/batch/contracts';
 import {canManageMigrationTools} from '@/lib/batch/product-spreadsheet';
 import sourceCatalogue from '@/lib/data/suntvmall-catalogue.json';
+import {shopifyImportFailure} from '@/lib/batch/shopify-import-failure';
 export async function POST(request:Request) {
  try {
   requireBatchOrigin(request); const staff=await requireBatchStaff(request);
@@ -15,7 +16,7 @@ export async function POST(request:Request) {
   const result=await getSupabaseAdmin().rpc('shopify_stage',{p_actor:staff.id,p_request:data.requestId,p_title:data.title,p_products:data.products});
   if(result.error)throw result.error;
   return batchResponse({ok:true,...result.data},201);
- } catch(error) {return batchFailure(error);}
+ } catch(error) {return shopifyImportFailure(error);}
 }
 export async function GET(request:Request) {
  try {

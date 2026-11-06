@@ -1,0 +1,17 @@
+import {beforeEach,expect,it,vi} from 'vitest';
+vi.mock('server-only',()=>({}));
+const m=vi.hoisted(()=>({staff:vi.fn(),origin:vi.fn(),allowed:vi.fn(),rpc:vi.fn()}));
+vi.mock('@/lib/batch/auth',()=>({requireBatchStaff:m.staff,requireBatchOrigin:m.origin}));
+vi.mock('@/lib/staff/permissions',()=>({permissionAllowed:m.allowed}));
+vi.mock('@/lib/supabase/admin',()=>({getSupabaseAdmin:()=>({rpc:m.rpc})}));
+import {POST} from '@/app/api/admin/shopify-stage/media/route';
+import {BatchError} from '@/lib/batch/contracts';
+const id='11111111-1111-4111-8111-111111111111';
+const request=(body:unknown={batch:id,handle:'hat'})=>new Request('https://example.test/api/admin/shopify-stage/media',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});
+beforeEach(()=>{vi.clearAllMocks();m.staff.mockResolvedValue({id,role:'merchandise_admin'});m.allowed.mockReturnValue(true);m.rpc.mockResolvedValue({data:{productId:id,batches:[id],queued:1,existing:0,held:0,failed:0},error:null});});
+it('derives the actor and MUJI style server-side without accepting URLs or product IDs',async()=>{const r=await POST(request());expect(r.status).toBe(201);expect(r.headers.get('cache-control')).toContain('no-store');expect(m.rpc).toHaveBeenCalledWith('shopify_queue_source_images',{p_actor:id,p_batch:id,p_handle:'hat',p_style_snapshot:expect.objectContaining({id:'muji'})});expect(await r.json()).toMatchObject({queued:1,held:0});});
+it('denies finance/no-access before a privileged call',async()=>{m.allowed.mockReturnValue(false);expect((await POST(request())).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();});
+it('requires same-origin and an authenticated staff session',async()=>{m.origin.mockImplementationOnce(()=>{throw new BatchError('INVALID_ORIGIN',403);});expect((await POST(request())).status).toBe(403);expect(m.rpc).not.toHaveBeenCalled();m.staff.mockRejectedValueOnce(new BatchError('SIGN_IN_REQUIRED',401));expect((await POST(request())).status).toBe(401);});
+it('rejects caller-injected images, product IDs, styles and invalid batch IDs',async()=>{for(const body of [{batch:id,handle:'hat',urls:['https://bad.test/x.jpg']},{batch:id,handle:'hat',productId:id},{batch:id,handle:'hat',style:'apple'},{batch:'wrong',handle:'hat'}])expect((await POST(request(body))).status).toBe(422);expect(m.rpc).not.toHaveBeenCalled();});
+it('returns a safe capacity hold rather than a false queued result',async()=>{m.rpc.mockResolvedValue({data:null,error:{message:'BATCH_ADMISSION_BACKPRESSURE'}});const r=await POST(request());expect(r.status).toBe(409);expect(await r.json()).toEqual({ok:false,code:'BATCH_ADMISSION_BACKPRESSURE'});});
+it('does not expose upstream SQL, supplier URLs or secrets',async()=>{m.rpc.mockResolvedValue({data:null,error:{message:'upstream https://private.invalid/?secret'}});expect(await (await POST(request())).json()).toEqual({ok:false,code:'BATCH_OPERATION_FAILED'});});

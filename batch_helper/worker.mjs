@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { normalizeImage, sha256, MAX_BYTES } from './processor.mjs';
 import { boundedFetch } from './network.mjs';
 import { expireInventoryReservations } from './maintenance.mjs';
+import { prepareSourceOriginal } from './source-images.mjs';
 
 const args = process.argv.slice(2);
 const limitIndex = args.indexOf('--limit');
@@ -53,9 +54,13 @@ for (let index = 0; batchEnabled && index < limit && !runController.signal.abort
     if (item.status === 'processing') {
       const batch = await db.from('media_batches').select('style_snapshot').eq('id', item.batch_id).single();
       if (batch.error) throw new Error(batch.error.message);
-      const bytes = await download('batch-originals', item.original_path, MAX_BYTES);
-      if (bytes.length !== item.byte_size) throw new Error('ORIGINAL_SIZE_CHANGED');
-      const result = await normalizeImage(bytes, batch.data.style_snapshot, item.mime);
+      const original = item.source_url ? await prepareSourceOriginal({item, rpc, download, runSignal:runController.signal, upload:async(bucket,path,bytes,mime)=>{
+        const {error}=await db.storage.from(bucket).upload(path,bytes,{contentType:mime,upsert:false,cacheControl:'31536000'});
+        if(error){const existing=await download(bucket,path,MAX_BYTES);if(sha256(existing)!==sha256(bytes))throw new Error('IMMUTABLE_OBJECT_CONFLICT');}
+      }}) : null;
+      const bytes = original?.bytes || await download('batch-originals', item.original_path, MAX_BYTES);
+      if (!original && bytes.length !== item.byte_size) throw new Error('ORIGINAL_SIZE_CHANGED');
+      const result = await normalizeImage(bytes, batch.data.style_snapshot, original?.mime || item.mime);
       if (item.source_sha256 && item.source_sha256 !== result.sourceSha256) throw new Error('ORIGINAL_CHANGED');
       const path = `${item.batch_id}/${item.id}/r${item.revision}-${result.outputSha256}.webp`;
       await immutableUpload('batch-processed', path, result.bytes, guard);
