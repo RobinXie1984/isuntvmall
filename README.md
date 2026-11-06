@@ -8,6 +8,8 @@ Existing staging/reconciliation, variants and the MUJI worker are reused. Suppor
 
 Reference walkthrough and acceptance scope: [Shopify parity record](docs/admin-import/20261106-SHOPIFY-PARITY.md). The Shopify reference was inspected without completing an import or changing that store. Release/test results are recorded separately after verification.
 
+Production release: Worker `a36ce252-6de3-45c8-8f81-7fa22915afdb`, source `4796c1a`, migration `20261106093855`. Verified 655 application tests, 35 worker tests, 136 isolated database checks, signed-in Excel import/reopened retry, automatic private image processing, four-language controls and mobile layout. Existing business-row hashes and runtime bindings match. [Release evidence, limits and rollback](docs/admin-import/20261106-RELEASE.md).
+
 A livestream commerce showroom with independent host rooms, per-room product selections, and a shared shopping bag that retains each line's host and stream context.
 
 **Current release: SEO/GEO Foundation v1 (5 November 2026), retaining the Shopify migration and merchandise-review workflow.** See the [production release and live verification](docs/seo/PRODUCTION-RELEASE-20261105.md). Existing SunTVMall listings retain their current checkout. Imported native variants remain inactive, demo-priced and stock-unknown until verified business review; native sales activation remains disabled. The separately authorized one-fan Stripe pilot is retained. See the [migration release](docs/SHOPIFY-MIGRATION-RELEASE-20261104.md), [current review preparation](docs/SHOPIFY-REVIEW-PREPARATION-20261104.md) and [fan payment boundary](docs/stripe/FAN-COLLECTION-PILOT.md). The dated sections below retain historical implementation notes and are superseded by these release records.
