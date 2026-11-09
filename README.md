@@ -1,5 +1,9 @@
 # iSunTVMall
 
+## KOL broadcasts — 9 November 2026
+
+Added seven owner-supplied programmes in the existing format; the first four lead the homepage and all seven appear on `/watch`. Neutral placeholders were explicitly selected. Previous broadcasts/introduction remain unchanged. Four-language public checks and 47 focused tests pass. This was an audited database content update, with no application rebuild. [Live links, provider limits and verification](docs/broadcasts/20261109.md).
+
 ## Weekly catalogue refresh — 9 November 2026
 
 Deployed the reviewed source-data refresh: 23 live price updates and 44 new private drafts (41 apparel, three footwear), retaining colleague drafts, current checkout controls and all approved images. Fresh exact-variant evidence covers the complete 181-product source feed. New/changed photos remain in private MUJI processing/review; they are not automatically approved. [Results, safeguards, pending business review and rollback](docs/weekly-sync/20261109.md).
