@@ -15,7 +15,7 @@ describe('price provenance across the catalogue',()=>{
    expect(productPriceDisclosure(p)).toBe(entry.variants.some(v=>'priceIsPlaceholder' in v&&v.priceIsPlaceholder)?'demo':'source');
    for(const v of p.sourceListing!.variants){if(sourcePriceDisclosure(v)==='demo')demo++;else if(sourcePriceDisclosure(v)==='source')source++;}
   }
-  expect(demo).toBe(306);expect(source).toBe(884);
+  expect(demo).toBe(306);expect(source).toBe(1096);
  });
  it('explicitly labels all mock-up prices',()=>{for(const p of [...demoProducts,...supplierDemoProducts])expect(productPriceDisclosure(p)).toBe('demo');});
  it('does not claim a colleague price edit or currency mismatch is verified by SunTVMall',()=>{
