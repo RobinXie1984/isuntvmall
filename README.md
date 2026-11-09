@@ -1,5 +1,9 @@
 # iSunTVMall
 
+## Weekly catalogue refresh — 9 November 2026
+
+Deployed the reviewed source-data refresh: 23 live price updates and 44 new private drafts (41 apparel, three footwear), retaining colleague drafts, current checkout controls and all approved images. Fresh exact-variant evidence covers the complete 181-product source feed. New/changed photos remain in private MUJI processing/review; they are not automatically approved. [Results, safeguards, pending business review and rollback](docs/weekly-sync/20261109.md).
+
 ## Batch import — 6 November 2026
 
 The product-import entry follows the observed SunTVMall Shopify sequence: **Products → Import → choose/replace file → Upload file → preview → Import products → results**. The same dialog is available from Batch import. It accepts Shopify-format CSV or Excel `.xlsx` (first worksheet), validates before confirmation, and creates private review drafts with a stable retry receipt. No internal collection name is required. The preview includes product/SKU/image-reference counts, first-product fields and variant source prices. Back/Cancel do not import anything.
