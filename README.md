@@ -2,6 +2,8 @@
 
 ## KOL broadcasts — 9 November 2026
 
+Signed-in follow-up: all seven new cards now use verified creator logos, concise four-language titles and permanent video/reel links. The final May 16 item is clearly marked as a short scarf preview. Original artwork is hash-verified in existing public storage; old promotional price overlays are excluded. The MUJI layout and application code are unchanged. [Current artwork and verification](docs/broadcasts/20261109.md#signed-in-artwork-follow-up).
+
 Added seven owner-supplied programmes in the existing format; the first four lead the homepage and all seven appear on `/watch`. Neutral placeholders were explicitly selected. Previous broadcasts/introduction remain unchanged. Four-language public checks and 47 focused tests pass. This was an audited database content update, with no application rebuild. [Live links, provider limits and verification](docs/broadcasts/20261109.md).
 
 ## Weekly catalogue refresh — 9 November 2026
