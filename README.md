@@ -1,5 +1,10 @@
 # iSunTVMall
 
+## 16 November 2026 — weekly catalogue refresh
+
+Added 15 private apparel drafts and queued 83 supplier photos for MUJI review; refreshed 14 published source-listed bag prices. Preserved 41 conflicting colleague drafts, all approved media, stock, payments and access. Current metadata covers 200 retained products / 1,603 variants, with 306 provisional amounts still demo-labelled. 655 regressions and four-language deployed readbacks pass. See [weekly evidence and review handoff](docs/weekly-sync/20261116.md).
+
+
 ## KOL broadcasts — 9 November 2026
 
 Signed-in follow-up: all seven new cards now use verified creator logos, concise four-language titles and permanent video/reel links. The final May 16 item is clearly marked as a short scarf preview. Original artwork is hash-verified in existing public storage; old promotional price overlays are excluded. The MUJI layout and application code are unchanged. [Current artwork and verification](docs/broadcasts/20261109.md#signed-in-artwork-follow-up).
