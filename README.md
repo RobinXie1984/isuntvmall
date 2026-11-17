@@ -155,3 +155,7 @@ Batch import now separates product spreadsheets from photo uploads. Shopify-form
 Advanced saved Shopify stages are visible and readable only by system or Business Super Admins. Merchandise staff retain ordinary private import and product/media preparation rights. Small admin/batch typography increases by 2px. Practical instructions are in `/admin/help#batch-import`; diagnosis and release evidence are in `docs/admin-import/`.
 
 Verified production results and rollback: [5 November merchandise intake release](docs/admin-import/20261105-RELEASE.md). The live Excel/retry/photo checks succeeded; existing merchandise, payment state and colleague permissions were preserved.
+
+### 17 November 2026 — short product film review candidate
+
+Prepared a preview-first workflow for all 17 KOL video entries, with three clean original-footage MALOVE/HONAYIN candidates under 60 seconds. Existing broadcast IDs, links, visibility and product relations are retained. Unreviewed films cannot publish in production; the introduction/live channel and commerce flows are unchanged. See [clip workflow and source-by-source holds](docs/product-films/REVIEW-20261117.md). Production replacement/deployment awaits Robin's preview approval.

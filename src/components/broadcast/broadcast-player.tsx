@@ -1,9 +1,14 @@
+import {filmForBroadcast,filmCopy} from "@/lib/broadcasts/product-films";
 import type { Locale } from "@/lib/i18n";
 import { broadcastEmbed, publicBroadcastTitle, type Broadcast } from "@/lib/broadcasts/contracts";
 import { broadcastCopy } from "@/lib/broadcasts/copy";
 import "./broadcast.css";
 
 export function BroadcastPlayer({ broadcast, locale, priority = false }: { broadcast: Broadcast; locale: Locale; priority?: boolean }) {
+  if(broadcast.kind==='broadcast'){
+    const film=filmForBroadcast(broadcast),words=filmCopy(locale);
+    return <div className="broadcast-player product-film-player">{film?<video controls playsInline muted preload="metadata" poster={film.poster} aria-label={film.brand}><source src={film.src} type="video/mp4"/></video>:<div className="brand-film-pending"><span aria-hidden="true">▷</span><div><h3>{words.pending}</h3><p>{words.note}</p></div></div>}<div className="broadcast-fallback"><a className="text-link" href={broadcast.url} target="_blank" rel="noopener noreferrer">{words.source} ↗</a></div></div>;
+  }
   const copy = broadcastCopy(locale);
   const embed = broadcastEmbed(broadcast.url);
   return <div className="broadcast-player">

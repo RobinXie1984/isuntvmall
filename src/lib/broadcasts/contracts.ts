@@ -1,3 +1,4 @@
+import {filmForBroadcast,filmCopy} from "./product-films";
 import { z } from "zod";
 import type { Locale } from "@/lib/i18n";
 
@@ -42,5 +43,5 @@ export function broadcastTitle(b: Broadcast, locale: Locale) {
 
 // Public editorial wording; source records and playback URLs retain their platform identity.
 export function publicBroadcastTitle(b: Broadcast, locale: Locale) {
-  return broadcastTitle(b, locale).replace(/Facebook/g, "KOL");
+  return b.kind === "broadcast" ? filmForBroadcast(b)?.brand ?? filmCopy(locale).title : broadcastTitle(b, locale);
 }

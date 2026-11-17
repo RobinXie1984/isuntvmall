@@ -5,7 +5,7 @@ import { BroadcastPlayer } from "./broadcast-player";
 import { BroadcastCard } from "./broadcast-card";
 
 const broadcast: Broadcast = {
-  id: "11111111-1111-4111-8111-111111111111", kind: "broadcast", revision: 0,
+  id: "11111111-1111-4111-8111-111111111111", kind: "introduction", revision: 0,
   title: "A recorded selection", titleZh: "精選回放", titleHans: "精选回放", titleJa: "セレクションの配信",
   url: "https://youtu.be/7CL0PxKA5iE", thumbnailUrl: "", position: 1, visible: true,
   status: "recorded", productIds: [],
@@ -18,18 +18,18 @@ describe("official broadcast player and fallback", () => {
     expect(html).toContain("Watch on YouTube");
     expect(html).not.toContain("autoplay=1");
   });
-  it("keeps a Facebook fallback even when an official video embed is present", () => {
-    const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, url: "https://www.facebook.com/share/v/1HmZq19pUq/?mibextid=wwXIfr" }} locale="en" />);
-    expect(html).toContain("www.facebook.com/plugins/video.php");
-    expect(html).toContain("Watch KOL broadcast");
+  it("replaces long KOL embeds with an honest pending film and retains the source", () => {
+    const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, kind:"broadcast", url: "https://www.facebook.com/share/v/1HmZq19pUq/?mibextid=wwXIfr" }} locale="en" />);
+    expect(html).not.toContain("<iframe");
+    expect(html).toContain("Original source");
     expect(html).toContain('target="_blank"');
-    expect(html).not.toContain("mibextid");
+    expect(html).toContain("Product film being prepared");
   });
   it.each(["https://www.facebook.com/share/p/1bFAWQmsx8/", "https://www.facebook.com/share/1F68N2tf7u/"])("does not treat unconfirmed post/share %s as a video", url => {
-    const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, url }} locale="en" />);
+    const html = renderToStaticMarkup(<BroadcastPlayer broadcast={{ ...broadcast, kind:"broadcast", url }} locale="en" />);
     expect(html).not.toContain("<iframe");
-    expect(html).toContain("Watch KOL broadcast");
-    expect(html).toContain("This broadcast opens on its original platform.");
+    expect(html).toContain("Original source");
+    expect(html).toContain("Product film being prepared");
   });
   it.each([
     ["zh-Hant", "前往 YouTube 觀看", "精選回放"],
