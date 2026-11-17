@@ -1,5 +1,10 @@
 # iSunTVMall
 
+## 17 November 2026 — brand-first homepage
+
+MALOVE and HONAYIN now lead the live storefront, with real merchandise grids and video placeholders approved by Robin. Catalogue, demo-price labels, MUJI approval, stock and payment controls remain intact. Desktop/mobile, four-language live checks and 657 regressions pass. See [release evidence and deferred footage](docs/brand-showcase/20261117.md).
+
+
 ## 16 November 2026 — weekly catalogue refresh
 
 Added 15 private apparel drafts and queued 83 supplier photos for MUJI review; refreshed 14 published source-listed bag prices. Preserved 41 conflicting colleague drafts, all approved media, stock, payments and access. Current metadata covers 200 retained products / 1,603 variants, with 306 provisional amounts still demo-labelled. 655 regressions and four-language deployed readbacks pass. See [weekly evidence and review handoff](docs/weekly-sync/20261116.md).
