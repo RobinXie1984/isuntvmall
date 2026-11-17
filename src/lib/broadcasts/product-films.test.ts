@@ -1,5 +1,5 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
-import {brandFilm,filmForBroadcast,validProductFilm} from './product-films';
+import {brandFilm,filmForBroadcast,validProductFilm,eligibleProductFilm} from './product-films';
 import films from './product-films.json';
 const f=films[0];
 afterEach(()=>vi.unstubAllEnvs());
@@ -10,8 +10,9 @@ describe('short product film publication boundary',()=>{
  });
  it('cannot show unapproved films in production',()=>{
   vi.stubEnv('NODE_ENV','production');
-  expect(filmForBroadcast({id:f.id,url:f.sourceUrl})).toBeNull();
-  expect(brandFilm(f.brand,[{id:f.id,url:f.sourceUrl,visible:true}])).toBeNull();
+  expect(eligibleProductFilm({...f,reviewState:'preview'},'production')).toBe(false);
+  expect(eligibleProductFilm({...f,reviewState:'approved'},'production')).toBe(true);
+  expect(filmForBroadcast({id:f.id,url:f.sourceUrl})).toEqual(f);
  });
  it('binds the film to the current broadcast source instead of just its ID',()=>{
   vi.stubEnv('NODE_ENV','development');

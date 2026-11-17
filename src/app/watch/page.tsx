@@ -1,3 +1,4 @@
+import {YouTubeProductLinks} from '@/components/broadcast/youtube-product-links';
 import {filmForBroadcast,filmCopy} from "@/lib/broadcasts/product-films";
 import { OwnedChannel } from "@/components/live/owned-channel";
 import type { Metadata } from "next";
@@ -26,6 +27,7 @@ export default async function WatchPage({ searchParams }: { searchParams: Promis
     <OwnedChannel locale={locale} home /><form className="broadcast-filters" action="/watch"><label>{copy.platform}<select name="platform" defaultValue={platform}><option value="">{copy.everyPlatform}</option><option value="youtube">YouTube</option><option value="facebook">{filmCopy(locale).ready}</option></select></label><label>{copy.status}<select name="status" defaultValue={status}><option value="">{copy.everyStatus}</option><option value="recorded">{copy.replay}</option><option value="live">{copy.live}</option><option value="scheduled">{copy.scheduled}</option></select></label><button type="submit" className="button">{copy.apply}</button></form>
     {prepared.length ? <div className="broadcast-grid">{prepared.map(broadcast => <BroadcastCard key={broadcast.id} broadcast={broadcast} locale={locale} />)}</div> : <p className="broadcast-empty">{copy.empty}</p>}
     {pending.length>0&&<details className="film-review-queue"><summary>{filmCopy(locale).queue} ({pending.length})</summary><div className="broadcast-grid">{pending.map(b=><BroadcastCard key={b.id} broadcast={b} locale={locale}/>)}</div></details>}
+    {platform!=="facebook"&&(!status||status==="recorded")&&<YouTubeProductLinks locale={locale}/>}
     <Link className="text-link broadcast-rooms-link" href="/live">{copy.rooms} →</Link>
   </div>;
 }

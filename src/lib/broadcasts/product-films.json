@@ -15,7 +15,7 @@
     "sourceSha256": "50a8baac9291f15f531f5eb8a8d5dea985cb4e0ea2d45d32e5c6e403459f5992",
     "bytes": 1672129,
     "audio": false,
-    "reviewState": "preview"
+    "reviewState": "approved"
   },
   {
     "id": "84ac8326-bda2-5f18-ace2-63b2e1d96217",
@@ -33,7 +33,7 @@
     "sourceSha256": "6c454c59fe7b98aeb3c0d7ebd8b9b9b9078281e7140f3cbf8c32312f44c642f1",
     "bytes": 953094,
     "audio": false,
-    "reviewState": "preview"
+    "reviewState": "approved"
   },
   {
     "id": "69c3fcf6-4f28-5e52-bb4b-b11cd6a5e50c",
@@ -51,6 +51,6 @@
     "sourceSha256": "a958b5da4ac208467d91fabff98e6868aa89b187dc9674f36410f3bfb3c0aba8",
     "bytes": 1939950,
     "audio": false,
-    "reviewState": "preview"
+    "reviewState": "approved"
   }
 ]
