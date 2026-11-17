@@ -162,4 +162,6 @@ Prepared a preview-first workflow for all 17 KOL video entries, with three clean
 
 ### 17 November 2026 — approved clips and individual brand links
 
-Prepared the approved MALOVE/HONAYIN short-film workflow and curated individual YouTube links, with source-by-source HOLD handling. Existing catalogue, media approval, staff access and payment controls are unchanged. See [release and remaining source holds](docs/product-films/RELEASE-20261117.md).
+Published the approved MALOVE/HONAYIN short-film workflow and curated individual YouTube links, with source-by-source HOLD handling. Existing catalogue, media approval, staff access and payment controls are unchanged. See [release and remaining source holds](docs/product-films/RELEASE-20261117.md).
+
+Local source ownership and the existing month-end Drive backup: [storage and backup scope](docs/backups/README.md).

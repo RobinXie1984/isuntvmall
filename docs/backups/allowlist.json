@@ -1,0 +1,14 @@
+{
+  "project": "isuntvmall",
+  "owner": "Maimai",
+  "workingHome": "/Users/robin/Developer/RobinOS/10_isuntvmall",
+  "source": {"mode": "reviewed-git-commit", "repository": "https://github.com/RobinXie1984/isuntvmall"},
+  "monthlyJob": "maimai-month-end-backup",
+  "reviewedArtifacts": [
+    {"root": "reports/product-clips-20261117", "include": ["pipeline-manifest.json", "reviewed-sections.json", "edited-sheets/*.jpg"]},
+    {"root": "reports/product-clips-release-20261117", "include": ["private-footage/*.mp4", "review-sheets/*.jpg", "footage-receipts.json", "final-review-register.json", "approved-asset-checks.json", "live-commercial-comparison.json", "live-asset-checks.json", "live-playback.json", "receipt.json"]}
+  ],
+  "excluded": ["credentials", "browser/account state", "production database and customer/order exports", "dependencies", "build caches", "virtual environments", "duplicate Git stores", "unclassified reports and originals"],
+  "retention": "Keep originals and prior backups; no automatic deletion or eviction",
+  "limitation": "Historical Studio originals require their own verified inventory; this package is reviewed source/media, not full runtime recovery"
+}
