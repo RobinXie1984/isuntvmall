@@ -55,5 +55,24 @@
     "audio": false,
     "reviewState": "approved",
     "framing": "Scale to fit inside a 540×960 portrait canvas. Keep the whole approved frame."
+  },
+  {
+    "id": "9cd7da08-7e88-5a0e-a531-53152a2cf246",
+    "brand": "HONAYIN",
+    "sourceUrl": "https://www.facebook.com/share/v/1HmZq19pUq/",
+    "sourceOriginal": "https://www.facebook.com/loveskinshop114/videos/3819988474810831/",
+    "src": "/brand-clips/9cd7da08-7e88-5a0e-a531-53152a2cf246.mp4",
+    "poster": "/brand-clips/9cd7da08-7e88-5a0e-a531-53152a2cf246.jpg",
+    "seconds": 3.7,
+    "sourceSampleStart": 3.4,
+    "sourceSampleEnd": 7.1,
+    "width": 432,
+    "height": 768,
+    "sha256": "53c18a81ce8ae29c5411402443c589cd09b78bc65f72dac73316d40f4cd67b12",
+    "sourceSha256": "3301020c7dba9ff5c0138974bab755fe404c196a80cbd88e02e1c6de4d609c45",
+    "bytes": 513979,
+    "audio": false,
+    "reviewState": "approved",
+    "framing": "Keep the original 9:16 frame. Trim before the price card."
   }
 ]
