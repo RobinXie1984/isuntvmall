@@ -7,7 +7,17 @@ export function eligibleProductFilm(f:ProductFilm,environment=process.env.NODE_E
 export function approvedProductFilm(id:string){return (manifest as ProductFilm[]).find(f=>f.id===id&&f.reviewState==='approved'&&validProductFilm(f))??null;}
 export function productFilmPlaybackUrl(f:ProductFilm){return process.env.NODE_ENV==='development'?f.src:'/api/product-films/'+f.id+'?v='+f.sha256.slice(0,16);}
 export function filmForBroadcast(b:{id:string;url:string}){return (manifest as ProductFilm[]).find(f=>f.id===b.id&&sourceKey(f.sourceUrl)===sourceKey(b.url)&&eligibleProductFilm(f))??null;}
-export function brandFilm(brand:string,broadcasts:readonly {id:string;url:string;visible:boolean}[]=[]){return (manifest as ProductFilm[]).find(f=>f.brand===brand&&eligibleProductFilm(f)&&broadcasts.some(b=>b.visible&&b.id===f.id&&sourceKey(b.url)===sourceKey(f.sourceUrl)))??null;}
+type BrandBroadcast = {id:string;url:string;visible:boolean};
+export function brandFilms(brand:string,broadcasts:readonly BrandBroadcast[]=[]){
+  const visibleBroadcasts = broadcasts.filter(b => b.visible);
+  return (manifest as ProductFilm[]).filter(f =>
+    f.brand === brand && eligibleProductFilm(f) &&
+    visibleBroadcasts.some(b => b.id === f.id && sourceKey(b.url) === sourceKey(f.sourceUrl))
+  );
+}
+export function brandFilm(brand:string,broadcasts:readonly BrandBroadcast[]=[]){
+  return brandFilms(brand,broadcasts)[0] ?? null;
+}
 export function filmCopy(locale:Locale){return {
  en:{title:'Product film',pending:'Product film being prepared',note:'A clean short product film is awaiting source material or review.',source:'Original source',queue:'Films awaiting source material or review',ready:'Product film',heading:'Brands in motion',description:'Short, quiet films focused on merchandise. Explore the brands and their details.'},
  'zh-Hant':{title:'商品短片',pending:'商品短片準備中',note:'乾淨的商品短片正等待原始影片或審核。',source:'原始來源',queue:'等待原始影片或審核的短片',ready:'商品短片',heading:'細看品牌',description:'以短片細看商品，探索品牌及產品細節。'},

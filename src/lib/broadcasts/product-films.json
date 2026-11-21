@@ -9,13 +9,14 @@
     "sourceStart": 1200,
     "sourceEnd": 1212,
     "crop": "crop=720:1120:0:160",
-    "width": 720,
-    "height": 1120,
-    "sha256": "f20394b4612d4323a58b8bd3b66b6f466a814ea778c6741aad5a342812ef729e",
+    "width": 540,
+    "height": 960,
+    "sha256": "8f8e46de438c2abebbed3787d00e1d93ce13a51f986a2b801e6fd9cfa342d3a9",
     "sourceSha256": "50a8baac9291f15f531f5eb8a8d5dea985cb4e0ea2d45d32e5c6e403459f5992",
-    "bytes": 1672129,
+    "bytes": 1705410,
     "audio": false,
-    "reviewState": "approved"
+    "reviewState": "approved",
+    "framing": "Scale to fit inside a 540×960 portrait canvas. Keep the whole approved frame."
   },
   {
     "id": "84ac8326-bda2-5f18-ace2-63b2e1d96217",
@@ -27,13 +28,14 @@
     "sourceStart": 1203,
     "sourceEnd": 1210.5,
     "crop": "crop=720:1136:0:144",
-    "width": 720,
-    "height": 1136,
-    "sha256": "0949da7e2c6204c14c52acadab224509d30b7df29cd93d4ab76779b8f6517acd",
+    "width": 540,
+    "height": 960,
+    "sha256": "7ce47c08171ab61140a6cb254b23b84f284785a7045877e78852141190f39a89",
     "sourceSha256": "6c454c59fe7b98aeb3c0d7ebd8b9b9b9078281e7140f3cbf8c32312f44c642f1",
-    "bytes": 953094,
+    "bytes": 909965,
     "audio": false,
-    "reviewState": "approved"
+    "reviewState": "approved",
+    "framing": "Scale to fit inside a 540×960 portrait canvas. Keep the whole approved frame."
   },
   {
     "id": "69c3fcf6-4f28-5e52-bb4b-b11cd6a5e50c",
@@ -45,12 +47,13 @@
     "sourceStart": 1200,
     "sourceEnd": 1212,
     "crop": "crop=720:1024:0:128",
-    "width": 720,
-    "height": 1024,
-    "sha256": "d3af57080a2497baf8bdd0d9728b553fa83e78f3bc9273e910b35fe53611b688",
+    "width": 540,
+    "height": 960,
+    "sha256": "52578b8dc68c3d0c9fffcfb80da85821b52023f5509599851f67a8051e467390",
     "sourceSha256": "a958b5da4ac208467d91fabff98e6868aa89b187dc9674f36410f3bfb3c0aba8",
-    "bytes": 1939950,
+    "bytes": 1592289,
     "audio": false,
-    "reviewState": "approved"
+    "reviewState": "approved",
+    "framing": "Scale to fit inside a 540×960 portrait canvas. Keep the whole approved frame."
   }
 ]
