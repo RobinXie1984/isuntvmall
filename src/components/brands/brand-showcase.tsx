@@ -9,10 +9,10 @@ import type { Product } from "@/types/commerce";
 import type { StoreLocale } from "@/lib/store-profile";
 
 const labels = {
-  en: { title: "Discover the brands", showcase: "KOL showcase", collection: "View collection and films" },
-  "zh-Hant": { title: "探索品牌", showcase: "創作者短片", collection: "瀏覽系列及短片" },
-  "zh-Hans": { title: "探索品牌", showcase: "创作者短片", collection: "浏览系列及短片" },
-  ja: { title: "ブランドを見つける", showcase: "クリエイター動画", collection: "コレクションと動画を見る" },
+  en: { title: "Discover the brands", showcase: "KOL showcase", collection: "View collection and films", replays: "Watch the previews" },
+  "zh-Hant": { title: "探索品牌", showcase: "創作者短片", collection: "瀏覽系列及短片", replays: "觀看預告" },
+  "zh-Hans": { title: "探索品牌", showcase: "创作者短片", collection: "浏览系列及短片", replays: "观看预告" },
+  ja: { title: "ブランドを見つける", showcase: "クリエイター動画", collection: "コレクションと動画を見る", replays: "予告動画を見る" },
 };
 
 export function BrandShowcase({
@@ -54,6 +54,7 @@ export function BrandShowcase({
                 <Heading>{brand.name}</Heading>
                 <p>{brand.description[locale]}</p>
                 {curated && <Link className="text-link" href={'/brands/' + brand.id}>{copy.collection} →</Link>}
+                {brand.replays && <p><Link className="text-link" href={brand.replays}>{copy.replays} →</Link></p>}
               </div>
               {displayed[0] && <div className="brand-banner-photo"><SourcePhoto product={displayed[0]} alt={brand.name} /></div>}
             </div>
@@ -67,7 +68,7 @@ export function BrandShowcase({
                     </video>
                   ))}
                 </div>
-              ) : !curated && (
+              ) : !curated && !brand.replays && (
                 <div className="brand-film-pending">
                   <span aria-hidden="true">▷</span>
                   <div><h3>{videoCopy.pending}</h3><p>{videoCopy.note}</p></div>

@@ -13,7 +13,7 @@ export function YouTubeProductLinks({ locale, brand }: { locale: StoreLocale; br
       {groups.map(group => {
         const name = group.key === "wool-shawls" ? copy.shawls : group.key;
         return (
-          <div key={group.key} className="youtube-product-group">
+          <div key={group.key} id={brand ? undefined : `youtube-originals-${group.key.toLowerCase()}`} className="youtube-product-group">
             <h3>{name}</h3>
             {group.key === "wool-shawls" && <p>{copy.unknown}</p>}
             <ul>
