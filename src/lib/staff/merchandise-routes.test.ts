@@ -3,7 +3,7 @@ vi.mock("server-only",()=>({}));
 const m=vi.hoisted(()=>({staff:vi.fn(),rpc:vi.fn()}));
 vi.mock("@/lib/staff/auth",async original=>({...await original<typeof import("@/lib/staff/auth")>(),requireStaff:m.staff}));
 vi.mock("@/lib/env",()=>({getSiteUrl:()=>"https://shop.example"}));
-vi.mock("@/lib/supabase/admin",()=>({getSupabaseAdmin:()=>({rpc:m.rpc})}));
+vi.mock("@/lib/supabase/admin",()=>({getSupabaseAdmin:()=>({rpc:m.rpc,from:()=>({select:()=>({in:async()=>({data:[],error:null})})})})}));
 import {GET,POST} from "@/app/api/admin/merchandise/route";
 const id="11111111-1111-4111-8111-111111111111";
 const body={action:"save",productId:id,revision:0,baseRevision:1,payload:{title:"Cup",titleZh:"杯",description:"",descriptionZh:"",category:"Cups",priceAmount:100,status:"published",isDemo:true,visibleImageIds:[]},supplier:{name:"Supplier",contact:"",notes:""}};
@@ -18,6 +18,6 @@ describe("merchandise API",()=>{
  it("rejects path slugs and unsupported SEO languages",async()=>{expect((await POST(request({...body,payload:{...body.payload,slug:"../admin"}}))).status).toBe(422);expect((await POST(request({...body,payload:{...body.payload,seo:{xx:{title:"Bad"}}}}))).status).toBe(422);expect(m.rpc).not.toHaveBeenCalled();});
  it("returns an actionable conflict for reserved historical URLs",async()=>{m.rpc.mockResolvedValue({error:{message:"SLUG_CONFLICT"}});const r=await POST(request(body));expect(r.status).toBe(409);expect(await r.json()).toEqual({ok:false,code:"SLUG_CONFLICT"});});
 
- it("normalises nullable legacy copy before editor save",async()=>{m.rpc.mockResolvedValue({data:{items:[{id,payload:{...body.payload,titleZh:null,descriptionZh:null}}],count:1,categories:[]},error:null});const r=await GET(new Request("https://shop.example/api/admin/merchandise"));expect(r.status).toBe(200);const value=await r.json();expect(value.items[0].payload.titleZh).toBe("");expect(value.items[0].payload.descriptionZh).toBe("");expect(value.items[0].payload.priceAmount).toBe(body.payload.priceAmount);});
+ it("normalises nullable legacy copy before editor save",async()=>{m.rpc.mockResolvedValue({data:{items:[{id,slug:"cup",images:[],payload:{...body.payload,titleZh:null,descriptionZh:null}}],count:1,categories:[]},error:null});const r=await GET(new Request("https://shop.example/api/admin/merchandise"));expect(r.status).toBe(200);const value=await r.json();expect(value.items[0].payload.titleZh).toBe("");expect(value.items[0].payload.descriptionZh).toBe("");expect(value.items[0].payload.priceAmount).toBe(body.payload.priceAmount);});
 
 });

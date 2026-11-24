@@ -554,7 +554,7 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
   background: #eee7db;
   cursor: pointer;
 }
-.introduction-cover > img { position: absolute; inset: 0 0 0 auto; width: 64%; height: 100%; object-fit: contain; background: #eaeaea; }
+.introduction-cover > img { position: absolute; inset: 0 0 0 auto; width: 64%; height: 100%; object-fit: contain; background: #fff; }
 .introduction-cover-action { display: grid; justify-items: center; gap: 10px; width: 36%; padding: 8px; color: #4a3a31; font-size: clamp(.75rem, 1.1vw, .9rem); }
 .introduction-cover .introduction-cover-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; padding-left: 2px; background: #faf5ec; }
 @media(max-width:900px) {
@@ -565,3 +565,15 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
   .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr); gap: 24px; }
   .exhibition-brand-display .brand-film-grid { grid-row: 2; width: min(100%, 220px); }
 }
+
+.merchandise-photo-preview { margin: 20px 0 24px; padding: 16px; border: 1px solid var(--line); background: #fbf8f3; }
+.merchandise-photo-preview .admin-card-heading { flex-wrap: wrap; gap: 10px; }
+.merchandise-photo-preview h3 { margin: 0; }
+.merchandise-photo-preview > p { margin: 10px 0; }
+.merchandise-photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 14px; margin-top: 16px; }
+.merchandise-photo-grid figure { margin: 0; min-width: 0; }
+.merchandise-photo-grid figure a { display: block; background: white; border: 1px solid var(--line); }
+.merchandise-photo-grid img { display: block; width: 100%; aspect-ratio: 1; object-fit: contain; }
+.merchandise-photo-grid figcaption { display: grid; justify-items: start; gap: 5px; margin-top: 7px; font-size: 13px; }
+.homepage-photo-badge { display: inline-block; margin-inline: 4px; padding: 3px 7px; border: 1px solid #e6dccc; background: #f8f2e8; color: #634c3e; font-size: 13px; font-weight: 500; }
+.homepage-photo-badge.is-ready { background: #ebe8dc; border-color: #d6cfbe; color: #413b30; }

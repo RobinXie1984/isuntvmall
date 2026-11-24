@@ -4,8 +4,7 @@ import { useState } from "react";
 import type { Broadcast } from "@/lib/broadcasts/contracts";
 import type { Locale } from "@/lib/i18n";
 import { BroadcastPlayer } from "./broadcast-player";
-
-const coverPhoto = "https://fikmqessuraosgoyxede.supabase.co/storage/v1/object/public/product-images/suntvmall/20261022/honayin-b15-l26050-dc45a5f589d4.webp";
+import { exhibitionIntroductionPhoto } from "@/lib/data/homepage-exhibition";
 
 const playLabel = {
   en: "Play introduction",
@@ -20,7 +19,7 @@ export function IntroductionCover({ broadcast, locale }: { broadcast: Broadcast;
 
   return (
     <button type="button" className="introduction-cover" onClick={() => setPlaying(true)}>
-      <img src={coverPhoto} alt="" />
+      <img src={exhibitionIntroductionPhoto} alt="" />
       <span className="introduction-cover-action">
         <span className="introduction-cover-icon" aria-hidden="true">▶</span>
         <span>{playLabel[locale]}</span>
