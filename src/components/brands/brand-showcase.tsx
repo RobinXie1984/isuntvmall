@@ -1,52 +1,79 @@
-import type {Broadcast} from '@/lib/broadcasts/contracts';
-import {brandFilms,filmCopy,productFilmPlaybackUrl} from "@/lib/broadcasts/product-films";
-import {showcaseBrands,brandProducts} from '@/lib/brand-showcase';
-import {ProductCard} from '@/components/product/product-card';
-import {SourcePhoto} from '@/components/product/source-photo';
-import type {Product} from '@/types/commerce';
-import type {StoreLocale} from '@/lib/store-profile';
-export function BrandShowcase({products,locale,broadcasts=[]}:{products:Product[];locale:StoreLocale;broadcasts?:Broadcast[]}){
- const copy={en:{title:'Discover the brands',clip:'Product film coming soon',note:'Original broadcast footage is being prepared for a short product film.'},'zh-Hant':{title:'探索品牌',clip:'商品短片準備中',note:'正從原始直播影片準備商品展示短片。'},'zh-Hans':{title:'探索品牌',clip:'商品短片准备中',note:'正从原始直播影片准备商品展示短片。'},ja:{title:'ブランドを見つける',clip:'商品動画を準備中',note:'元の配信映像から短い商品紹介動画を準備しています。'}}[locale];
- const selections=showcaseBrands.map(brand=>({brand,items:brandProducts(products,brand.match)})).filter(s=>s.items.length);
- if(!selections.length)return null;
- const videoLabel = filmCopy(locale).title;
- return (
-  <section className="shell brand-showcase" aria-label={copy.title}>
-   <header className="section-heading">
-    <h1>{copy.title}</h1>
-    <nav>{selections.map(({brand}) => <a key={brand.id} href={'#brand-'+brand.id}>{brand.name}</a>)}</nav>
-   </header>
-   {selections.map(({brand,items}) => {
-    const films = brandFilms(brand.name,broadcasts);
-    return (
-     <section id={'brand-'+brand.id} className="brand-story" key={brand.id}>
-      <div className="brand-banner">
-       <div className="brand-banner-copy">
-        <span className="eyebrow">{brand.name}</span>
-        <h2>{brand.name}</h2>
-        <p>{brand.description[locale]}</p>
-       </div>
-       <div className="brand-banner-photo"><SourcePhoto product={items[0]} alt={brand.name}/></div>
-      </div>
-      {films.length > 0 ? (
-       <div className="brand-film-grid" role="group" aria-label={`${brand.name} · ${videoLabel}`}>
-        {films.map((film,index) => (
-         <video key={film.id} className="brand-film-tile" controls playsInline preload="none"
-          poster={film.poster} aria-label={`${brand.name} · ${videoLabel} ${index + 1}`}>
-          <source src={productFilmPlaybackUrl(film)} type="video/mp4"/>
-         </video>
-        ))}
-       </div>
-      ) : (
-       <div className="brand-film-pending">
-        <span aria-hidden="true">▷</span>
-        <div><h3>{copy.clip}</h3><p>{copy.note}</p></div>
-       </div>
-      )}
-      <div className="product-grid">{items.slice(0,8).map(p => <ProductCard key={p.id} product={p}/>)}</div>
-     </section>
-    );
-   })}
-  </section>
- );
+import Link from "next/link";
+import type { Broadcast } from "@/lib/broadcasts/contracts";
+import { brandFilms, filmCopy, productFilmPlaybackUrl } from "@/lib/broadcasts/product-films";
+import { showcaseBrands, brandProducts } from "@/lib/brand-showcase";
+import { exhibitionFilms, exhibitionProducts } from "@/lib/data/homepage-exhibition";
+import { ProductCard } from "@/components/product/product-card";
+import { SourcePhoto } from "@/components/product/source-photo";
+import type { Product } from "@/types/commerce";
+import type { StoreLocale } from "@/lib/store-profile";
+
+const labels = {
+  en: { title: "Discover the brands", collection: "View collection and films" },
+  "zh-Hant": { title: "探索品牌", collection: "瀏覽系列及短片" },
+  "zh-Hans": { title: "探索品牌", collection: "浏览系列及短片" },
+  ja: { title: "ブランドを見つける", collection: "コレクションと動画を見る" },
+};
+
+export function BrandShowcase({
+  products, locale, broadcasts = [], curated = false, brandId,
+}: {
+  products: Product[];
+  locale: StoreLocale;
+  broadcasts?: Broadcast[];
+  curated?: boolean;
+  brandId?: string;
+}) {
+  const copy = labels[locale];
+  const videoCopy = filmCopy(locale);
+  const selections = showcaseBrands
+    .filter(brand => !brandId || brand.id === brandId)
+    .map(brand => ({ brand, items: brandProducts(products, brand.match) }))
+    .filter(selection => Boolean(brandId) || selection.items.length > 0);
+  if (!selections.length) return null;
+
+  return (
+    <section className="shell brand-showcase" aria-label={copy.title}>
+      {!brandId && <header className="section-heading">
+        <h1>{copy.title}</h1>
+        <nav>{selections.map(({ brand }) => <a key={brand.id} href={'#brand-' + brand.id}>{brand.name}</a>)}</nav>
+      </header>}
+      {selections.map(({ brand, items }) => {
+        const displayed = curated ? exhibitionProducts(items).slice(0, 4) : brandId ? items : items.slice(0, 8);
+        const feature = curated ? exhibitionFilms[brand.id] : undefined;
+        const films = brandFilms(brand.name, broadcasts).filter(film => !curated || film.id === feature?.id);
+        const Heading = brandId ? "h1" : "h2";
+        return (
+          <section id={'brand-' + brand.id} className="brand-story" key={brand.id}>
+            <div className={'brand-banner' + (displayed.length ? '' : ' brand-banner-text-only')}>
+              <div className="brand-banner-copy">
+                <Heading>{brand.name}</Heading>
+                <p>{brand.description[locale]}</p>
+                {curated && <Link className="text-link" href={'/brands/' + brand.id}>{copy.collection} →</Link>}
+              </div>
+              {displayed[0] && <div className="brand-banner-photo"><SourcePhoto product={displayed[0]} alt={brand.name} /></div>}
+            </div>
+            <div className={curated ? "exhibition-brand-display" : undefined}>
+              {films.length > 0 ? (
+                <div className="brand-film-grid" role="group" aria-label={`${brand.name} · ${videoCopy.title}`}>
+                  {films.map((film, index) => (
+                    <video key={film.id} className="brand-film-tile" controls playsInline preload="none"
+                      poster={feature?.poster ?? film.poster} aria-label={`${brand.name} · ${videoCopy.title} ${index + 1}`}>
+                      <source src={productFilmPlaybackUrl(film)} type="video/mp4" />
+                    </video>
+                  ))}
+                </div>
+              ) : !curated && (
+                <div className="brand-film-pending">
+                  <span aria-hidden="true">▷</span>
+                  <div><h3>{videoCopy.pending}</h3><p>{videoCopy.note}</p></div>
+                </div>
+              )}
+              {displayed.length > 0 && <div className="product-grid">{displayed.map(p => <ProductCard key={p.id} product={p} />)}</div>}
+            </div>
+          </section>
+        );
+      })}
+    </section>
+  );
 }

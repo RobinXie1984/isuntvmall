@@ -511,3 +511,57 @@ button,a,input,select,textarea{outline-offset:4px}button:focus-visible,a:focus-v
 @media (max-width: 680px) {
   .brand-film-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* Warm paper and natural finishes for the storefront exhibition. */
+body:has(.homepage-exhibition) {
+  --ink: #302923;
+  --paper: #fcfaf6;
+  --muted: #6c6259;
+  --line: #e7ded3;
+}
+body:has(.homepage-exhibition) .site-header { background: var(--paper); }
+body:has(.homepage-exhibition) .category-nav .nav-room-link,
+.homepage-exhibition .text-link { color: #675246; }
+.homepage-exhibition .text-link:hover { color: #382b22; }
+.homepage-exhibition .button { background: #655146; border-color: #655146; }
+.homepage-exhibition .button:hover:not(:disabled) { background: #4b3a30; }
+.homepage-exhibition .product-image-wrap,
+.homepage-exhibition .source-photo,
+.homepage-exhibition .brand-film-tile { background: #f1ebe3; }
+.homepage-exhibition .brand-banner,
+.homepage-exhibition .editorial-hero { background: #f2ece3; }
+.homepage-exhibition .preview-banner,
+.homepage-exhibition .rooms-section { background: #f6f0e8; }
+.homepage-exhibition .category-tiles a { grid-template-columns: minmax(0,1fr) auto; padding-block: 14px; }
+.homepage-exhibition .room-art { background: #f0e9df; }
+.homepage-exhibition .eyebrow,
+.homepage-exhibition .product-category { color: #736254; }
+.homepage-exhibition .corner-label { background: #fbf7f0; color: #695548; }
+.brand-banner-text-only { grid-template-columns: 1fr; min-height: auto; }
+.homepage-exhibition .brand-banner h2,
+.brand-banner h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 400; letter-spacing: .03em; margin: 16px 0; }
+.exhibition-brand-display { margin-top: 28px; }
+.exhibition-brand-display:has(.brand-film-grid) { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,4fr); gap: 24px; align-items: start; }
+.exhibition-brand-display .brand-film-grid { grid-template-columns: minmax(0,1fr); margin: 0; }
+.introduction-cover {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 10px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid #e5dbcd;
+  background: #eee7db url("/editorial/expanded/linen-table-napkins.jpg") center 52% / cover;
+  cursor: pointer;
+}
+.introduction-cover > span { background: #faf5ec; color: #4a3a31; }
+.introduction-cover > span:last-child { padding: .55rem .9rem; font-size: .9rem; }
+.introduction-cover .introduction-cover-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; padding-left: 2px; }
+@media(max-width:900px) {
+  .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr) minmax(0,2fr); }
+  .exhibition-brand-display .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:680px) {
+  .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .exhibition-brand-display .brand-film-grid { grid-row: 2; width: min(100%, 220px); }
+}

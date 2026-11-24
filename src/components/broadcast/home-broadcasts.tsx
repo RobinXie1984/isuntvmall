@@ -4,11 +4,12 @@ import { publicBroadcastTitle, type Broadcast } from "@/lib/broadcasts/contracts
 import { broadcastCopy } from "@/lib/broadcasts/copy";
 import { BroadcastCard } from "./broadcast-card";
 import { BroadcastPlayer } from "./broadcast-player";
+import { IntroductionCover } from "./introduction-cover";
 import "./broadcast.css";
 
-export function FeaturedIntroduction({ broadcast, locale }: { broadcast: Broadcast; locale: Locale }) {
+export function FeaturedIntroduction({ broadcast, locale, quietCover = false }: { broadcast: Broadcast; locale: Locale; quietCover?: boolean }) {
   const copy = broadcastCopy(locale);
-  return <section className="shell featured-introduction" aria-labelledby="introduction-heading"><div className="introduction-copy"><span className="eyebrow">{copy.introduction}</span><h2 id="introduction-heading">{publicBroadcastTitle(broadcast, locale)}</h2><p>{copy.introductionBody}</p><Link className="text-link" href="/watch">{copy.all} →</Link></div><BroadcastPlayer broadcast={broadcast} locale={locale} priority /></section>;
+  return <section className="shell featured-introduction" aria-labelledby="introduction-heading"><div className="introduction-copy"><span className="eyebrow">{copy.introduction}</span><h2 id="introduction-heading">{publicBroadcastTitle(broadcast, locale)}</h2><p>{copy.introductionBody}</p><Link className="text-link" href="/watch">{copy.all} →</Link></div>{quietCover ? <IntroductionCover broadcast={broadcast} locale={locale} /> : <BroadcastPlayer broadcast={broadcast} locale={locale} priority />}</section>;
 }
 export function HomeBroadcasts({ broadcasts, locale }: { broadcasts: Broadcast[]; locale: Locale }) {
   const copy = broadcastCopy(locale);

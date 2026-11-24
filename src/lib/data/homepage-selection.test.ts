@@ -3,6 +3,7 @@ import { homepageSelection } from "./homepage-selection";
 import { holidayProducts } from "./holiday-catalogue";
 import { expandedProducts } from "./expanded-catalogue";
 import { productsForHoliday } from "./holiday-collections";
+import { exhibitionHero, exhibitionHeroImage, exhibitionProducts } from "./homepage-exhibition";
 
 const now = new Date("2026-09-25T04:00:00Z");
 const everyday = [...expandedProducts].sort((a,b)=>Number(b.featured)-Number(a.featured));
@@ -34,5 +35,22 @@ describe("homepage selection", () => {
     ]);
     expect(homepageSelection([autumn[0], autumn[0]], now)).toEqual([autumn[0]]);
     expect(homepageSelection([], now)).toEqual([]);
+  });
+});
+
+describe("homepage exhibition palette", () => {
+  it("features only reviewed photo versions and leaves other catalogue products available", () => {
+    const linen = expandedProducts.find(product => product.slug === "linen-overshirt")!;
+    const unselected = expandedProducts.find(product => product.slug === "relaxed-cotton-trousers")!;
+    const revised = { ...linen, images: [{ ...linen.images[0], sourceUrl: "/editorial/expanded/relaxed-cotton-trousers.jpg" }] };
+    expect(exhibitionProducts([unselected, linen])).toEqual([linen]);
+    expect(exhibitionProducts([unselected, revised])).toEqual([]);
+    expect(unselected.images).not.toHaveLength(0);
+  });
+
+  it("keeps reviewed seasonal covers and falls back to a neutral photo", () => {
+    const autumn = "/editorial/holiday/harvest-table-runner.jpg";
+    expect(exhibitionHeroImage(autumn)).toBe(autumn);
+    expect(exhibitionHeroImage("/editorial/holiday/indigo-summer-towel.jpg")).toBe(exhibitionHero);
   });
 });
