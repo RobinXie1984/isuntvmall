@@ -1,5 +1,5 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
-import {brandFilm,filmForBroadcast,validProductFilm,eligibleProductFilm} from './product-films';
+import {brandFilms,filmForBroadcast,validProductFilm,eligibleProductFilm} from './product-films';
 import films from './product-films.json';
 const f=films.find(film=>!film.standalone)!;
 afterEach(()=>vi.unstubAllEnvs());
@@ -21,15 +21,16 @@ describe('short product film publication boundary',()=>{
  });
  it('respects current visibility and source edits on the brand homepage',()=>{
   vi.stubEnv('NODE_ENV','development');
-  expect(brandFilm(f.brand,[{id:f.id,url:f.sourceUrl,visible:true}])).toEqual(f);
-  expect(brandFilm(f.brand,[{id:f.id,url:f.sourceUrl,visible:false}])).toBeNull();
-  expect(brandFilm(f.brand,[{id:f.id,url:'https://www.facebook.com/reel/123/',visible:true}])).toBeNull();
-  expect(brandFilm(f.brand)).toBeNull();
+  expect(brandFilms(f.brand,[{id:f.id,url:f.sourceUrl,visible:true}])).toContainEqual(f);
+  expect(brandFilms(f.brand,[{id:f.id,url:f.sourceUrl,visible:false}])).not.toContainEqual(f);
+  expect(brandFilms(f.brand,[{id:f.id,url:'https://www.facebook.com/reel/123/',visible:true}])).not.toContainEqual(f);
+  expect(brandFilms(f.brand)).not.toContainEqual(f);
  });
  it('shows an approved standalone film under its brand without a replay entry',()=>{
   vi.stubEnv('NODE_ENV','production');
-  const film=films.find(film=>film.standalone)!;
-  expect(brandFilm(film.brand)).toEqual(film);
-  expect(brandFilm(f.brand)).toBeNull();
+  for(const brand of ['MALOVE','HONAYIN']) {
+   const standalone=films.filter(film=>film.brand===brand&&film.standalone&&film.reviewState==='approved');
+   expect(brandFilms(brand)).toEqual(standalone);
+  }
  });
 });
