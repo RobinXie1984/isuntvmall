@@ -21,3 +21,10 @@
 .product-film-player video{display:block;width:100%;max-height:70vh;object-fit:contain;background:#f4f2ed}.film-review-queue{margin:32px 0}.film-review-queue summary{cursor:pointer;font-size:17px;padding:18px;border-block:1px solid var(--line);margin-bottom:24px}.broadcast-card-visual>img{object-fit:contain}
 
 .youtube-product-links{margin-top:44px;border-top:1px solid var(--line);padding-top:32px}.youtube-product-links h2{font-size:26px;font-weight:400}.youtube-product-links>p,.youtube-product-group>p{font-size:14px;line-height:1.8;color:var(--muted)}.youtube-product-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;margin-top:22px}.youtube-product-group h3{font-size:19px;font-weight:400}.youtube-product-group ul{list-style:none;padding:0;margin:12px 0}.youtube-product-group li{border-bottom:1px solid var(--line)}.youtube-product-group a{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:14px 0;font-size:15px;line-height:1.6;min-height:48px}.youtube-product-group a:hover{text-decoration:underline;text-underline-offset:4px}.youtube-brand-links{padding:20px 0;margin-bottom:22px;border-block:1px solid var(--line)}.youtube-brand-links summary{cursor:pointer;font-size:16px;line-height:1.7}.youtube-brand-links .youtube-product-groups{display:block}.film-preview-item{margin-top:32px}@media(max-width:760px){.youtube-product-groups{grid-template-columns:1fr;gap:20px}.youtube-product-links h2{font-size:23px}}
+
+.youtube-product-links .youtube-product-groups { display: grid; grid-template-columns: minmax(0,1fr); gap: 24px; }
+.youtube-product-links .youtube-product-group ul { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%, 310px),1fr)); gap: 18px; }
+.youtube-product-links .youtube-product-group li { max-width: 570px; min-width: 0; }
+.youtube-original-frame { aspect-ratio: 16 / 9; min-height: 200px; background: #f2eee7; }
+.youtube-original-frame iframe { display: block; width: 100%; height: 100%; min-height: 200px; border: 0; }
+.youtube-original-fallback { color: var(--muted); font-size: .84rem; text-align: end; }
