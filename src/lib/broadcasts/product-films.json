@@ -1,5 +1,25 @@
 [
   {
+    "id": "135f099a-8ba9-5dca-92e1-33eb7e95c8bc",
+    "brand": "MALOVE",
+    "sourceUrl": "https://www.youtube.com/watch?v=PBURulmFhu4",
+    "src": "/brand-clips/135f099a-8ba9-5dca-92e1-33eb7e95c8bc.mp4",
+    "poster": "/brand-clips/135f099a-8ba9-5dca-92e1-33eb7e95c8bc.jpg",
+    "seconds": 26,
+    "sourceStart": 2193,
+    "sourceEnd": 2219,
+    "crop": "crop=468:832:232:316",
+    "width": 432,
+    "height": 768,
+    "sha256": "d658620ed28df5f57eea06b39fe750fbaa8e67f5a3af809ea75e881a0222a8e9",
+    "sourceSha256": "922a2dad3753499160969d44e638cf929a9772a74ba13eba596a66fc1e132acd",
+    "bytes": 2382854,
+    "audio": false,
+    "reviewState": "approved",
+    "standalone": true,
+    "framing": "Keep the 9:16 shoe try-on in view while cropping the broadcast graphics and subtitles."
+  },
+  {
     "id": "de6efc0c-3a5d-5e4c-9b00-fd741992930b",
     "brand": "HONAYIN",
     "sourceUrl": "https://www.facebook.com/ginboutiquehk/videos/2077075352936345/",

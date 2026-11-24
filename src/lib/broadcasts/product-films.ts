@@ -1,6 +1,6 @@
 import manifest from './product-films.json';
 import type {Locale} from '@/lib/i18n';
-export type ProductFilm={id:string;brand:string;sourceUrl:string;src:string;poster:string;seconds:number;bytes:number;sha256:string;reviewState:string};
+export type ProductFilm={id:string;brand:string;sourceUrl:string;src:string;poster:string;seconds:number;bytes:number;sha256:string;reviewState:string;standalone?:boolean};
 function sourceKey(value:string){try{const u=new URL(value);u.searchParams.delete('mibextid');return u.toString();}catch{return '';}}
 export function validProductFilm(f:ProductFilm){return Boolean(f.brand.trim()&&Number.isSafeInteger(f.bytes)&&f.bytes>0&&f.bytes<=25*1024*1024&&f.seconds>0&&f.seconds<60&&/^\/brand-clips\/[a-z0-9-]+\.mp4$/.test(f.src)&&/^\/brand-clips\/[a-z0-9-]+\.jpg$/.test(f.poster)&&/^[a-f0-9]{64}$/.test(f.sha256)&&['preview','approved'].includes(f.reviewState));}
 export function eligibleProductFilm(f:ProductFilm,environment=process.env.NODE_ENV){return validProductFilm(f)&&(f.reviewState==='approved'||environment==='development');}
@@ -12,7 +12,7 @@ export function brandFilms(brand:string,broadcasts:readonly BrandBroadcast[]=[])
   const visibleBroadcasts = broadcasts.filter(b => b.visible);
   return (manifest as ProductFilm[]).filter(f =>
     f.brand === brand && eligibleProductFilm(f) &&
-    visibleBroadcasts.some(b => b.id === f.id && sourceKey(b.url) === sourceKey(f.sourceUrl))
+    (f.standalone === true || visibleBroadcasts.some(b => b.id === f.id && sourceKey(b.url) === sourceKey(f.sourceUrl)))
   );
 }
 export function brandFilm(brand:string,broadcasts:readonly BrandBroadcast[]=[]){

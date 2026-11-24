@@ -1,7 +1,7 @@
 import {afterEach,describe,expect,it,vi} from 'vitest';
 import {brandFilm,filmForBroadcast,validProductFilm,eligibleProductFilm} from './product-films';
 import films from './product-films.json';
-const f=films[0];
+const f=films.find(film=>!film.standalone)!;
 afterEach(()=>vi.unstubAllEnvs());
 describe('short product film publication boundary',()=>{
  it('requires a bounded local film and a reviewable digest',()=>{
@@ -24,6 +24,12 @@ describe('short product film publication boundary',()=>{
   expect(brandFilm(f.brand,[{id:f.id,url:f.sourceUrl,visible:true}])).toEqual(f);
   expect(brandFilm(f.brand,[{id:f.id,url:f.sourceUrl,visible:false}])).toBeNull();
   expect(brandFilm(f.brand,[{id:f.id,url:'https://www.facebook.com/reel/123/',visible:true}])).toBeNull();
+  expect(brandFilm(f.brand)).toBeNull();
+ });
+ it('shows an approved standalone film under its brand without a replay entry',()=>{
+  vi.stubEnv('NODE_ENV','production');
+  const film=films.find(film=>film.standalone)!;
+  expect(brandFilm(film.brand)).toEqual(film);
   expect(brandFilm(f.brand)).toBeNull();
  });
 });
