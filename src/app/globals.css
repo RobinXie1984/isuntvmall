@@ -544,19 +544,19 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
 .exhibition-brand-display:has(.brand-film-grid) { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,4fr); gap: 24px; align-items: start; }
 .exhibition-brand-display .brand-film-grid { grid-template-columns: minmax(0,1fr); margin: 0; }
 .introduction-cover {
+  position: relative;
   display: grid;
-  justify-items: center;
   align-content: center;
-  gap: 10px;
   width: 100%;
+  padding: 0;
   aspect-ratio: 16 / 9;
   border: 1px solid #e5dbcd;
-  background: #eee7db url("/editorial/expanded/linen-table-napkins.jpg") center 52% / cover;
+  background: #eee7db;
   cursor: pointer;
 }
-.introduction-cover > span { background: #faf5ec; color: #4a3a31; }
-.introduction-cover > span:last-child { padding: .55rem .9rem; font-size: .9rem; }
-.introduction-cover .introduction-cover-icon { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; padding-left: 2px; }
+.introduction-cover > img { position: absolute; inset: 0 0 0 auto; width: 64%; height: 100%; object-fit: contain; background: #eaeaea; }
+.introduction-cover-action { display: grid; justify-items: center; gap: 10px; width: 36%; padding: 8px; color: #4a3a31; font-size: clamp(.75rem, 1.1vw, .9rem); }
+.introduction-cover .introduction-cover-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; padding-left: 2px; background: #faf5ec; }
 @media(max-width:900px) {
   .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr) minmax(0,2fr); }
   .exhibition-brand-display .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { weeklyPlan, validatePreparedCatalogue, applyExistingMetadata, queueSupplierPhoto, cents, auditSourcePrices, priceReviewFingerprint } from './suntvmall-weekly.mjs';
+import { verifyHomepagePalette } from './verify-homepage-palette.mjs';
 const source = { id: 1, handle: 'test-product', title: 'Test', body_html: 'Plain', vendor: 'Test', updated_at: '2026-10-22', options: [{ name: 'Colour' }], variants: [{ id: 2, price: '10.00', option1: 'White', available: true }], images: [{ id: 3, src: 'https://cdn.shopify.com/original.jpg' }] };
 const copy = { en: 'White', 'zh-Hant': '白色', 'zh-Hans': '白色', ja: '白' };
 const entry = { id: 'product', sku: 'SUNTV-1', sourceId: '1', sourceHandle: 'test-product', title: copy, description: copy, priceAmount: 1000, reviewedImageName: 'approved.webp', variants: [{ id: '2', priceAmount: 1000, available: true, options: [copy] }] };
@@ -36,9 +37,11 @@ describe('weekly source sync and photo gate', () => {
     const result = weeklyPlan(feed([source]), feed([next]), catalogue, '2026-10-26', [receipt(next)]);
     expect(result.metadata.products[0].priceAmount).toBe(1234); expect(result.metadata.products[0].reviewedImageName).toBe('approved.webp');
     expect(result.changes[0]).toMatchObject({ imageReview: true, publishImage: false }); expect(entry.priceAmount).toBe(1000);
+    expect(result.homepagePaletteReview).toEqual([{ sourceId:'1', kind:'existing', imageVersion:'pending-review', newImageEligible:false }]);
   });
   it('is a no-op for unchanged source and holds new options for translation', () => {
     expect(weeklyPlan(feed([source]), feed([source]), catalogue, '2026-10-26').changes).toEqual([]);
+    expect(weeklyPlan(feed([source]), feed([source]), catalogue, '2026-10-26').homepagePaletteReview).toEqual([]);
     const next = structuredClone(source); next.variants[0].option1 = 'Blue';
     expect(weeklyPlan(feed([source]), feed([next]), catalogue, '2026-10-26').changes[0].copyReview).toBe(true);
   });
@@ -46,7 +49,15 @@ describe('weekly source sync and photo gate', () => {
     const next = { ...source, id: 4, variants: [{ ...source.variants[0], id: 5 }] };
     const result = weeklyPlan(feed([source]), feed([next]), catalogue, '2026-10-26');
     expect(result.changes[0]).toMatchObject({ kind: 'new', publish: false, imageReview: true });
+    expect(result.homepagePaletteReview).toEqual([{ sourceId:'4', kind:'new', imageVersion:'pending-review', newImageEligible:false }]);
     expect(result.missing).toEqual(['1']); expect(result.metadata.products).toHaveLength(1);
+  });
+  it('verifies the public homepage uses the reviewed photo version and rejects unreviewed replacements', () => {
+    const home = (cover, card) => `<html lang="en"><main><div class="homepage-exhibition"><div class="brand-banner-photo"><img src="${cover}"></div><article class="product-card"><a href="/product/test-product"><img src="${card}"></a></article></div></main></html>`;
+    const approved = { 'test-product': '/images/reviewed.webp' };
+    expect(verifyHomepagePalette(home('/images/reviewed.webp','/images/reviewed.webp'), approved)).toEqual({ locale:'en', cards:1 });
+    expect(() => verifyHomepagePalette(home('/images/reviewed.webp','/images/replacement.webp'), approved)).toThrow('HOMEPAGE_PHOTO_NOT_REVIEWED');
+    expect(() => verifyHomepagePalette(home('/images/replacement.webp','/images/reviewed.webp'), approved)).toThrow('HOMEPAGE_BANNER_NOT_REVIEWED');
   });
   it('rejects incomplete feeds, duplicate IDs and malformed prices', () => {
     expect(() => weeklyPlan(feed([source]), feed([]), catalogue, 'x')).toThrow();

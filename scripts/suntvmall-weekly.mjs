@@ -148,7 +148,10 @@ export function weeklyPlan(previousFeed, currentFeed, catalogue, checkedAt, revi
   }
   // A missing product may indicate a partial source response. Never delete/archive it.
   const missing = [...before.keys()].filter(id => !now.has(id));
-  return { checkedAt, sourceCount: now.size, changes, missing, metadata, priceAudit, sourceDigest: digest(currentFeed), mediaPolicy: 'private-review-only' };
+  const homepagePaletteReview = changes.filter(change => change.imageReview).map(({ sourceId, kind }) => ({
+    sourceId, kind, imageVersion: 'pending-review', newImageEligible: false,
+  }));
+  return { checkedAt, sourceCount: now.size, changes, missing, metadata, priceAudit, homepagePaletteReview, sourceDigest: digest(currentFeed), mediaPolicy: 'private-review-only' };
 }
 
 const checked = result => { if (result.error) throw Error(result.error.message); return result.data; };
