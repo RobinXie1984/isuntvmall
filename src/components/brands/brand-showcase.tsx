@@ -2,17 +2,17 @@ import Link from "next/link";
 import type { Broadcast } from "@/lib/broadcasts/contracts";
 import { brandFilms, filmCopy, productFilmPlaybackUrl } from "@/lib/broadcasts/product-films";
 import { showcaseBrands, brandProducts } from "@/lib/brand-showcase";
-import { exhibitionFilms, exhibitionProducts } from "@/lib/data/homepage-exhibition";
+import { exhibitionFilmLeads, exhibitionProducts } from "@/lib/data/homepage-exhibition";
 import { ProductCard } from "@/components/product/product-card";
 import { SourcePhoto } from "@/components/product/source-photo";
 import type { Product } from "@/types/commerce";
 import type { StoreLocale } from "@/lib/store-profile";
 
 const labels = {
-  en: { title: "Discover the brands", collection: "View collection and films" },
-  "zh-Hant": { title: "探索品牌", collection: "瀏覽系列及短片" },
-  "zh-Hans": { title: "探索品牌", collection: "浏览系列及短片" },
-  ja: { title: "ブランドを見つける", collection: "コレクションと動画を見る" },
+  en: { title: "Discover the brands", showcase: "KOL showcase", collection: "View collection and films" },
+  "zh-Hant": { title: "探索品牌", showcase: "創作者短片", collection: "瀏覽系列及短片" },
+  "zh-Hans": { title: "探索品牌", showcase: "创作者短片", collection: "浏览系列及短片" },
+  ja: { title: "ブランドを見つける", showcase: "クリエイター動画", collection: "コレクションと動画を見る" },
 };
 
 export function BrandShowcase({
@@ -33,15 +33,19 @@ export function BrandShowcase({
   if (!selections.length) return null;
 
   return (
-    <section className="shell brand-showcase" aria-label={copy.title}>
+    <section className="shell brand-showcase" id={curated ? "kol-showcase" : undefined} aria-label={curated ? copy.showcase : copy.title}>
       {!brandId && <header className="section-heading">
-        <h1>{copy.title}</h1>
+        <h1>{curated ? copy.showcase : copy.title}</h1>
         <nav>{selections.map(({ brand }) => <a key={brand.id} href={'#brand-' + brand.id}>{brand.name}</a>)}</nav>
       </header>}
       {selections.map(({ brand, items }) => {
         const displayed = curated ? exhibitionProducts(items).slice(0, 4) : brandId ? items : items.slice(0, 8);
-        const feature = curated ? exhibitionFilms[brand.id] : undefined;
-        const films = brandFilms(brand.name, broadcasts).filter(film => !curated || film.id === feature?.id);
+        const feature = curated ? exhibitionFilmLeads[brand.id] : undefined;
+        const films = brandFilms(brand.name, broadcasts);
+        if (feature) {
+          const first = films.findIndex(film => film.id === feature.id);
+          if (first > 0) films.unshift(...films.splice(first, 1));
+        }
         const Heading = brandId ? "h1" : "h2";
         return (
           <section id={'brand-' + brand.id} className="brand-story" key={brand.id}>
@@ -58,7 +62,7 @@ export function BrandShowcase({
                 <div className="brand-film-grid" role="group" aria-label={`${brand.name} · ${videoCopy.title}`}>
                   {films.map((film, index) => (
                     <video key={film.id} className="brand-film-tile" controls playsInline preload="none"
-                      poster={feature?.poster ?? film.poster} aria-label={`${brand.name} · ${videoCopy.title} ${index + 1}`}>
+                      poster={(film.id === feature?.id && feature.poster) || film.poster} aria-label={`${brand.name} · ${videoCopy.title} ${index + 1}`}>
                       <source src={productFilmPlaybackUrl(film)} type="video/mp4" />
                     </video>
                   ))}

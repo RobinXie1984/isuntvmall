@@ -33,7 +33,7 @@ export function exhibitionHeroImage(seasonalImage: string): string {
   return reviewedHolidayImages.has(seasonalImage) ? seasonalImage : exhibitionHero;
 }
 
-export const exhibitionFilms: Readonly<Record<string, {id: string; poster?: string}>> = {
+export const exhibitionFilmLeads: Readonly<Record<string, {id: string; poster?: string}>> = {
   malove: { id: "84ac8326-bda2-5f18-ace2-63b2e1d96217" },
   honayin: { id: "7e5029a0-1d08-56c5-8662-a310b9414088", poster: "/editorial/honayin-film-cover.jpg" },
 };

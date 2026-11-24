@@ -541,8 +541,13 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
 .homepage-exhibition .brand-banner h2,
 .brand-banner h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 400; letter-spacing: .03em; margin: 16px 0; }
 .exhibition-brand-display { margin-top: 28px; }
-.exhibition-brand-display:has(.brand-film-grid) { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,4fr); gap: 24px; align-items: start; }
-.exhibition-brand-display .brand-film-grid { grid-template-columns: minmax(0,1fr); margin: 0; }
+.exhibition-brand-display .brand-film-grid {
+  width: min(100%, 880px);
+  margin: 0 auto 36px;
+}
+.exhibition-brand-display .brand-film-tile {
+  border: 1px solid var(--line);
+}
 .introduction-cover {
   position: relative;
   display: grid;
@@ -558,12 +563,10 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
 .introduction-cover-action { display: grid; justify-items: center; gap: 10px; width: 36%; padding: 8px; color: #4a3a31; font-size: clamp(.75rem, 1.1vw, .9rem); }
 .introduction-cover .introduction-cover-icon { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; padding-left: 2px; background: #faf5ec; }
 @media(max-width:900px) {
-  .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr) minmax(0,2fr); }
   .exhibition-brand-display .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media(max-width:680px) {
-  .exhibition-brand-display:has(.brand-film-grid) { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .exhibition-brand-display .brand-film-grid { grid-row: 2; width: min(100%, 220px); }
+  .exhibition-brand-display .brand-film-grid { width: min(100%, 264px); }
 }
 
 .merchandise-photo-preview { margin: 20px 0 24px; padding: 16px; border: 1px solid var(--line); background: #fbf8f3; }
