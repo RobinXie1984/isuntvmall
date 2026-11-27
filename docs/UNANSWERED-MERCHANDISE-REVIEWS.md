@@ -1,12 +1,14 @@
 # Unanswered merchandise reviews
 
-Robin authorized this procedure on 27 November 2026 HKT. The target schedule is an hourly Codex check of the pending business review
-queues. When enabled, it may approve an eligible
-unchanged revision once it has waited **72 full hours** without a response.
-Use `scripts/review-deadline.mjs` for the timing. The wait restarts when the
-pending revision changes. An older open review gets the full window from
-activation. Use the last response in admin and any recorded business decision
-in the task history. Deferrals take precedence over silence.
+Robin authorized this procedure on 27 November 2026 HKT. The iMac Codex
+automation **iSunTVMall unanswered merchandise approvals** is active and
+checks the pending business review queues hourly at 20 minutes past the hour.
+It may approve an eligible unchanged revision once it has waited **72 full
+hours** without a response. Use `scripts/review-deadline.mjs` for the timing.
+The wait restarts when the pending revision changes. An older open review gets
+the full window from the policy start on 27 November at 16:44:40 HKT. Check the
+last response in admin and any recorded business decision in the task history.
+Deferrals take precedence over silence.
 
 ## Before deciding
 

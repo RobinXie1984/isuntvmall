@@ -12,8 +12,9 @@ release notes in `README.md`.
   Brands links to the existing brand galleries and the Winter Edit.
   Reviewed SunTVMall listings retain their external checkout while the
   Shopify native variant workflow remains gated.
-- Added the 72-hour eligibility rule and runbook for unanswered business
-  reviews. Scheduler activation is pending. Catalogue photo and homepage palette approvals
-  remain separate. See `docs/UNANSWERED-MERCHANDISE-REVIEWS.md`.
+- Activated the hourly Codex check for unanswered business reviews. An
+  unchanged review must wait 72 full hours and pass its evidence checks.
+  Catalogue photo and homepage palette approvals remain separate.
+  See `docs/UNANSWERED-MERCHANDISE-REVIEWS.md`.
 - Local Git worktrees are grouped inside the project in `.worktrees/`, with
   release evidence kept in ignored task-owned folders.
