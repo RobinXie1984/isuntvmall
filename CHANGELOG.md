@@ -10,6 +10,8 @@ release notes in `README.md`.
   Existing product and collection URLs continue to work.
 - The Winter Edit pairs jackets and scarves with their product films. Featured
   Brands links to the existing brand galleries and the Winter Edit.
+  Reviewed SunTVMall listings retain their external checkout while the
+  Shopify native variant workflow remains gated.
 - Added the 72-hour eligibility rule and runbook for unanswered business
   reviews. Scheduler activation is pending. Catalogue photo and homepage palette approvals
   remain separate. See `docs/UNANSWERED-MERCHANDISE-REVIEWS.md`.
