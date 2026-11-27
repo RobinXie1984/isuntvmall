@@ -19,4 +19,19 @@ describe('customer category groups', () => {
     expect(browseGroup({category:'Other',title:'Special'})).toBeUndefined();
     expect(matchesBrowseCategory({category:'Other',title:'Special'},'Other')).toBe(true);
   });
+  it('separates bags and accessories without breaking the combined category URL', () => {
+    const bag = { category: 'Bags & accessories', title: 'HONAYIN 牛皮托特包' };
+    const scarf = { category: 'Bags & accessories', title: 'Cashmere scarf' };
+    const strap = { category: 'Accessories', title: 'Replacement bag strap' };
+    expect(matchesBrowseCategory(bag, 'group-bags')).toBe(true);
+    expect(matchesBrowseCategory(bag, 'group-accessories')).toBe(false);
+    for (const accessory of [scarf, strap]) {
+      expect(matchesBrowseCategory(accessory, 'group-accessories')).toBe(true);
+      expect(matchesBrowseCategory(accessory, 'group-bags')).toBe(false);
+    }
+    expect(matchesBrowseCategory(bag, 'Bags & accessories')).toBe(true);
+    expect(matchesBrowseCategory(scarf, 'group-fashion')).toBe(true);
+    expect(matchesBrowseCategory({ ...strap, category: 'Bags & accessories' }, 'group-accessories')).toBe(true);
+    expect(matchesBrowseCategory({ category: 'Apparel', title: '連帽外套' }, 'group-clothing')).toBe(true);
+  });
 });

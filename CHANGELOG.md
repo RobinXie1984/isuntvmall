@@ -5,6 +5,10 @@ release notes in `README.md`.
 
 ## 2026-11-27 HKT
 
+- Use the horizontal navigation for the Mall catalogue, with separate Bags
+  and Accessories categories. The AI-generated demo collection admits only
+  original concept artwork and keeps supplier-photo samples out.
+
 - Real merchandise now leads the homepage and main catalogue. The
   AI-generated demo collection keeps sample merchandise browseable by category.
   Existing product and collection URLs continue to work.

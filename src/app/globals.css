@@ -590,7 +590,9 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
   .winter-edit .winter-film-grid { grid-template-columns: minmax(0, 1fr); max-width: 280px; }
 }
 
-.mall-category-nav { gap: clamp(16px, 1.85vw, 28px); }
+.mall-category-nav { gap: clamp(14px, 1.65vw, 24px); }
+.mall-category-nav a[aria-current="page"] { border-color: var(--ink); }
+.catalogue-layout.catalogue-layout-single { grid-template-columns: minmax(0, 1fr); }
 @media (max-width: 760px) {
   .mall-category-nav .nav-featured-link { order: -4; }
   .mall-category-nav .nav-winter-link { order: -3; }

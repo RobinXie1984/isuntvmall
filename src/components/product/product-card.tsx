@@ -8,10 +8,14 @@ import { productTitle, productImageAlt } from "@/lib/product-copy";
 import { productImage } from "@/lib/product-image";
 import { formatLocalizedMoney } from "@/lib/i18n";
 import { useLocale } from "@/components/i18n/locale-provider";
+import { getStoreProfile } from "@/lib/store-profile";
+import { mallBrowseGroup, mallBrowseGroups } from "@/lib/browse-categories";
 import type { CartSource, Product } from "@/types/commerce";
 
 export function ProductCard({ product, source }: { product: Product; source?: CartSource }) {
   const { t, localize, locale } = useLocale();
+  const category = getStoreProfile().id === "isuntvmall" ? mallBrowseGroup(product) : undefined;
+  const categoryLabel = mallBrowseGroups.find(group => group.id === category)?.label;
   const disclosure = productPriceDisclosure(product);
   const productUrl = `/product/${product.slug}${source ? `?room=${source.liveSessionId}` : ""}`;
   return (
@@ -21,7 +25,7 @@ export function ProductCard({ product, source }: { product: Product; source?: Ca
         {product.sourceListing?<SourcePhoto product={product} alt={productImageAlt(product,locale,localize)} lazy/>:<img src={productImage(product)} alt={productImageAlt(product, locale, localize)} loading="lazy" />}
       </Link>
       <div className="product-card-copy">
-        <span className="product-category">{localize(product.category)}</span>
+        <span className="product-category">{categoryLabel ? t(categoryLabel[0], categoryLabel[1], categoryLabel[2]) : localize(product.category)}</span>
         <Link className="product-title" href={productUrl}>{productTitle(product, locale, localize)}</Link>
         <div className="product-card-bottom">
           <div><strong>{product.sourceListing && new Set(product.sourceListing.variants.map(v=>v.priceAmount)).size > 1 && t("From ", "起價 ", "最低価格 ")}{formatLocalizedMoney(product.priceAmount, product.currency, locale)}</strong><small>{disclosure ? t(...priceDisclosureCopy[disclosure]) : (product.nativeVariants?.some(v=>v.stockQty!==null&&v.stockQty>0&&!v.priceIsPlaceholder) ? t("Options available", "有可選規格", "選択可能な種類あり") : product.stockQty > 0 ? t(`${product.stockQty} in stock`, `${product.stockQty} 件現貨`, `在庫${product.stockQty}点`) : t("Sold out", "售罄"))}</small></div>
