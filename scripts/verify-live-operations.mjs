@@ -7,7 +7,7 @@ const q = (sql, args = []) => db.query(sql, args);
 const one = async (sql, args = []) => (await q(sql, args)).rows[0];
 const check = (name, value) => { assert.ok(value, name); console.log(`PASS ${++passed}: ${name}`); };
 const fails = async (fn, code) => { try { await fn(); return false; } catch (error) { return String(error).includes(code); } };
-await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
+await db.exec('create role anon;create role authenticated;create role service_role bypassrls;create schema auth;create table auth.users(id uuid primary key,email text,is_anonymous boolean default false);create table auth.sessions(id uuid primary key,user_id uuid,not_after timestamptz);create schema storage;create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);');
 for (const file of readdirSync('supabase/migrations').filter(file => file.endsWith('.sql')).sort()) await db.exec(readFileSync(`supabase/migrations/${file}`, 'utf8'));
 check('all actual migrations execute', true);
 const host1=randomUUID(),host2=randomUUID(),owner=randomUUID(),producer=randomUUID(),creator=randomUUID(),other=randomUUID(),editor=randomUUID();
