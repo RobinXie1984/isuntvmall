@@ -51,3 +51,34 @@ and any required disclosure on the live product. Each run must be safe to
 resume and must leave existing approved catalogue photos in place during
 review. Keep this review sweep independent of weekly product and price
 imports. No-change runs are quiet.
+
+## Verify the first automatic approval
+
+The hourly review run should capture the first genuine approval in
+`reports/retail-separation-20261127/unanswered-review-activation/`. A timed
+dry run or a one-time manual approval does not complete this check.
+
+1. Record the current pending revision, the time it entered review, the
+   computed deadline, the source evidence and any hold decisions before
+   approving. Capture the current state of known held items, including the
+   YY12-YD130403 down listing and its pending photo. The 27 November baseline
+   in that directory shows this listing in draft with zero approval events,
+   approved price overrides or public images.
+2. Use the existing audited approval path only after the deadline. Record
+   that the decision was automatic under Robin's delegated authority. For
+   photos, include this in the audit reason. For prices, tie the private run
+   receipt to the product, variant and approved revision.
+3. For a photo, read the approval and worker publication events from
+   `media_batch_audit`. Match the actor, timestamps, revision and output
+   hash to the batch row. Verify the processed image attached to the
+   intended product and hash the published bytes. For a price, read the
+   matching `price_approve` merchandise audit event through approved
+   database access. Match the revision, actor and source fingerprint to
+   the override, then verify the exact variant price and disclosure on
+   the storefront.
+4. Read the held items again and compare against the baseline. Record any
+   intervening human decision separately. Report the first result in this
+   chat with the approval time, audit evidence, published result and hold
+   state. If any link in the chain is missing, report which check remains
+   unverified and keep the receipt open. If no eligible item reaches the
+   deadline, continue with the normal schedule.
