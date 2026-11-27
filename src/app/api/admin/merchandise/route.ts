@@ -37,6 +37,7 @@ export async function GET(request:Request) {
   const publishedRows = new Map((catalogue?.data ?? []).map(row => [row.id, row]));
   const items = rows.map(item => {
     const current = publishedRows.get(item.id);
+    const isDemo = item.payload.isDemo === true;
     const primary = item.images.find(photo => photo.visible);
     const published = current && current.catalog_revision === item.baseRevision
       ? current.status === "published" && !profile.excludedProductIds.includes(item.id)
@@ -44,8 +45,8 @@ export async function GET(request:Request) {
     return {
       ...item,
       payload:{...item.payload,titleZh:item.payload.titleZh??"",descriptionZh:item.payload.descriptionZh??""},
-      ...(showHomepage ? { homepage: homepagePhotoStatus(item.slug,primary?.url,published) } : {}),
-      images: item.images.map(photo => ({ ...photo, ...(showHomepage ? { paletteReviewed:homepagePhotoReviewed(item.slug,photo.url) } : {}) })),
+      ...(showHomepage ? { homepage: homepagePhotoStatus(item.slug,primary?.url,published,isDemo) } : {}),
+      images: item.images.map(photo => ({ ...photo, ...(showHomepage ? { paletteReviewed:!isDemo && homepagePhotoReviewed(item.slug,photo.url) } : {}) })),
     };
   });
   return privateResponse({...data,items});

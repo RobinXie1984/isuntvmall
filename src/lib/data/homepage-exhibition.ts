@@ -1,3 +1,4 @@
+import { isRealMerchandise } from "./catalogue-audience";
 import { productImage } from "@/lib/product-image";
 import type { Product } from "@/types/commerce";
 import images from "./homepage-exhibition-images.json";
@@ -12,9 +13,10 @@ export function homepagePhotoReviewed(slug: string, image: string): boolean {
   return Object.hasOwn(reviewedImages, slug) && reviewedImages[slug] === image;
 }
 
-export type HomepagePhotoStatus = "ready" | "review" | "catalogue-first" | "unavailable";
+export type HomepagePhotoStatus = "ready" | "review" | "catalogue-first" | "demo-only" | "unavailable";
 
-export function homepagePhotoStatus(slug: string, primaryImage: string | undefined, published: boolean | undefined): HomepagePhotoStatus {
+export function homepagePhotoStatus(slug: string, primaryImage: string | undefined, published: boolean | undefined, isDemo = false): HomepagePhotoStatus {
+  if (isDemo) return "demo-only";
   if (published === undefined) return "unavailable";
   if (!published || !primaryImage) return "catalogue-first";
   return homepagePhotoReviewed(slug, primaryImage) ? "ready" : "review";
@@ -25,7 +27,7 @@ export function exhibitionProducts(products: readonly Product[]): Product[] {
   // Review the actual image version. A supplier replacement needs its own editorial review.
   return Object.keys(reviewedImages).flatMap(slug => {
     const product = bySlug.get(slug);
-    return slug !== exhibitionIntroductionSlug && product && homepagePhotoReviewed(slug, productImage(product)) ? [product] : [];
+    return slug !== exhibitionIntroductionSlug && product && isRealMerchandise(product) && homepagePhotoReviewed(slug, productImage(product)) ? [product] : [];
   });
 }
 

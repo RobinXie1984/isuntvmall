@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { catalogueAudience } from "./catalogue-audience";
 import { homepageSelection } from "./homepage-selection";
 import { holidayProducts } from "./holiday-catalogue";
 import { expandedProducts } from "./expanded-catalogue";
@@ -42,8 +43,10 @@ describe("homepage exhibition palette", () => {
   it("features only reviewed photo versions and leaves other catalogue products available", () => {
     const linen = expandedProducts.find(product => product.slug === "linen-overshirt")!;
     const unselected = expandedProducts.find(product => product.slug === "relaxed-cotton-trousers")!;
-    const revised = { ...linen, images: [{ ...linen.images[0], sourceUrl: "/editorial/expanded/relaxed-cotton-trousers.jpg" }] };
-    expect(exhibitionProducts([unselected, linen])).toEqual([linen]);
+    const real = { ...linen, isDemo: false };
+    const revised = { ...real, images: [{ ...linen.images[0], sourceUrl: "/editorial/expanded/relaxed-cotton-trousers.jpg" }] };
+    expect(exhibitionProducts([unselected, linen])).toEqual([]);
+    expect(exhibitionProducts([unselected, real])).toEqual([real]);
     expect(exhibitionProducts([unselected, revised])).toEqual([]);
     expect(unselected.images).not.toHaveLength(0);
   });
@@ -52,5 +55,15 @@ describe("homepage exhibition palette", () => {
     const autumn = "/editorial/holiday/harvest-table-runner.jpg";
     expect(exhibitionHeroImage(autumn)).toBe(autumn);
     expect(exhibitionHeroImage("/editorial/holiday/indigo-summer-towel.jpg")).toBe(exhibitionHero);
+  });
+});
+
+describe("iSunTVMall catalogue audience", () => {
+  it("keeps samples discoverable in their own collection and real merchandise in its retail categories", () => {
+    const demo = expandedProducts[0];
+    const real = { ...expandedProducts[1], isDemo: false };
+    expect(catalogueAudience([demo, real], true, false)).toEqual([real]);
+    expect(catalogueAudience([demo, real], true, true)).toEqual([demo]);
+    expect(catalogueAudience([demo, real], false, false)).toEqual([demo, real]);
   });
 });

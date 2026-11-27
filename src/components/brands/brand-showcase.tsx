@@ -9,10 +9,10 @@ import type { Product } from "@/types/commerce";
 import type { StoreLocale } from "@/lib/store-profile";
 
 const labels = {
-  en: { title: "Discover the brands", showcase: "KOL showcase", collection: "View collection and films", replays: "Watch the previews" },
-  "zh-Hant": { title: "探索品牌", showcase: "創作者短片", collection: "瀏覽系列及短片", replays: "觀看預告" },
-  "zh-Hans": { title: "探索品牌", showcase: "创作者短片", collection: "浏览系列及短片", replays: "观看预告" },
-  ja: { title: "ブランドを見つける", showcase: "クリエイター動画", collection: "コレクションと動画を見る", replays: "予告動画を見る" },
+  en: { title: "Discover the brands", showcase: "Featured brands", collection: "View collection and films", replays: "Watch the previews" },
+  "zh-Hant": { title: "探索品牌", showcase: "精選品牌", collection: "瀏覽系列及短片", replays: "觀看預告" },
+  "zh-Hans": { title: "探索品牌", showcase: "精选品牌", collection: "浏览系列及短片", replays: "观看预告" },
+  ja: { title: "ブランドを見つける", showcase: "注目ブランド", collection: "コレクションと動画を見る", replays: "予告動画を見る" },
 };
 
 export function BrandShowcase({

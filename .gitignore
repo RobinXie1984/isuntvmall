@@ -45,3 +45,7 @@ BASELINE-MANIFEST.json
 
 # Disposable native database verification evidence
 /native-concurrency-receipt.json
+
+# Local linked worktrees and release receipts
+/.worktrees/
+/reports/

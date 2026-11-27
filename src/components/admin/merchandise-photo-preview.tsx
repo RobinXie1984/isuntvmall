@@ -10,6 +10,7 @@ const statusCopy = {
   ready: ["Homepage ready", "可供首頁選用", "ホームページ掲載候補"],
   review: ["Homepage review pending", "等待首頁審核", "ホームページ用審査待ち"],
   "catalogue-first": ["Catalogue publication needed", "須先發布至商品目錄", "カタログ公開が先です"],
+  "demo-only": ["Demo collection only", "僅供示範系列", "デモコレクション専用"],
   unavailable: ["Homepage status unavailable", "暫未能取得首頁狀態", "ホームページの状態を確認できません"],
 } as const;
 

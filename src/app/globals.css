@@ -580,3 +580,18 @@ body:has(.homepage-exhibition) .category-nav .nav-room-link,
 .merchandise-photo-grid figcaption { display: grid; justify-items: start; gap: 5px; margin-top: 7px; font-size: 13px; }
 .homepage-photo-badge { display: inline-block; margin-inline: 4px; padding: 3px 7px; border: 1px solid #e6dccc; background: #f8f2e8; color: #634c3e; font-size: 13px; font-weight: 500; }
 .homepage-photo-badge.is-ready { background: #ebe8dc; border-color: #d6cfbe; color: #413b30; }
+
+.winter-edit h2 { font-size: 24px; font-weight: 400; }
+.winter-edit .winter-film-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 560px; }
+.winter-edit .brand-film-tile { background: #f1ebe3; }
+.winter-catalogue { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 36px; }
+.winter-catalogue .text-link { display: inline-block; margin-top: 16px; }
+@media (max-width: 680px) {
+  .winter-edit .winter-film-grid { grid-template-columns: minmax(0, 1fr); max-width: 280px; }
+}
+
+.mall-category-nav { gap: clamp(16px, 1.85vw, 28px); }
+@media (max-width: 760px) {
+  .mall-category-nav .nav-featured-link { order: -4; }
+  .mall-category-nav .nav-winter-link { order: -3; }
+}

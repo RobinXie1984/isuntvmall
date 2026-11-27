@@ -303,5 +303,41 @@
     "audio": false,
     "reviewState": "approved",
     "standalone": true
+  },
+  {
+    "id": "b89d8e7d-6efa-5d7d-b28f-cb379d7b59ef",
+    "brand": "Winter Edit",
+    "sourceUrl": "https://www.facebook.com/kyliefashion2017/videos/1692475835772364/",
+    "src": "/brand-clips/b89d8e7d-6efa-5d7d-b28f-cb379d7b59ef.mp4",
+    "poster": "/brand-clips/b89d8e7d-6efa-5d7d-b28f-cb379d7b59ef.jpg",
+    "seconds": 21.0,
+    "bytes": 2271776,
+    "sha256": "ef2db93fa3004b085e834960b07d5124b011ea5e31e04f8a9476def48b509598",
+    "reviewState": "approved",
+    "standalone": true
+  },
+  {
+    "id": "022dd2ac-1da5-5310-b728-3de5536182c5",
+    "brand": "Winter Edit",
+    "sourceUrl": "https://www.facebook.com/yuzubear/videos/1856272595648158/",
+    "src": "/brand-clips/022dd2ac-1da5-5310-b728-3de5536182c5.mp4",
+    "poster": "/brand-clips/022dd2ac-1da5-5310-b728-3de5536182c5.jpg",
+    "seconds": 19.0,
+    "bytes": 3176221,
+    "sha256": "943f3a7c83336a0bc3e0613aac18487bfb8f91025166ea41484c9238700ec0ac",
+    "reviewState": "approved",
+    "standalone": true
+  },
+  {
+    "id": "87888428-da47-556d-a101-99ecba1b7d18",
+    "brand": "MALOVE",
+    "sourceUrl": "https://www.facebook.com/kicon7278/videos/1318041133782424/",
+    "src": "/brand-clips/87888428-da47-556d-a101-99ecba1b7d18.mp4",
+    "poster": "/brand-clips/87888428-da47-556d-a101-99ecba1b7d18.jpg",
+    "seconds": 26.990988,
+    "bytes": 1724451,
+    "sha256": "8f72891f57fe54ab35d5461dee6cc71bef5acb456540e042dedff0bb89952a06",
+    "reviewState": "approved",
+    "standalone": true
   }
 ]
